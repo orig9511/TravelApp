@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Continent Selector</title>
+
+    <script src="mapdata.js"></script>
+    <script src="continentmap.js"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: white;
+      }
+
+      #map {
+        width: 100%;
+        height: 600px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+
+    <script>
+      simplemaps_continentmap.load();
+
+      simplemaps_continentmap.hooks.click = function (id) {
+        const continent = simplemaps_continentmap_mapdata.state_specific[id];
+
+        console.log("MAP CLICK:", continent.name);
+
+        window.parent.postMessage(
+          {
+            type: "continent-selected",
+            continent: continent.name,
+          },
+          "*",
+        );
+
+        alert("MAP CLICK: " + continent.name);
+
+        return false;
+      };
+    </script>
+  </body>
+</html>

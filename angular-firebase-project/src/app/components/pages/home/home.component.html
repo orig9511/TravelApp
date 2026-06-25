@@ -1,0 +1,78 @@
+<div class="container-fluid px-0">
+  <div
+    id="homeCarousel"
+    class="carousel slide carousel-fade"
+    data-bs-ride="carousel"
+    data-bs-interval="5000"
+  >
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+      <button
+        *ngFor="
+          let src of carouselImageSources;
+          let i = index;
+          trackBy: trackByIndex
+        "
+        type="button"
+        data-bs-target="#homeCarousel"
+        [attr.data-bs-slide-to]="i"
+        [class.active]="i === 0"
+      ></button>
+    </div>
+
+    <!-- Slides -->
+    <div class="carousel-inner">
+      <div
+        *ngFor="
+          let src of carouselImageSources;
+          let i = index;
+          trackBy: trackByIndex
+        "
+        class="carousel-item"
+        [class.active]="i === 0"
+      >
+        <div
+          class="carousel-slide"
+          [ngStyle]="{ 'background-image': 'url(' + src + ')' }"
+        >
+          <div class="carousel-overlay"></div>
+
+          <!-- Responsive caption -->
+          <div class="carousel-caption text-center text-md-start">
+            <h1 class="display-4 display-md-3 fw-bold mb-2 mb-md-3">
+              {{ "home.carouselSlides." + i + ".title" | translate }}
+            </h1>
+            <p class="fs-6 fs-md-5 mb-3 mb-md-4 d-none d-sm-block">
+              {{ "home.carouselSlides." + i + ".subtitle" | translate }}
+            </p>
+            <button
+              class="btn btn-primary btn-md btn-lg-lg rounded-pill px-4 px-lg-5"
+              (click)="exploreContinent(i)"
+            >
+              {{ "home.exploreButton" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#homeCarousel"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#homeCarousel"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+</div>

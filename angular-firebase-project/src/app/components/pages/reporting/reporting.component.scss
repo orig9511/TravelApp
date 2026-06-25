@@ -1,0 +1,259 @@
+.reporting-header {
+  h2 {
+    font-weight: 600;
+    color: #2c3e50;
+  }
+}
+
+.chart-container {
+  min-height: 200px;
+}
+
+.chart-bar-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+.chart-label {
+  flex: 0 0 180px;
+  font-size: 0.85rem;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chart-bar-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.chart-bar {
+  height: 28px;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  min-width: 20px;
+}
+
+.chart-value {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+  min-width: 25px;
+}
+
+.stat-box {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.occupancy-widget {
+  .occupancy-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  .progress {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+.card-header {
+  h5,
+  h6 {
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-label {
+    flex: 0 0 100px;
+    font-size: 0.75rem;
+  }
+
+  .stat-box {
+    padding: 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+}
+
+.currency-eur {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+}
+
+// Analytics section styling
+.analytics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.analytics-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.analytics-rank {
+  flex: 0 0 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.analytics-content {
+  flex: 1;
+  padding: 0 1rem;
+  min-width: 0; // Allow text truncation
+}
+
+.analytics-title {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.analytics-subtitle {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.analytics-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  i {
+    font-size: 1.1rem;
+  }
+
+  strong {
+    font-size: 1.1rem;
+    color: #2c3e50;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-item {
+    padding: 0.5rem;
+  }
+
+  .analytics-rank {
+    flex: 0 0 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .analytics-content {
+    padding: 0 0.75rem;
+  }
+
+  .analytics-title {
+    font-size: 0.9rem;
+  }
+
+  .analytics-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .analytics-badge {
+    padding: 0.4rem 0.75rem;
+
+    i,
+    strong {
+      font-size: 0.95rem;
+    }
+  }
+}
+
+// Dark mode overrides
+:host-context(body.dark-mode) {
+  .booking-chart-body {
+    background-color: #ffffff;
+
+    .chart-label {
+      color: #555;
+    }
+
+    .chart-value {
+      color: #333;
+    }
+  }
+
+  .analytics-item {
+    background: #3a3a3a;
+  }
+
+  .analytics-title {
+    color: #e4e4e4;
+  }
+
+  .analytics-subtitle {
+    color: #aaaaaa;
+  }
+
+  .analytics-badge {
+    background: #4a4a4a;
+
+    strong {
+      color: #e4e4e4;
+    }
+  }
+}

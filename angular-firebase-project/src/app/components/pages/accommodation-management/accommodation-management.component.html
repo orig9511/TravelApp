@@ -1,0 +1,422 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>{{ "accommodationManagement.title" | translate }}</h2>
+  </div>
+
+  <!-- Error banner -->
+  <div *ngIf="error" class="alert alert-danger alert-dismissible">
+    {{ error }}
+    <button type="button" class="btn-close" (click)="error = null"></button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <!-- Empty state -->
+  <div
+    *ngIf="!loading && !error && accommodations.length === 0"
+    class="text-center py-5 text-muted"
+  >
+    <i class="fa-solid fa-building-circle-xmark fa-3x d-block mb-2"></i>
+    {{ "accommodationManagement.empty" | translate }}
+  </div>
+
+  <!-- Table -->
+  <div
+    *ngIf="!loading && accommodations.length > 0"
+    class="table-responsive shadow-sm rounded"
+  >
+    <table class="table table-hover align-middle mb-0 bg-white">
+      <thead class="table-light">
+        <tr>
+          <th>Szálláshely</th>
+          <th>Típus</th>
+          <th>Helyszín</th>
+          <th class="text-end">Ár/éj</th>
+          <th class="text-center">Értékelés</th>
+          <th class="text-center">Műveletek</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let acc of accommodations; trackBy: trackByAccommodationId">
+          <td>
+            <div class="fw-semibold">{{ acc.name }}</div>
+            <div class="text-muted small">{{ acc.email }}</div>
+          </td>
+          <td>
+            <span class="badge bg-secondary">{{ acc.type || "—" }}</span>
+          </td>
+          <td>
+            <div>{{ acc.city }}, {{ acc.country }}</div>
+            <div class="text-muted small">{{ acc.continent }}</div>
+          </td>
+          <td class="text-end">
+            {{ acc.pricePerNight | number: "1.0-0" }}
+            <span class="currency-eur">&euro;</span>/éj
+          </td>
+          <td class="text-center">
+            <span class="text-warning">
+              <ng-container
+                *ngFor="
+                  let s of [].constructor(acc.stars || 0);
+                  trackBy: trackByIndex
+                "
+              >
+                >★</ng-container
+              >
+            </span>
+            <small class="text-muted d-block"
+              >{{ acc.rating | number: "1.1-1" }}/5</small
+            >
+          </td>
+          <td class="text-center" style="white-space: nowrap">
+            <!-- Delete confirm inline -->
+            <ng-container
+              *ngIf="deleteConfirmId === acc.id; else normalActions"
+            >
+              <span class="me-2 small text-danger">Biztosan törölni?</span>
+              <button
+                class="btn btn-danger btn-sm me-1"
+                [disabled]="deleting"
+                (click)="executeDelete(acc.id!)"
+              >
+                <span
+                  *ngIf="deleting"
+                  class="spinner-border spinner-border-sm me-1"
+                ></span>
+                Igen
+              </button>
+              <button
+                class="btn btn-outline-secondary btn-sm"
+                (click)="cancelDelete()"
+              >
+                Nem
+              </button>
+            </ng-container>
+
+            <ng-template #normalActions>
+              <button
+                class="btn btn-sm btn-info me-1"
+                (click)="openViewModal(acc)"
+                title="Megtekintés"
+              >
+                <i class="fa-solid fa-eye"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-primary me-1"
+                (click)="openEditModal(acc)"
+                title="Szerkesztés"
+              >
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="confirmDelete(acc.id!)"
+                title="Törlés"
+              >
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- View / Edit modal -->
+<div
+  *ngIf="showModal"
+  class="modal d-block"
+  tabindex="-1"
+  style="background: rgba(0, 0, 0, 0.45)"
+  (click)="closeModal()"
+>
+  <div
+    class="modal-dialog modal-lg modal-dialog-scrollable"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i
+            class="fa-solid me-2"
+            [class.fa-eye]="viewMode"
+            [class.fa-pen]="!viewMode"
+          ></i>
+          {{
+            (viewMode
+              ? "accommodationManagement.viewTitle"
+              : "accommodationManagement.editTitle"
+            ) | translate
+          }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <div *ngIf="formError" class="alert alert-danger">{{ formError }}</div>
+
+        <form (ngSubmit)="submitForm()" #accForm="ngForm">
+          <div class="row g-3">
+            <!-- Basic info -->
+            <div class="col-12">
+              <label class="form-label fw-semibold">Szálláshely neve</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.name"
+                name="name"
+                [disabled]="viewMode"
+                placeholder="pl. Adriatic Paradise Hotel"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Típus</label>
+              <select
+                class="form-select"
+                [(ngModel)]="form.type"
+                name="type"
+                [disabled]="viewMode"
+              >
+                <option value="">— Válasszon —</option>
+                <option value="hotel">Hotel</option>
+                <option value="apartment">Apartman</option>
+                <option value="hostel">Hostel</option>
+                <option value="villa">Villa</option>
+                <option value="resort">Resort</option>
+                <option value="guesthouse">Panzió</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Kép URL</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.imageUrl"
+                name="imageUrl"
+                type="url"
+                [disabled]="viewMode"
+                placeholder="https://..."
+              />
+            </div>
+
+            <!-- Pricing & capacity -->
+            <div class="col-md-4">
+              <label class="form-label"
+                >Ár/éj (<span class="currency-eur">&euro;</span>)</label
+              >
+              <input
+                class="form-control"
+                [(ngModel)]="form.pricePerNight"
+                name="pricePerNight"
+                type="number"
+                min="0"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Szobák száma</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.roomCount"
+                name="roomCount"
+                type="number"
+                min="1"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Szoba kapacitás (fő)</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.capacityPerAccommodation"
+                name="capacityPerAccommodation"
+                type="number"
+                min="1"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Elérhető helyek</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.availablePlaces"
+                name="availablePlaces"
+                type="number"
+                min="0"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Értékelés (0–5)</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.rating"
+                name="rating"
+                type="number"
+                min="0"
+                max="5"
+                step="0.1"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Csillagok (1–5)</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.stars"
+                name="stars"
+                type="number"
+                min="1"
+                max="5"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <!-- Contact -->
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.email"
+                name="email"
+                type="email"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Telefon</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.mobile"
+                name="mobile"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <!-- Location -->
+            <div class="col-md-4">
+              <label class="form-label">Kontinens</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.continent"
+                name="continent"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Ország</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.country"
+                name="country"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Város</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.city"
+                name="city"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Cím</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.address"
+                name="address"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+              <label class="form-label">Leírás</label>
+              <textarea
+                class="form-control"
+                [(ngModel)]="form.description"
+                name="description"
+                rows="3"
+                [disabled]="viewMode"
+              ></textarea>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Megjegyzés</label>
+              <input
+                class="form-control"
+                [(ngModel)]="form.comment"
+                name="comment"
+                [disabled]="viewMode"
+              />
+            </div>
+
+            <!-- Services -->
+            <div class="col-12">
+              <label class="form-label"
+                >Szolgáltatások
+                <small class="text-muted">(vesszővel elválasztva)</small></label
+              >
+              <input
+                class="form-control"
+                [(ngModel)]="servicesInput"
+                (ngModelChange)="onServicesChange()"
+                name="servicesInput"
+                [disabled]="viewMode"
+                placeholder="pl. WiFi, Medence, Reggeli, Parkoló"
+              />
+              <div
+                *ngIf="form.services.length > 0"
+                class="mt-2 d-flex flex-wrap gap-1"
+              >
+                <span
+                  *ngFor="let s of form.services; trackBy: trackByValue"
+                  class="badge bg-primary"
+                  >{{ s }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="closeModal()"
+        >
+          {{ viewMode ? "Bezárás" : "Mégse" }}
+        </button>
+        <button
+          *ngIf="!viewMode"
+          type="button"
+          class="btn btn-primary"
+          [disabled]="submitting"
+          (click)="submitForm()"
+        >
+          <span
+            *ngIf="submitting"
+            class="spinner-border spinner-border-sm me-1"
+          ></span>
+          {{ "accommodationManagement.save" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

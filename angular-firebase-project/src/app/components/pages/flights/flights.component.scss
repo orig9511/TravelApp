@@ -1,0 +1,373 @@
+// ── Discovery section ─────────────────────────────────────────────────────────
+.flt-discovery {
+  background: var(--flights-surface, #f8fafc);
+  padding-top: 2.5rem;
+}
+
+.flt-discovery__header {
+  margin-bottom: 1.5rem;
+}
+
+.flt-discovery__title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.flt-discovery__subtitle {
+  font-size: 0.88rem;
+  color: var(--color-muted, #6c757d);
+  margin: 0;
+}
+
+.flt-discovery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+
+  @media (max-width: 575px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// ── Discovery card ────────────────────────────────────────────────────────────
+.flt-disc-card {
+  position: relative;
+  background: var(--flights-surface, #fff);
+  border: 1.5px solid var(--flights-border, #e9eef5);
+  border-radius: 16px;
+  padding: 1rem 1rem 0.85rem;
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+  transition:
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    border-color 0.15s;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.12);
+    border-color: rgba(26, 115, 232, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary, #1a73e8);
+    outline-offset: 2px;
+  }
+}
+
+.flt-disc-card__badge {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.2em 0.55em;
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  &--trending {
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    color: #fff;
+  }
+  &--best-price {
+    background: rgba(25, 135, 84, 0.12);
+    color: #198754;
+    border: 1px solid rgba(25, 135, 84, 0.25);
+  }
+  &--direct {
+    background: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+    border: 1px solid rgba(13, 110, 253, 0.2);
+  }
+  &--all-included {
+    background: rgba(111, 66, 193, 0.1);
+    color: #6f42c1;
+    border: 1px solid rgba(111, 66, 193, 0.2);
+  }
+}
+
+.flt-disc-card__route {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+
+.flt-disc-card__code {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--color-text);
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.flt-disc-card__arrow {
+  font-size: 0.65rem;
+  color: var(--color-primary, #1a73e8);
+  flex-shrink: 0;
+}
+
+.flt-disc-card__airline {
+  font-size: 0.75rem;
+  color: var(--color-muted, #6c757d);
+  margin-bottom: 0.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flt-disc-card__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.flt-disc-card__stops {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #e06000;
+  background: rgba(224, 96, 0, 0.08);
+  padding: 0.2em 0.5em;
+  border-radius: 5px;
+
+  &--direct {
+    color: #198754;
+    background: rgba(25, 135, 84, 0.08);
+  }
+}
+
+.flt-disc-card__price {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--color-primary, #1a73e8);
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+// ── Fallback banners ──────────────────────────────────────────────────────────
+.alert {
+  border-radius: 12px !important;
+  font-size: 0.88rem;
+}
+
+// ── Date chips ────────────────────────────────────────────────────────────────
+.flt-date-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.25rem 0 0.5rem;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.flt-date-chips__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-muted, #6c757d);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.flt-date-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border: 1.5px solid var(--flights-border, #e9eef5);
+  border-radius: 10px;
+  background: var(--flights-surface, #fff);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+
+  &:hover {
+    border-color: rgba(26, 115, 232, 0.4);
+    background: rgba(26, 115, 232, 0.04);
+  }
+
+  &--active {
+    border-color: var(--color-primary, #1a73e8);
+    background: rgba(26, 115, 232, 0.08);
+    color: var(--color-primary, #1a73e8);
+  }
+}
+
+.flt-date-chip__price {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-primary, #1a73e8);
+  margin-top: 0.1rem;
+}
+
+// ── Smart empty states ────────────────────────────────────────────────────────
+.flt-empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: var(--flights-surface, #fff);
+  border: 1.5px solid var(--flights-border, #e9eef5);
+  border-radius: 16px;
+
+  &--filter {
+    border-style: dashed;
+  }
+}
+
+.flt-empty__icon {
+  font-size: 2.2rem;
+  color: var(--color-muted, #adb5bd);
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.flt-empty__title {
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.4rem;
+}
+
+.flt-empty__desc {
+  font-size: 0.88rem;
+  color: var(--color-muted, #6c757d);
+  margin-bottom: 1rem;
+}
+
+.flt-empty__suggestions {
+  margin-top: 2rem;
+}
+
+.flt-empty__suggestions-label {
+  font-size: 0.85rem;
+  color: var(--color-muted, #6c757d);
+  margin-bottom: 1rem;
+}
+
+.flt-empty__discovery-grid {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+// ── Mobile UX ─────────────────────────────────────────────────────────────────
+.flt-filter-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  background: var(--color-primary, #1a73e8);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 0.65rem 1.4rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.flt-filter-fab__count {
+  background: #fff;
+  color: var(--color-primary, #1a73e8);
+  border-radius: 50%;
+  width: 1.35rem;
+  height: 1.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.flt-filter-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 60;
+}
+
+.flt-filter-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(320px, 85vw);
+  height: 100vh;
+  background: var(--flights-surface, #fff);
+  z-index: 70;
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+  padding: 0 1rem 2rem;
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.15);
+
+  &--open {
+    transform: translateX(0);
+  }
+}
+
+.flt-filter-drawer__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.25rem;
+  font-weight: 700;
+  border-bottom: 1px solid var(--flights-border, #e9eef5);
+  margin-bottom: 0.5rem;
+  position: sticky;
+  top: 0;
+  background: var(--flights-surface, #fff);
+  z-index: 1;
+}
+
+.flt-sticky-cta {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1rem;
+  z-index: 50;
+  background: var(--color-primary, #1a73e8);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  animation: flt-slide-up 0.2s ease;
+}
+
+@keyframes flt-slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

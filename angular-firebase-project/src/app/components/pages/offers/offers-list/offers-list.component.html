@@ -1,0 +1,154 @@
+<!-- Skeleton loading amíg az ajánlatok betöltődnek -->
+<ng-container *ngIf="loading">
+  <div class="row">
+    <div
+      class="col-md-4 mb-4"
+      *ngFor="let _ of skeletonItems; trackBy: trackByIndex"
+    >
+      <div class="skeleton-card h-100">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line skeleton-title"></div>
+          <div class="skeleton-line skeleton-short"></div>
+          <div class="skeleton-line skeleton-medium"></div>
+          <div class="skeleton-line skeleton-narrow"></div>
+          <div class="skeleton-line skeleton-medium"></div>
+        </div>
+        <div class="skeleton-footer">
+          <div class="skeleton-price"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Ajánlat kártyák -->
+<ng-container *ngIf="!loading">
+  <div class="row">
+    <div
+      class="col-md-4 mb-4"
+      *ngFor="let offer of filteredOffers; trackBy: trackByOfferId"
+    >
+      <div
+        class="card h-100 shadow-sm offer-card"
+        [class.offer-card--inactive]="offer.isInactive"
+        (click)="goToDetails(offer.id, offer.isInactive)"
+        tabindex="0"
+        role="button"
+        [attr.aria-disabled]="offer.isInactive"
+      >
+        <!-- Inactive overlay badge -->
+        <div *ngIf="offer.isInactive" class="offer-inactive-overlay">
+          <span class="offer-inactive-badge">{{
+            "offers.notAvailable" | translate
+          }}</span>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-favorite"
+          [class.favorited]="favoriteIds.has(offer.id)"
+          (click)="toggleFavorite(offer.id, $event)"
+          [attr.aria-label]="
+            favoriteIds.has(offer.id)
+              ? ('offers.removeFromFavorites' | translate)
+              : ('offers.addToFavorites' | translate)
+          "
+        >
+          <i class="fa-solid fa-heart"></i>
+        </button>
+        <div class="offer-image-wrapper">
+          <img
+            [src]="optimizeImageUrl(offer.images[0])"
+            class="offer-image"
+            loading="lazy"
+            decoding="async"
+            width="400"
+            height="200"
+            alt="offer image"
+            (error)="onImageError($event)"
+          />
+        </div>
+
+        <div class="card-body">
+          <h4 class="card-title fw-bolder">
+            {{ languageService.getLocalizedText(offer.title, offer.titleEn) }}
+          </h4>
+
+          <h6 class="card-text">
+            {{
+              languageService.getLocalizedText(
+                offer.shortDescription,
+                offer.shortDescriptionEn
+              )
+            }}
+          </h6>
+
+          <ul class="list-unstyled small">
+            <li>
+              <strong>{{ "offers.location" | translate }}</strong>
+              {{ offer.location }}
+            </li>
+            <li>
+              <strong>{{ "offers.hotel" | translate }}</strong>
+              {{ offer.hotelName }}
+            </li>
+            <li>
+              <strong>{{ "offers.stars" | translate }}</strong>
+              {{ offer.hotelStars }}★
+            </li>
+            <li>
+              <strong>{{ "offers.duration" | translate }}</strong>
+              {{ offer.days }} {{ "offers.days" | translate }} /
+              {{ offer.nights }}
+              {{ "offers.nights" | translate }}
+            </li>
+            <li>
+              <strong>{{ "offers.persons" | translate }}</strong>
+              {{ offer.persons }}
+            </li>
+            <li>
+              <strong>{{ "offers.type" | translate }}</strong>
+              {{ "offers." + offer.travelCategory | translate }}
+            </li>
+            <li>
+              <strong>{{ "offers.available" | translate }}</strong>
+            </li>
+            <li>
+              {{
+                offer.travelPeriodStart
+                  | date: (currentLang === "hu" ? "yyyy. MM. dd." : "MMM d, y")
+              }}
+              –
+              {{
+                offer.travelPeriodEnd
+                  | date: (currentLang === "hu" ? "yyyy. MM. dd." : "MMM d, y")
+              }}
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-footer text-end">
+          <h3 class="price">
+            {{ offer.price | smartPrice }}
+            <span class="currency-eur">&euro;</span>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="filteredOffers.length === 0" class="text-center text-muted py-5">
+    <h5>{{ "offers.noOffers" | translate }}</h5>
+    <p>{{ "offers.tryModifyFilters" | translate }}</p>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="!hasMore && !isLoading" class="text-center py-4 text-muted">
+    <hr />
+    <p class="mb-0">{{ "offers.noMoreOffers" | translate }}</p>
+  </div>
+</ng-container>

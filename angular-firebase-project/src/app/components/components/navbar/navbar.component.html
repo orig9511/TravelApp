@@ -1,0 +1,429 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <a routerLink="/" class="navbar-brand">
+      <img src="TravelApp.png" alt="TravelApp logo" class="brand-logo" />
+      TravelApp
+    </a>
+
+    <!-- Hamburger gomb, mobil nézethez -->
+    <button
+      class="hamburger"
+      [class.active]="isMenuOpen"
+      (click)="toggleMenu()"
+      [attr.aria-label]="'navbar.menuOpen' | translate"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <!-- Full-screen off-canvas menü -->
+    <ul class="navbar-menu" [class.active]="isMenuOpen">
+      <li class="toggle-wrapper">
+        <div class="toggle-row">
+          <div class="theme-toggle-item">
+            <div class="theme-toggle">
+              <button
+                class="theme-toggle-btn"
+                (click)="toggleTheme()"
+                [attr.aria-label]="
+                  (isDarkMode$ | async)
+                    ? ('navbar.themeLightMode' | translate)
+                    : ('navbar.themeDarkMode' | translate)
+                "
+              >
+                <i
+                  class="fa-solid fa-sun icon"
+                  [class.active]="!(isDarkMode$ | async)"
+                ></i>
+                <i
+                  class="fa-solid fa-moon icon"
+                  [class.active]="isDarkMode$ | async"
+                ></i>
+              </button>
+            </div>
+          </div>
+          <div class="language-toggle-item">
+            <div class="language-toggle">
+              <button
+                class="language-toggle-btn"
+                (click)="toggleLanguage()"
+                [attr.aria-label]="
+                  'Switch language to ' +
+                  ((currentLanguage$ | async) === 'hu' ? 'English' : 'Magyar')
+                "
+              >
+                <span
+                  class="lang-text"
+                  [class.active]="(currentLanguage$ | async) === 'hu'"
+                  >HU</span
+                >
+                <span
+                  class="lang-text"
+                  [class.active]="(currentLanguage$ | async) === 'en'"
+                  >EN</span
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <a routerLink="/offers" class="nav-link" (click)="closeMenu()">
+          <span class="nav-link-sizer" aria-hidden="true">Ajánlatok</span>
+          <span class="nav-link-text">{{ "navbar.offers" | translate }}</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/accommodation" class="nav-link" (click)="closeMenu()">
+          <span class="nav-link-sizer" aria-hidden="true">Szállásfoglalás</span>
+          <span class="nav-link-text">{{
+            "navbar.accommodation" | translate
+          }}</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/flights" class="nav-link" (click)="closeMenu()">
+          <span class="nav-link-sizer" aria-hidden="true">Repülőjegyek</span>
+          <span class="nav-link-text">{{ "navbar.flights" | translate }}</span>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="/package" class="nav-link" (click)="closeMenu()">
+          <span class="nav-link-sizer" aria-hidden="true"
+            >Szállás+repülőjegy</span
+          >
+          <span class="nav-link-text">{{ "navbar.package" | translate }}</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/favorites"
+          class="nav-link nav-link--icon"
+          (click)="closeMenu()"
+        >
+          <span class="nav-icon-wrap">
+            <i
+              id="nav-heart-icon"
+              class="fa-solid fa-heart"
+              [class.has-favorites]="hasFavorites$ | async"
+            ></i>
+            <span
+              class="nav-fav-badge"
+              *ngIf="favoriteCount$ | async as count"
+              >{{ count }}</span
+            >
+          </span>
+        </a>
+      </li>
+      <!-- NINCS BEJELENTKEZVE -->
+      <li *ngIf="!(user$ | async)">
+        <a routerLink="/login" class="nav-link login-btn" (click)="closeMenu()">
+          <span class="nav-link-sizer" aria-hidden="true">Bejelentkezés</span>
+          <span class="nav-link-text">{{ "navbar.login" | translate }}</span>
+        </a>
+      </li>
+
+      <!-- BE VAN JELENTKEZVE -->
+      <ng-container *ngIf="user$ | async">
+        <!-- DESKTOP -->
+        <li class="nav-item dropdown d-none d-lg-block">
+          <button
+            class="btn btn-link nav-link dropdown-toggle p-0 profile-trigger"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span class="profile-icon">
+              <i class="fa-solid fa-circle-user"></i>
+              <span
+                class="notification-badge"
+                *ngIf="unreadCount$ | async as count"
+                [attr.data-count]="count > 9 ? '9+' : count"
+              ></span>
+            </span>
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-end">
+            <!-- PROFILE FIRST -->
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/profile"
+                (click)="closeMenu()"
+              >
+                {{ "navbar.profile" | translate }}
+              </a>
+              <hr class="dropdown-divider" />
+            </li>
+            @if (currentUserProfile$ | async; as profile) {
+              @if (profile.role === "admin") {
+                <li>
+                  <a class="dropdown-item" routerLink="/admin/users">
+                    {{ "navbar.manageUsers" | translate }}
+                  </a>
+                </li>
+              }
+            }
+            <li><hr class="dropdown-divider" /></li>
+
+            <!-- NOTIFICATIONS SECTION -->
+            <li
+              class="notification-header"
+              (click)="toggleNotificationCollapse(); $event.stopPropagation()"
+            >
+              <div class="notification-title">
+                <strong>
+                  {{ "navbar.notifications" | translate }}
+                  <span
+                    class="notification-count"
+                    *ngIf="unreadCount$ | async as count"
+                    >({{ count }})</span
+                  >
+                </strong>
+                <div class="notification-header-actions">
+                  <button
+                    class="btn btn-link btn-sm collapse-toggle"
+                    title="Toggle notifications"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <i
+                      class="fa-solid"
+                      [class.fa-chevron-down]="isNotificationsCollapsed"
+                      [class.fa-chevron-up]="!isNotificationsCollapsed"
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            </li>
+
+            <!-- Notification controls - only visible when expanded -->
+            <li
+              class="notification-controls"
+              *ngIf="!isNotificationsCollapsed"
+              (click)="$event.stopPropagation()"
+            >
+              <div class="notification-actions">
+                <button
+                  class="btn btn-link btn-sm mark-all-read"
+                  *ngIf="unreadCount$ | async as count"
+                  (click)="
+                    markAllNotificationsAsRead(); $event.stopPropagation()
+                  "
+                >
+                  {{ "navbar.markAllRead" | translate }}
+                </button>
+              </div>
+            </li>
+
+            <ng-container *ngIf="!isNotificationsCollapsed">
+              <li
+                *ngFor="let notification of notifications; trackBy: trackByNotificationId"
+                class="notification-item"
+              >
+                <div
+                  class="notification-content"
+                  [class.unread]="!notification.read"
+                  (click)="onNotificationClick(notification)"
+                >
+                  <div class="notification-text">
+                    <strong>{{ notification.title }}</strong>
+                    <p class="notification-message">
+                      {{ notification.message }}
+                    </p>
+                    <span class="notification-time">{{
+                      getTimeAgo(notification)
+                    }}</span>
+                  </div>
+                  <div
+                    class="notification-icons"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <button
+                      *ngIf="!notification.read"
+                      class="notification-icon-btn dismiss-btn"
+                      (click)="dismissNotification(notification.id, $event)"
+                      title="Mark as read"
+                    >
+                      <i class="fa-solid fa-check"></i>
+                    </button>
+                    <button
+                      class="notification-icon-btn delete-btn"
+                      (click)="deleteNotification(notification.id, $event)"
+                      title="Delete"
+                    >
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </li>
+
+              <li *ngIf="notifications.length === 0" class="notification-empty">
+                <p>{{ "navbar.noNotifications" | translate }}</p>
+              </li>
+            </ng-container>
+
+            <li><hr class="dropdown-divider" /></li>
+
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/my-bookings"
+                (click)="closeMenu()"
+              >
+                {{ "navbar.myBookings" | translate }}
+              </a>
+            </li>
+
+            <ng-container *ngIf="userProfile$ | async as profile">
+              <li *ngIf="isAdvertiserOrAdmin(profile)">
+                <hr class="dropdown-divider" />
+              </li>
+
+              <li *ngIf="isAdvertiserOrAdmin(profile)">
+                <a
+                  class="dropdown-item"
+                  routerLink="/advertiser-panel"
+                  (click)="closeMenu()"
+                >
+                  {{ "navbar.advertiserPanel" | translate }}
+                </a>
+              </li>
+            </ng-container>
+
+            <li><hr class="dropdown-divider" /></li>
+
+            <li>
+              <button class="dropdown-item" (click)="logout()">
+                {{ "navbar.logout" | translate }}
+              </button>
+            </li>
+          </ul>
+        </li>
+
+        <!-- MOBILE -->
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" routerLink="/profile" (click)="closeMenu()">
+            {{ "navbar.profile" | translate }}
+          </a>
+        </li>
+
+        <li class="nav-item d-lg-none mobile-notifications">
+          <div
+            class="mobile-notification-header"
+            (click)="toggleNotificationCollapse(); $event.stopPropagation()"
+          >
+            <span class="nav-link">
+              {{ "navbar.notifications" | translate }}
+              <span
+                class="mobile-notif-badge"
+                *ngIf="unreadCount$ | async as count"
+              >
+                {{ count }}
+              </span>
+            </span>
+            <button
+              class="btn btn-link btn-sm collapse-toggle-mobile"
+              (click)="$event.stopPropagation()"
+            >
+              <i
+                class="fa-solid"
+                [class.fa-chevron-down]="isNotificationsCollapsed"
+                [class.fa-chevron-up]="!isNotificationsCollapsed"
+              ></i>
+            </button>
+          </div>
+
+          <div
+            class="mobile-notification-controls"
+            *ngIf="!isNotificationsCollapsed"
+            (click)="$event.stopPropagation()"
+          >
+            <div class="mobile-notification-actions">
+              <button
+                class="btn btn-link btn-sm mark-all-read-mobile"
+                *ngIf="unreadCount$ | async as count"
+                (click)="markAllNotificationsAsRead(); $event.stopPropagation()"
+              >
+                {{ "navbar.markAllRead" | translate }}
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="mobile-notification-list"
+            *ngIf="!isNotificationsCollapsed"
+          >
+            <div
+              *ngFor="let notification of notifications; trackBy: trackByNotificationId"
+              class="mobile-notification-item"
+              [class.unread]="!notification.read"
+            >
+              <div
+                class="notification-text"
+                (click)="onNotificationClick(notification)"
+              >
+                <strong>{{ notification.title }}</strong>
+                <p class="notification-message">{{ notification.message }}</p>
+                <span class="notification-time">{{
+                  getTimeAgo(notification)
+                }}</span>
+              </div>
+              <div
+                class="notification-icons"
+                (click)="$event.stopPropagation()"
+              >
+                <button
+                  *ngIf="!notification.read"
+                  class="notification-icon-btn dismiss-btn"
+                  (click)="dismissNotification(notification.id, $event)"
+                  title="Olvasottnak jelöl"
+                >
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button
+                  class="notification-icon-btn delete-btn"
+                  (click)="deleteNotification(notification.id, $event)"
+                  title="Törlés"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <div
+              *ngIf="notifications.length === 0"
+              class="mobile-notification-empty"
+            >
+              <p>{{ "navbar.noNotifications" | translate }}</p>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" routerLink="/my-bookings" (click)="closeMenu()">
+            {{ "navbar.myBookings" | translate }}
+          </a>
+        </li>
+
+        <ng-container *ngIf="userProfile$ | async as profile">
+          <li class="nav-item d-lg-none" *ngIf="isAdvertiserOrAdmin(profile)">
+            <a
+              class="nav-link"
+              routerLink="/advertiser-panel"
+              (click)="closeMenu()"
+            >
+              {{ "navbar.advertiserPanel" | translate }}
+            </a>
+          </li>
+        </ng-container>
+
+        <li class="nav-item d-lg-none">
+          <button class="nav-link login-btn" (click)="logout(); closeMenu()">
+            {{ "navbar.logout" | translate }}
+          </button>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</nav>

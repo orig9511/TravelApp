@@ -1,0 +1,32 @@
+<div class="sort-bar">
+  <span class="sort-bar__label">{{ "flights.sort.title" | translate }}:</span>
+  <div class="sort-bar__tabs" role="group">
+    <button
+      type="button"
+      class="sort-tab"
+      [class.sort-tab--active]="selectedSort === 'cheapest'"
+      (click)="onSortChange('cheapest')"
+    >
+      <i class="bi bi-tag-fill" aria-hidden="true"></i>
+      <span>{{ "flights.sort.cheapest" | translate }}</span>
+    </button>
+    <button
+      type="button"
+      class="sort-tab"
+      [class.sort-tab--active]="selectedSort === 'shortest'"
+      (click)="onSortChange('shortest')"
+    >
+      <i class="bi bi-lightning-fill" aria-hidden="true"></i>
+      <span>{{ "flights.sort.shortest" | translate }}</span>
+    </button>
+    <button
+      type="button"
+      class="sort-tab"
+      [class.sort-tab--active]="selectedSort === 'earliest'"
+      (click)="onSortChange('earliest')"
+    >
+      <i class="bi bi-clock-fill" aria-hidden="true"></i>
+      <span>{{ "flights.sort.earliest" | translate }}</span>
+    </button>
+  </div>
+</div>

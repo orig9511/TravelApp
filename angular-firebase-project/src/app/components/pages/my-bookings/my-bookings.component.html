@@ -1,0 +1,388 @@
+<div class="container mt-4 mb-5">
+  <h2 class="mb-4">{{ "myBookings.title" | translate }}</h2>
+
+  <!-- LOADING -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">{{ "myBookings.loading" | translate }}</p>
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="!loading && error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div
+    *ngIf="
+      !loading && !error && bookings.length === 0 && reservations.length === 0
+    "
+    class="text-center py-5"
+  >
+    <i class="fa-solid fa-calendar-xmark fa-4x text-muted mb-3"></i>
+    <h4>{{ "myBookings.empty" | translate }}</h4>
+    <p class="text-muted">{{ "myBookings.emptySubtitle" | translate }}</p>
+    <a routerLink="/offers" class="btn btn-primary mt-3">
+      {{ "myBookings.browseOffers" | translate }}
+    </a>
+  </div>
+
+  <!-- BOOKINGS LIST -->
+  <div
+    *ngIf="
+      !loading && !error && (bookings.length > 0 || reservations.length > 0)
+    "
+  >
+    <!-- HOTEL RESERVATIONS -->
+    <div *ngIf="reservations.length > 0" class="mb-4">
+      <h4 class="mb-3">
+        <i class="fa-solid fa-hotel me-2 text-success"></i
+        >{{ "myBookings.hotelSectionTitle" | translate }}
+      </h4>
+      <div class="row g-3">
+        <div
+          class="col-12"
+          *ngFor="let res of reservations; trackBy: trackByReservationId"
+        >
+          <div class="card booking-card">
+            <div class="card-body">
+              <div class="mb-2">
+                <span class="badge bg-success me-2">
+                  <i class="fa-solid fa-hotel me-1"></i>
+                  {{ "myBookings.badgeAccommodation" | translate }}
+                </span>
+              </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <div
+                    class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                    style="height: 120px"
+                  >
+                    <i
+                      *ngIf="!res.accommodation?.imageUrl"
+                      class="fa-solid fa-hotel fa-3x text-white opacity-50"
+                    ></i>
+                    <img
+                      *ngIf="res.accommodation?.imageUrl"
+                      [src]="res.accommodation?.imageUrl"
+                      class="img-fluid rounded"
+                      style="max-height: 120px; object-fit: cover; width: 100%"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h5 class="mb-2">
+                    {{
+                      res.accommodation?.name ||
+                        ("myBookings.defaultAccommodation" | translate)
+                    }}
+                  </h5>
+                  <p class="mb-1">
+                    <i class="fa-solid fa-map-marker-alt me-2"></i
+                    >{{ res.accommodation?.city }}
+                  </p>
+                  <p class="mb-1">
+                    <i class="fa-solid fa-calendar-check me-2"></i
+                    ><strong>{{ "myBookings.checkIn" | translate }}</strong>
+                    {{ res.startDate | isoDate }}
+                  </p>
+                  <p class="mb-1">
+                    <i class="fa-solid fa-calendar-times me-2"></i
+                    ><strong>{{ "myBookings.checkOut" | translate }}</strong>
+                    {{ res.endDate | isoDate }}
+                  </p>
+                  <p class="mb-1">
+                    <i class="fa-solid fa-moon me-2"></i
+                    ><strong>{{ "myBookings.nights" | translate }}</strong>
+                    {{ getNights(res) }}
+                  </p>
+                  <p class="mb-1">
+                    <i class="fa-solid fa-users me-2"></i
+                    ><strong>{{ "myBookings.guests" | translate }}</strong>
+                    {{ res.persons }} {{ "myBookings.guestsUnit" | translate }}
+                  </p>
+                  <p class="mb-0">
+                    <i class="fa-solid fa-euro-sign me-2"></i
+                    ><strong>{{ "myBookings.total" | translate }}</strong>
+                    {{ res.price }} <span class="currency-eur">&euro;</span>
+                  </p>
+                </div>
+                <div class="col-md-3 text-md-end">
+                  <span
+                    class="badge mb-3"
+                    [ngClass]="getStatusBadgeClass(res.status)"
+                  >
+                    {{ getStatusLabel(res.status) | translate }}
+                  </span>
+                  <div class="mt-2">
+                    <small class="text-muted d-block">{{
+                      "myBookings.bookingId" | translate
+                    }}</small>
+                    <small class="font-monospace">{{ res.id }}</small>
+                  </div>
+                  <div *ngIf="res.status === 'pending'" class="mt-3">
+                    <small class="text-muted d-block mb-2">{{
+                      "myBookings.pendingNote" | translate
+                    }}</small>
+                    <ng-container
+                      *ngIf="
+                        confirmingReservationId !== res.id;
+                        else confirmResCancel
+                      "
+                    >
+                      <button
+                        class="btn btn-sm btn-danger w-100"
+                        (click)="requestCancelReservation(res)"
+                      >
+                        <i class="fa-solid fa-times me-1"></i>
+                        {{ "myBookings.cancelReservationButton" | translate }}
+                      </button>
+                    </ng-container>
+                    <ng-template #confirmResCancel>
+                      <small class="text-danger d-block mb-1">{{
+                        "myBookings.confirmCancelQuestion" | translate
+                      }}</small>
+                      <div class="d-flex gap-1">
+                        <button
+                          class="btn btn-sm btn-danger flex-fill"
+                          (click)="confirmCancelReservation(res)"
+                        >
+                          {{ "myBookings.confirmYes" | translate }}
+                        </button>
+                        <button
+                          class="btn btn-sm btn-secondary flex-fill"
+                          (click)="confirmingReservationId = null"
+                        >
+                          {{ "myBookings.confirmNo" | translate }}
+                        </button>
+                      </div>
+                    </ng-template>
+                  </div>
+                  <div *ngIf="res.status === 'confirmed'" class="mt-3">
+                    <i class="fa-solid fa-check-circle text-success me-1"></i>
+                    <small class="text-success">{{
+                      "myBookings.confirmedLabel" | translate
+                    }}</small>
+                  </div>
+                  <div *ngIf="res.status === 'cancelled'" class="mt-3">
+                    <i class="fa-solid fa-ban text-danger me-1"></i>
+                    <small class="text-danger">{{
+                      "myBookings.cancelledLabel" | translate
+                    }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS (offers + flights) -->
+    <div *ngIf="bookings.length > 0">
+      <h4 class="mb-3" *ngIf="reservations.length > 0">
+        <i class="fa-solid fa-suitcase me-2 text-primary"></i
+        >{{ "myBookings.otherSectionTitle" | translate }}
+      </h4>
+      <div class="row g-3">
+        <div
+          class="col-12"
+          *ngFor="let booking of bookings; trackBy: trackByBookingId"
+        >
+          <div class="card booking-card">
+            <div class="card-body">
+              <!-- TYPE BADGE HEADER -->
+              <div class="mb-2">
+                <span
+                  *ngIf="booking.bookingType === 'flight'"
+                  class="badge bg-info text-dark me-2"
+                >
+                  <i class="fa-solid fa-plane me-1"></i>
+                  {{ "myBookings.badgeFlight" | translate }}
+                </span>
+                <span
+                  *ngIf="booking.bookingType !== 'flight'"
+                  class="badge bg-primary me-2"
+                >
+                  <i class="fa-solid fa-suitcase me-1"></i>
+                  {{ "myBookings.badgePackage" | translate }}
+                </span>
+              </div>
+              <div class="row">
+                <!-- OFFER IMAGE -->
+                <div class="col-md-3">
+                  <ng-container *ngIf="booking.offer?.images as offerImages">
+                    <img
+                      *ngIf="offerImages.length > 0"
+                      [src]="offerImages[0]"
+                      [alt]="booking.offer?.title || 'Offer image'"
+                      class="img-fluid rounded"
+                      style="max-height: 150px; object-fit: cover; width: 100%"
+                    />
+                    <div
+                      *ngIf="offerImages.length === 0"
+                      class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                      style="height: 150px"
+                    >
+                      <i
+                        class="fa-solid fa-image fa-3x text-white opacity-50"
+                      ></i>
+                    </div>
+                  </ng-container>
+                  <div
+                    *ngIf="!booking.offer?.images"
+                    class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                    style="height: 150px"
+                  >
+                    <i
+                      class="fa-solid fa-image fa-3x text-white opacity-50"
+                    ></i>
+                  </div>
+                </div>
+
+                <!-- BOOKING DETAILS -->
+                <div class="col-md-6">
+                  <h5 class="mb-2">
+                    {{
+                      booking.offer?.title ||
+                        booking.offerTitle ||
+                        ("myBookings.loadingOffer" | translate)
+                    }}
+                  </h5>
+
+                  <p class="mb-1" *ngIf="booking.bookingType !== 'flight'">
+                    <i class="fa-solid fa-calendar me-2"></i>
+                    <strong>{{ "myBookings.dateTime" | translate }}</strong>
+                    {{ booking.instance?.departureDate | isoDate }} –
+                    {{ booking.instance?.returnDate | isoDate }}
+                  </p>
+
+                  <p class="mb-1" *ngIf="booking.bookingType === 'flight'">
+                    <i class="fa-solid fa-plane-departure me-2"></i>
+                    <strong>{{ "myBookings.departure" | translate }}</strong>
+                    {{ booking.selectedDate | isoDate }}
+                  </p>
+
+                  <p class="mb-1">
+                    <i class="fa-solid fa-users me-2"></i>
+                    <strong>{{ "myBookings.persons" | translate }}</strong>
+                    {{ booking.quantity }}
+                    {{ "myBookings.guestsUnit" | translate }}
+                  </p>
+
+                  <p class="mb-1">
+                    <i class="fa-solid fa-euro-sign me-2"></i>
+                    <strong>{{ "myBookings.total" | translate }}</strong>
+                    {{ booking.totalPrice }}
+                    <span class="currency-eur">&euro;</span>
+                  </p>
+
+                  <p
+                    class="mb-1"
+                    *ngIf="
+                      booking.extras &&
+                      (booking.extras.extraBaggage > 0 ||
+                        booking.extras.extraLegroom > 0)
+                    "
+                  >
+                    <i class="fa-solid fa-plus-circle me-2"></i>
+                    <strong>{{ "myBookings.extras" | translate }}</strong>
+                    <span *ngIf="booking.extras.extraBaggage > 0">
+                      {{ booking.extras.extraBaggage }}×
+                      {{ "myBookings.extraBaggage" | translate }}
+                    </span>
+                    <span *ngIf="booking.extras.extraLegroom > 0">
+                      {{ booking.extras.extraBaggage > 0 ? ", " : "" }}
+                      {{ booking.extras.extraLegroom }}×
+                      {{ "myBookings.extraLegroom" | translate }}
+                    </span>
+                  </p>
+
+                  <p class="mb-0">
+                    <i class="fa-solid fa-clock me-2"></i>
+                    <strong>{{ "myBookings.bookingDate" | translate }}</strong>
+                    {{ booking.createdAt | isoDate }}
+                  </p>
+                </div>
+
+                <!-- STATUS & ACTIONS -->
+                <div class="col-md-3 text-md-end">
+                  <span
+                    class="badge mb-3"
+                    [ngClass]="getStatusBadgeClass(booking.status)"
+                  >
+                    {{ getStatusLabel(booking.status) | translate }}
+                  </span>
+
+                  <div class="mt-2">
+                    <small class="text-muted d-block">{{
+                      "myBookings.bookingId" | translate
+                    }}</small>
+                    <small class="font-monospace">{{ booking.id }}</small>
+                  </div>
+
+                  <!-- PENDING STATUS ACTIONS -->
+                  <div *ngIf="booking.status === 'pending'" class="mt-3">
+                    <small class="text-muted d-block mb-2">
+                      {{ "myBookings.pendingNote" | translate }}
+                    </small>
+
+                    <ng-container
+                      *ngIf="
+                        confirmingBookingId !== booking.id;
+                        else confirmBookingCancel
+                      "
+                    >
+                      <button
+                        class="btn btn-sm btn-danger w-100 mb-2"
+                        (click)="requestCancelBooking(booking)"
+                      >
+                        <i class="fa-solid fa-times me-1"></i>
+                        {{ "myBookings.cancelButton" | translate }}
+                      </button>
+                    </ng-container>
+                    <ng-template #confirmBookingCancel>
+                      <small class="text-danger d-block mb-1">{{
+                        "myBookings.confirmCancelQuestion" | translate
+                      }}</small>
+                      <div class="d-flex gap-1">
+                        <button
+                          class="btn btn-sm btn-danger flex-fill"
+                          (click)="confirmCancelBooking(booking)"
+                        >
+                          {{ "myBookings.confirmYes" | translate }}
+                        </button>
+                        <button
+                          class="btn btn-sm btn-secondary flex-fill"
+                          (click)="confirmingBookingId = null"
+                        >
+                          {{ "myBookings.confirmNo" | translate }}
+                        </button>
+                      </div>
+                    </ng-template>
+                  </div>
+
+                  <!-- CONFIRMED STATUS -->
+                  <div *ngIf="booking.status === 'confirmed'" class="mt-3">
+                    <i class="fa-solid fa-check-circle text-success me-1"></i>
+                    <small class="text-success">{{
+                      "myBookings.confirmedLabel" | translate
+                    }}</small>
+                  </div>
+
+                  <!-- CANCELLED STATUS -->
+                  <div *ngIf="booking.status === 'cancelled'" class="mt-3">
+                    <i class="fa-solid fa-ban text-danger me-1"></i>
+                    <small class="text-danger">{{
+                      "myBookings.cancelledLabel" | translate
+                    }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

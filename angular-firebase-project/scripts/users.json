@@ -1,0 +1,26 @@
+{
+  "user_admin_001": {
+    "first_name": "Anna",
+    "last_name": "Kovács",
+    "date_of_birth": "1990-04-12",
+    "username": "admin.anna",
+    "email": "anna.kovacs@example.com",
+    "role": "admin"
+  },
+  "user_adv_001": {
+    "first_name": "Bence",
+    "last_name": "Szabó",
+    "date_of_birth": "1995-09-03",
+    "username": "bence_ads",
+    "email": "bence.szabo@example.com",
+    "role": "advertiser"
+  },
+  "user_cust_001": {
+    "first_name": "Eszter",
+    "last_name": "Nagy",
+    "date_of_birth": "2000-01-20",
+    "username": "eszter_n",
+    "email": "eszter.nagy@example.com",
+    "role": "customer"
+  }
+}

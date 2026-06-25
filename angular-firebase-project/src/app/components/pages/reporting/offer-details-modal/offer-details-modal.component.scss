@@ -1,0 +1,137 @@
+.modal-backdrop {
+  z-index: 1040;
+}
+
+.modal {
+  z-index: 1050;
+}
+
+.modal-header-content {
+  flex: 1;
+
+  .modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .offer-meta {
+    font-size: 0.9rem;
+  }
+}
+
+.offer-image-container {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .offer-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+}
+
+.analytics-section {
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+  }
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+    font-size: 1.2rem;
+
+    &.bg-info {
+      background: #17a2b8;
+    }
+
+    &.bg-danger {
+      background: #dc3545;
+    }
+
+    &.bg-success {
+      background: #28a745;
+    }
+
+    &.bg-warning {
+      background: #ffc107;
+    }
+
+    &.bg-primary {
+      background: #007bff;
+    }
+  }
+
+  .stat-content {
+    flex: 1;
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #6c757d;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #212529;
+    }
+  }
+}
+
+.capacity-stats {
+  .capacity-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .capacity-label {
+      font-weight: 500;
+      color: #6c757d;
+    }
+
+    .capacity-value {
+      font-weight: 600;
+      color: #212529;
+    }
+  }
+}
+
+.progress-container {
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

@@ -1,0 +1,162 @@
+<div *ngIf="offer">
+  <div class="container mt-4" *ngIf="!loading && offer">
+    <!-- GALÉRIA -->
+    <div class="row mb-4">
+      <div class="col-md-8">
+        <img
+          [src]="selectedImage"
+          class="img-fluid main-image"
+          loading="lazy"
+          decoding="async"
+          alt="offer image"
+        />
+      </div>
+
+      <div class="col-md-4">
+        <div class="thumbs">
+          <img
+            *ngFor="let img of offer.images; trackBy: trackByImage"
+            [src]="img"
+            class="thumb"
+            loading="lazy"
+            decoding="async"
+            [class.active]="img === selectedImage"
+            (click)="selectImage(img)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- CÍM + ÁR -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>
+        {{ languageService.getLocalizedText(offer.title, offer.titleEn) }}
+      </h2>
+      <h3 class="price text-success">
+        {{ offer.price | smartPrice }}
+      </h3>
+    </div>
+
+    <!-- META -->
+    <div class="mb-3 text-muted">
+      📍 {{ offer.location }} | 📅
+      {{ offer.travelPeriodStart | isoDate: currentLang }} -
+      {{ offer.travelPeriodEnd | isoDate: currentLang }} | 🕒 {{ offer.days }}
+      {{ "offerDetail.days" | translate }} / {{ offer.nights }}
+      {{ "offerDetail.nights" | translate }} | 👤 {{ offer.persons }}
+      {{ "offerDetail.persons" | translate }} |
+      {{ "offers." + offer.travelCategory | translate }}
+    </div>
+
+    <!-- LEÍRÁS -->
+
+    <p class="lead">
+      {{
+        languageService.getLocalizedText(
+          offer.shortDescription,
+          offer.shortDescriptionEn
+        )
+      }}
+    </p>
+    <p class="lead">
+      {{
+        languageService.getLocalizedText(offer.description, offer.descriptionEn)
+      }}
+    </p>
+
+    <!-- HOTEL -->
+    <div class="card p-3 mb-4">
+      <h5>🏨 {{ offer.hotelName }} ({{ offer.hotelStars }}★)</h5>
+      <p class="mb-1">{{ offer.hotelAddress }}</p>
+      <p *ngIf="offer.hotelPhone">📞 {{ offer.hotelPhone }}</p>
+      <p *ngIf="offer.hotelEmail">✉️ {{ offer.hotelEmail }}</p>
+    </div>
+
+    <div class="d-flex gap-2 mt-4 mb-4">
+      <button
+        class="btn btn-lg"
+        [class.btn-danger]="isFavorite"
+        [class.btn-outline-danger]="!isFavorite"
+        (click)="toggleFavorite()"
+        [attr.aria-label]="
+          isFavorite
+            ? ('offerDetail.removeFromFavorites' | translate)
+            : ('offerDetail.addToFavorites' | translate)
+        "
+      >
+        <i class="fa-solid fa-heart me-1"></i>
+        {{
+          isFavorite
+            ? ("offerDetail.removeFromFavorites" | translate)
+            : ("offerDetail.addToFavorites" | translate)
+        }}
+      </button>
+    </div>
+
+    <!-- INSTANCE SELECTOR -->
+    <ng-container *ngIf="instances$ | async as instances">
+      <hr class="mt-2 mb-4" />
+      <h4 class="mb-3">{{ "offerDetail.chooseDate" | translate }}</h4>
+
+      <div *ngIf="instances.length === 0" class="text-muted mb-4">
+        {{ "offerDetail.noInstances" | translate }}
+      </div>
+
+      <div class="list-group mb-4" *ngIf="instances.length > 0">
+        <button
+          *ngFor="let instance of instances; trackBy: trackByInstanceId"
+          type="button"
+          class="list-group-item list-group-item-action instance-option"
+          [class.active]="selectedInstance?.id === instance.id"
+          [class.instance-option--selected]="
+            selectedInstance?.id === instance.id
+          "
+          [attr.aria-pressed]="selectedInstance?.id === instance.id"
+          [disabled]="instance.availableCapacity === 0"
+          (click)="selectInstance(instance)"
+        >
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong
+                >{{ instance.departureDate | isoDate: currentLang }} –
+                {{ instance.returnDate | isoDate: currentLang }}</strong
+              >
+              <span
+                class="ms-3 small"
+                [class.text-muted]="selectedInstance?.id !== instance.id"
+              >
+                {{ instance.availableCapacity }}
+                {{ "offerDetail.availableSpots" | translate }}
+              </span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <i
+                *ngIf="selectedInstance?.id === instance.id"
+                class="fa-solid fa-check-circle selected-marker"
+                aria-hidden="true"
+              ></i>
+              <span class="fw-bold" *ngIf="instance.availableCapacity > 0"
+                >{{ instance.pricePerPerson | smartPrice }}
+                <span class="currency-eur">&euro;</span
+                >{{ "offerDetail.perPerson" | translate }}</span
+              >
+              <span
+                *ngIf="instance.availableCapacity === 0"
+                class="badge bg-danger"
+                >{{ "offerDetail.notAvailable" | translate }}</span
+              >
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <button
+        class="btn btn-primary btn-lg mb-5"
+        [disabled]="!selectedInstance"
+        (click)="goToBooking()"
+      >
+        {{ "offerDetail.book" | translate }}
+      </button>
+    </ng-container>
+  </div>
+</div>

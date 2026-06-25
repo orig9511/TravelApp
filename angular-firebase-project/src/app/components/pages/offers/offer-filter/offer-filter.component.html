@@ -1,0 +1,87 @@
+<div *ngIf="hasActiveFilters()" class="alert alert-info py-2 mb-3">
+  {{ "offers.filterActive" | translate }}
+</div>
+
+<div
+  *ngIf="hasActiveFilters() && resultCount !== null"
+  class="small text-muted mb-3"
+>
+  {{ resultCount }} {{ "offers.offersFound" | translate }}
+</div>
+
+<div class="card p-3 shadow-sm position-sticky top-0">
+  <h5 class="mb-3">{{ "offers.filterTitle" | translate }}</h5>
+  <!-- Utazás típusa -->
+  <label class="form-label">{{ "offers.travelType" | translate }}</label>
+  <select class="form-select mb-3" [(ngModel)]="filter.travelCategory">
+    <option [ngValue]="undefined">{{ "offers.all" | translate }}</option>
+    <option value="flight">{{ "offers.flight" | translate }}</option>
+    <option value="individual">{{ "offers.individual" | translate }}</option>
+    <option value="tour">{{ "offers.tour" | translate }}</option>
+  </select>
+
+  <!-- Ár -->
+  <label class="form-label">{{ "offers.price" | translate }}</label>
+  <input
+    type="number"
+    class="form-control mb-2"
+    [placeholder]="'offers.min' | translate"
+    [(ngModel)]="filter.minPrice"
+  />
+  <input
+    type="number"
+    class="form-control mb-3"
+    [placeholder]="'offers.max' | translate"
+    [(ngModel)]="filter.maxPrice"
+  />
+
+  <!-- Napok -->
+  <label class="form-label">{{ "offers.daysCount" | translate }}</label>
+  <input
+    type="number"
+    class="form-control mb-2"
+    [placeholder]="'offers.min' | translate"
+    [(ngModel)]="filter.minDays"
+  />
+  <input
+    type="number"
+    class="form-control mb-3"
+    [placeholder]="'offers.max' | translate"
+    [(ngModel)]="filter.maxDays"
+  />
+  <!-- Utazás dátuma -->
+  <label class="form-label">{{ "offers.whenTravel" | translate }}</label>
+  <input
+    type="date"
+    class="form-control mb-3"
+    [(ngModel)]="filter.travelDate"
+  />
+
+  <!-- Fő -->
+  <label class="form-label">{{ "offers.howManyPersons" | translate }}</label>
+  <input type="number" class="form-control mb-3" [(ngModel)]="filter.persons" />
+
+  <!-- Csillag -->
+  <label class="form-label">{{ "offers.hotelStars" | translate }}</label>
+  <select class="form-select mb-3" [(ngModel)]="filter.minStars">
+    <option [ngValue]="undefined">{{ "offers.all" | translate }}</option>
+    <option
+      *ngFor="let s of [1, 2, 3, 4, 5]; trackBy: trackByIndex"
+      [value]="s"
+    >
+      {{ s }}+
+    </option>
+  </select>
+
+  <div *ngIf="filter.travelDate" class="small text-muted mt-2">
+    {{ "offers.selectedDate" | translate }} {{ filter.travelDate }}
+  </div>
+
+  <button class="btn btn-primary w-100 mb-2" (click)="applyFilter()">
+    {{ "offers.applyFilter" | translate }}
+  </button>
+
+  <button class="btn btn-outline-secondary w-100" (click)="reset()">
+    {{ "offers.reset" | translate }}
+  </button>
+</div>

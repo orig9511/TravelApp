@@ -1,0 +1,73 @@
+<footer class="footer">
+  <div class="container-fluid px-3 px-lg-5">
+    <!-- Footer Links  -->
+    <div class="row py-3 py-md-4 justify-content-center">
+      <div class="col-12">
+        <ul
+          class="footer-links d-flex flex-wrap justify-content-center gap-3 gap-lg-4 mb-0"
+        >
+          <li>
+            <a routerLink="/offers">{{ "footer.offers" | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/accommodation">{{
+              "footer.accommodation" | translate
+            }}</a>
+          </li>
+          <li>
+            <a routerLink="/flights">{{ "footer.flights" | translate }}</a>
+          </li>
+          <li>
+            <a routerLink="/package">{{ "footer.package" | translate }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Social Icons -->
+    <div class="row pb-3">
+      <div class="col-12">
+        <div class="social-links d-flex justify-content-center gap-2 gap-lg-3">
+          <a
+            href="https://www.facebook.com/"
+            class="social-link facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="'footer.facebookAriaLabel' | translate"
+          >
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a
+            href="https://x.com/"
+            class="social-link twitter"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="'footer.twitterAriaLabel' | translate"
+          >
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+          <a
+            href="https://instagram.com/"
+            class="social-link instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="'footer.instagramAriaLabel' | translate"
+          >
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="row">
+      <div class="col-12">
+        <div class="footer-bottom text-center py-2">
+          <p class="copyright mb-0">
+            {{ "footer.copyright" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

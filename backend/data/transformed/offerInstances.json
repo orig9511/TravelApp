@@ -1,0 +1,970 @@
+[
+  {
+    "id": "4YWNobpKwA9er7dkYXRQ",
+    "offerId": "HFZK1UIyRY8Nguwk1oS7",
+    "departureDate": "2026-08-26T00:00:00.000Z",
+    "returnDate": "2026-09-03T00:00:00.000Z",
+    "pricePerPerson": 990,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "82PugRnMYAKKluk9d9V1",
+    "offerId": "axQwrE3hVuDKmXaZJjyx",
+    "departureDate": "2026-07-22T00:00:00.000Z",
+    "returnDate": "2026-07-30T00:00:00.000Z",
+    "pricePerPerson": 950,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "8fTakJ3PVKtxoIDGqz8I",
+    "offerId": "nC96t6y3sXUDNs2JWZGL",
+    "departureDate": "2026-08-26T00:00:00.000Z",
+    "returnDate": "2026-09-03T00:00:00.000Z",
+    "pricePerPerson": 3520,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "AQjJX2VMksxgE4SYNsPP",
+    "offerId": "haUvWOBWsLlAsxri4XQt",
+    "departureDate": "2026-07-18T00:00:00.000Z",
+    "returnDate": "2026-07-26T00:00:00.000Z",
+    "pricePerPerson": 800,
+    "capacity": 15,
+    "availableCapacity": 1,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "BjrqtgIQn1ONBUx7VJ3Z",
+    "offerId": "8XmEkUzBD6172fs2kLWo",
+    "departureDate": "2026-07-22T00:00:00.000Z",
+    "returnDate": "2026-07-30T00:00:00.000Z",
+    "pricePerPerson": 1420,
+    "capacity": 15,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "Bs2d0GCyPeXTMSy3ZBYE",
+    "offerId": "h4yfvElfruIalcXcwzzY",
+    "departureDate": "2026-07-10T00:00:00.000Z",
+    "returnDate": "2026-07-18T00:00:00.000Z",
+    "pricePerPerson": 399,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "ErOsc66o3KxAbKSwnp9a",
+    "offerId": "Y8304hXFz5GygFhEog9z",
+    "departureDate": "2026-06-13T00:00:00.000Z",
+    "returnDate": "2026-06-21T00:00:00.000Z",
+    "pricePerPerson": 361,
+    "capacity": 20,
+    "availableCapacity": 18,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "FRDMjY8r8E0pFPFl2nbz",
+    "offerId": "axQwrE3hVuDKmXaZJjyx",
+    "departureDate": "2026-08-12T00:00:00.000Z",
+    "returnDate": "2026-08-20T00:00:00.000Z",
+    "pricePerPerson": 1045,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "Ga769qyAxD5kNQZ71JGZ",
+    "offerId": "h4yfvElfruIalcXcwzzY",
+    "departureDate": "2026-08-14T00:00:00.000Z",
+    "returnDate": "2026-08-22T00:00:00.000Z",
+    "pricePerPerson": 420,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "GoeuZBfsxYsHRlJb5I7B",
+    "offerId": "jrYTzhxlOh43KRtQsR9D",
+    "departureDate": "2026-06-10T00:00:00.000Z",
+    "returnDate": "2026-06-18T00:00:00.000Z",
+    "pricePerPerson": 1226,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "Gxt7uQDEEYpoyzLuavcm",
+    "offerId": "To3MRJpV1broPzeChSKA",
+    "departureDate": "2026-07-29T00:00:00.000Z",
+    "returnDate": "2026-08-06T00:00:00.000Z",
+    "pricePerPerson": 1980,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "J1rmdHFLItMGUVXtbEY4",
+    "offerId": "RCX3DUcEwkBQtYj42nmV",
+    "departureDate": "2026-07-15T00:00:00.000Z",
+    "returnDate": "2026-07-23T00:00:00.000Z",
+    "pricePerPerson": 350,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "NwxR1emDkbEez1jBB0Jn",
+    "offerId": "bLqupXeTvu5CqpDU7i4f",
+    "departureDate": "2026-06-13T00:00:00.000Z",
+    "returnDate": "2026-06-21T00:00:00.000Z",
+    "pricePerPerson": 1758,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "QJWpBlkOflTT8Wr1EFgW",
+    "offerId": "jrYTzhxlOh43KRtQsR9D",
+    "departureDate": "2026-07-15T00:00:00.000Z",
+    "returnDate": "2026-07-23T00:00:00.000Z",
+    "pricePerPerson": 1290,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "RqIi9eX3YqhVic9Fkyl6",
+    "offerId": "axQwrE3hVuDKmXaZJjyx",
+    "departureDate": "2026-06-17T00:00:00.000Z",
+    "returnDate": "2026-06-25T00:00:00.000Z",
+    "pricePerPerson": 903,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "SDH9MLwLgstQ9CUyCc4d",
+    "offerId": "WUA8AwhZbOjzOTDMGtpC",
+    "departureDate": "2026-06-10T00:00:00.000Z",
+    "returnDate": "2026-06-18T00:00:00.000Z",
+    "pricePerPerson": 428,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "TBgajwKZXpM7Bs2ayGzE",
+    "offerId": "8pPkQ9wGuzqpceGvEPaJ",
+    "departureDate": "2026-07-29T00:00:00.000Z",
+    "returnDate": "2026-08-06T00:00:00.000Z",
+    "pricePerPerson": 780,
+    "capacity": 15,
+    "availableCapacity": 1,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "U2rLHdNw4VmkGnHkbk5K",
+    "offerId": "WUA8AwhZbOjzOTDMGtpC",
+    "departureDate": "2026-07-15T00:00:00.000Z",
+    "returnDate": "2026-07-23T00:00:00.000Z",
+    "pricePerPerson": 450,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "U8SklHFrdUGc3r51YOQM",
+    "offerId": "jrYTzhxlOh43KRtQsR9D",
+    "departureDate": "2026-08-05T00:00:00.000Z",
+    "returnDate": "2026-08-13T00:00:00.000Z",
+    "pricePerPerson": 1419,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "Vxo2ktMXTN1KmDETHk07",
+    "offerId": "Y8304hXFz5GygFhEog9z",
+    "departureDate": "2026-08-08T00:00:00.000Z",
+    "returnDate": "2026-08-16T00:00:00.000Z",
+    "pricePerPerson": 418,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "WNww9usCUECbOWfd2m30",
+    "offerId": "haUvWOBWsLlAsxri4XQt",
+    "departureDate": "2026-06-13T00:00:00.000Z",
+    "returnDate": "2026-06-21T00:00:00.000Z",
+    "pricePerPerson": 760,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "Wfct1eLDwG6AVQ6MUwoa",
+    "offerId": "8XmEkUzBD6172fs2kLWo",
+    "departureDate": "2026-08-12T00:00:00.000Z",
+    "returnDate": "2026-08-20T00:00:00.000Z",
+    "pricePerPerson": 1562,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "aTd9NJ0fBS2Fmyc6beKL",
+    "offerId": "RCX3DUcEwkBQtYj42nmV",
+    "departureDate": "2026-08-05T00:00:00.000Z",
+    "returnDate": "2026-08-13T00:00:00.000Z",
+    "pricePerPerson": 385,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "aXWhxI5jTdF3mKESxoWN",
+    "offerId": "z051fL7Tr52xzhKsnoze",
+    "departureDate": "2026-08-14T00:00:00.000Z",
+    "returnDate": "2026-08-22T00:00:00.000Z",
+    "pricePerPerson": 1000,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "cMmJyS45frz4Kcow8bZn",
+    "offerId": "Y8304hXFz5GygFhEog9z",
+    "departureDate": "2026-07-18T00:00:00.000Z",
+    "returnDate": "2026-07-26T00:00:00.000Z",
+    "pricePerPerson": 380,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "eSLeokOyjuM9Z2Y5MEHu",
+    "offerId": "WUA8AwhZbOjzOTDMGtpC",
+    "departureDate": "2026-08-05T00:00:00.000Z",
+    "returnDate": "2026-08-13T00:00:00.000Z",
+    "pricePerPerson": 495,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "ga8TSKtcqfG6QDDP93hr",
+    "offerId": "HFZK1UIyRY8Nguwk1oS7",
+    "departureDate": "2026-07-01T00:00:00.000Z",
+    "returnDate": "2026-07-09T00:00:00.000Z",
+    "pricePerPerson": 855,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "hyFZqv5zQ33d7y6oxFqO",
+    "offerId": "nC96t6y3sXUDNs2JWZGL",
+    "departureDate": "2026-08-05T00:00:00.000Z",
+    "returnDate": "2026-08-13T00:00:00.000Z",
+    "pricePerPerson": 3200,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "iGSBPld3SZ5C8S9dJIvg",
+    "offerId": "bLqupXeTvu5CqpDU7i4f",
+    "departureDate": "2026-08-08T00:00:00.000Z",
+    "returnDate": "2026-08-16T00:00:00.000Z",
+    "pricePerPerson": 2035,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "iNfGNlYctR9EvMNBjdoT",
+    "offerId": "UksyNYoNNl9SwlEGqCbo",
+    "departureDate": "2026-04-09T00:00:00.000Z",
+    "returnDate": "2026-04-10T00:00:00.000Z",
+    "pricePerPerson": 1,
+    "capacity": 10,
+    "availableCapacity": 10,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 10,
+      "extraLegroom": 2
+    },
+    "extrasAvailable": {
+      "extraBaggage": 10,
+      "extraLegroom": 2
+    },
+    "createdAt": null
+  },
+  {
+    "id": "jkJI18LHHENr5Qk00VIe",
+    "offerId": "nC96t6y3sXUDNs2JWZGL",
+    "departureDate": "2026-07-01T00:00:00.000Z",
+    "returnDate": "2026-07-09T00:00:00.000Z",
+    "pricePerPerson": 3040,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "jx9hLwez0CNrJ8yvlTiU",
+    "offerId": "HFZK1UIyRY8Nguwk1oS7",
+    "departureDate": "2026-08-05T00:00:00.000Z",
+    "returnDate": "2026-08-13T00:00:00.000Z",
+    "pricePerPerson": 900,
+    "capacity": 15,
+    "availableCapacity": 1,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "nLQ8yRxd8868Jo4ac37j",
+    "offerId": "z051fL7Tr52xzhKsnoze",
+    "departureDate": "2026-07-10T00:00:00.000Z",
+    "returnDate": "2026-07-18T00:00:00.000Z",
+    "pricePerPerson": 950,
+    "capacity": 20,
+    "availableCapacity": 18,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "of1iuLdqs67QFqxZXpx3",
+    "offerId": "8XmEkUzBD6172fs2kLWo",
+    "departureDate": "2026-06-17T00:00:00.000Z",
+    "returnDate": "2026-06-25T00:00:00.000Z",
+    "pricePerPerson": 1349,
+    "capacity": 20,
+    "availableCapacity": 19,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "oxSubXiHoRFH1VE7qYp7",
+    "offerId": "z051fL7Tr52xzhKsnoze",
+    "departureDate": "2026-09-04T00:00:00.000Z",
+    "returnDate": "2026-09-12T00:00:00.000Z",
+    "pricePerPerson": 1100,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "pq8a7rmeCAkWz9JeS0mR",
+    "offerId": "To3MRJpV1broPzeChSKA",
+    "departureDate": "2026-08-19T00:00:00.000Z",
+    "returnDate": "2026-08-27T00:00:00.000Z",
+    "pricePerPerson": 2178,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "s1OFJ6IYPvY44BC4BgwD",
+    "offerId": "8pPkQ9wGuzqpceGvEPaJ",
+    "departureDate": "2026-06-24T00:00:00.000Z",
+    "returnDate": "2026-07-02T00:00:00.000Z",
+    "pricePerPerson": 741,
+    "capacity": 20,
+    "availableCapacity": 19,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "tMTFAS8Cx0vS7uh2zUFL",
+    "offerId": "RCX3DUcEwkBQtYj42nmV",
+    "departureDate": "2026-06-10T00:00:00.000Z",
+    "returnDate": "2026-06-18T00:00:00.000Z",
+    "pricePerPerson": 333,
+    "capacity": 20,
+    "availableCapacity": 18,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "tx1C8D6RSyXkyW4C9VUn",
+    "offerId": "bLqupXeTvu5CqpDU7i4f",
+    "departureDate": "2026-07-18T00:00:00.000Z",
+    "returnDate": "2026-07-26T00:00:00.000Z",
+    "pricePerPerson": 1850,
+    "capacity": 15,
+    "availableCapacity": 2,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "vDp97Ig3kKW2AOtpukdL",
+    "offerId": "h4yfvElfruIalcXcwzzY",
+    "departureDate": "2026-09-04T00:00:00.000Z",
+    "returnDate": "2026-09-12T00:00:00.000Z",
+    "pricePerPerson": 462,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "vMkuDB6DAdZIoIGPsGNm",
+    "offerId": "haUvWOBWsLlAsxri4XQt",
+    "departureDate": "2026-08-08T00:00:00.000Z",
+    "returnDate": "2026-08-16T00:00:00.000Z",
+    "pricePerPerson": 880,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "w6dqKpq9ltsLPVlwFG2d",
+    "offerId": "To3MRJpV1broPzeChSKA",
+    "departureDate": "2026-06-24T00:00:00.000Z",
+    "returnDate": "2026-07-02T00:00:00.000Z",
+    "pricePerPerson": 1881,
+    "capacity": 20,
+    "availableCapacity": 20,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "xjLKULymM4KvG94LGER4",
+    "offerId": "8pPkQ9wGuzqpceGvEPaJ",
+    "departureDate": "2026-08-19T00:00:00.000Z",
+    "returnDate": "2026-08-27T00:00:00.000Z",
+    "pricePerPerson": 858,
+    "capacity": 12,
+    "availableCapacity": 0,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "extrasAvailable": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "createdAt": null
+  },
+  {
+    "id": "zqCzmdWJoiUC35N9MnQq",
+    "offerId": "8pPkQ9wGuzqpceGvEPaJ",
+    "departureDate": "2026-04-01T00:00:00.000Z",
+    "returnDate": "2026-04-06T00:00:00.000Z",
+    "pricePerPerson": 825,
+    "capacity": 50,
+    "availableCapacity": 44,
+    "title": null,
+    "image": null,
+    "travelCategory": "",
+    "flightDetails": null,
+    "extrasCapacity": {
+      "extraBaggage": 50,
+      "extraLegroom": 10
+    },
+    "extrasAvailable": {
+      "extraBaggage": 47,
+      "extraLegroom": 7
+    },
+    "createdAt": null
+  }
+]

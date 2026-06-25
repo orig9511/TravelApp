@@ -1,0 +1,1227 @@
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // right: 0;
+  // width: 100%;
+  // z-index: 100;
+  background: var(--color-bg-light);
+  box-shadow: var(--shadow-soft);
+
+  .navbar-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    min-height: 4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color var(--transition-base);
+    flex-shrink: 0;
+    z-index: 102;
+
+    &:hover {
+      color: var(--color-primary-dark);
+    }
+
+    i {
+      font-size: 1.8rem;
+    }
+
+    .brand-logo {
+      height: 3rem;
+      width: auto;
+    }
+  }
+
+  /* Hamburger menü gomb (csak mobilon) */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 102;
+    transition: var(--transition-base);
+
+    span {
+      display: block;
+      width: 100%;
+      height: 3px;
+      background: var(--color-primary);
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    &:hover span {
+      background: var(--color-primary-dark);
+    }
+
+    /* Hamburger, X animáció */
+    &.active {
+      span {
+        background: white;
+      }
+
+      span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+      }
+
+      span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+      }
+    }
+  }
+
+  /* Full-screen off-canvas menü */
+  .navbar-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 6rem 2rem 2rem;
+    width: 100vw;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 0;
+
+    /* Full-screen pozicionálás */
+    position: fixed;
+    top: 0;
+    right: -100vw;
+    height: 100vh;
+    background: rgba(66, 69, 72, 0.95);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: none;
+    transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 101;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+      visibility 0s 0.4s,
+      opacity 0.3s ease;
+
+    &.active {
+      right: 0;
+      visibility: visible;
+      opacity: 1;
+      transition:
+        right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+        visibility 0s 0s,
+        opacity 0.3s ease;
+    }
+
+    li {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+      width: auto;
+    }
+
+    /* Amikor a menü aktív, az item-ek animálva jelennek meg */
+    &.active li {
+      /* Staggered animáció minden item-nek */
+      @for $i from 1 through 12 {
+        &:nth-child(#{$i}) {
+          animation: slideInItem 0.5s ease forwards;
+          animation-delay: #{$i * 0.1}s;
+        }
+      }
+    }
+  }
+
+  /* Slide-in animáció a menu itemeknek */
+  @keyframes slideInItem {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nav-link {
+    position: relative;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    transition: all var(--transition-base);
+    display: block;
+    border-bottom: none;
+    text-align: center;
+    z-index: 1;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: #ffffff;
+      transition: width var(--transition-base);
+    }
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.8);
+      transform: scale(1.05);
+
+      &::after {
+        width: 80%;
+      }
+    }
+  }
+
+  .nav-link-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  // Sizer span: láthatatlan, csak mobilon nem kell
+  .nav-link-sizer {
+    display: none;
+  }
+
+  // Szöveg span: mobilon inline, mint a régi szöveges tartalom
+  .nav-link-text {
+    display: inline;
+  }
+
+  // Favorites nav-link: flex so icon + label never cause line-height shifts
+  .nav-link--icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  // Stable icon container: badge is absolute so it never affects flow height
+  .nav-icon-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+
+    i {
+      font-size: 1.25rem;
+      transition: color 0.4s ease;
+    }
+
+    i.has-favorites {
+      color: #e53935;
+    }
+  }
+
+  .nav-fav-badge {
+    position: absolute;
+    top: -0.55rem;
+    right: -0.7rem;
+    background: var(--color-primary, #1a73e8);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.18em 0.42em;
+    border-radius: 9999px;
+    min-width: 1.3em;
+    text-align: center;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .login-btn {
+    background: #ffffff;
+    color: var(--color-primary) !important;
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    flex-shrink: 0;
+    margin-top: 1.5rem;
+    text-align: center;
+    border: 2px solid #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    z-index: 1;
+
+    &:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.95);
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .nav-select-wrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-select {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-md);
+    padding: 0.45rem 2.1rem 0.45rem 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.2;
+    outline: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+
+    &:hover,
+    &:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
+    }
+
+    option {
+      color: #1b1f24;
+      background: #ffffff;
+    }
+  }
+}
+
+/* Desktop layout */
+@media (min-width: 768px) {
+  .navbar {
+    .hamburger {
+      display: none;
+    }
+
+    .navbar-container {
+      gap: 1rem;
+    }
+
+    .navbar-menu {
+      position: static;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      width: auto;
+      height: auto;
+      padding: 0;
+      background: transparent;
+      backdrop-filter: none;
+      box-shadow: none;
+      padding-left: 0;
+      visibility: visible;
+      opacity: 1;
+      right: auto;
+
+      &.active {
+        right: auto;
+      }
+
+      li {
+        opacity: 1;
+        transform: translateY(0);
+        animation: none;
+        width: auto;
+      }
+
+      &.active li {
+        animation: none;
+      }
+    }
+
+    .nav-link {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--color-text);
+      padding: 0.5rem 0.25rem;
+      border-bottom: none;
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      &::after {
+        bottom: 0;
+        left: 0;
+        transform: none;
+        background: linear-gradient(
+          90deg,
+          var(--color-primary),
+          var(--color-primary-dark)
+        );
+      }
+
+      &:hover {
+        color: var(--color-primary);
+        transform: none;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+
+    .nav-select {
+      color: var(--color-text);
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+
+      &:hover,
+      &:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.14);
+      }
+    }
+
+    // Sizer: foglalja a helyet a hosszabb fordításhoz, láthatatlan
+    .nav-link-sizer {
+      display: block;
+      visibility: hidden;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    // Szöveg: ráfedd a sizerre, abszolút pozícióban
+    .nav-link-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+    .login-btn {
+      background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-primary-dark)
+      );
+      color: #fff !important;
+      padding: 0.4rem 0.9rem;
+      margin-top: 0;
+      border: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-medium);
+        background: linear-gradient(
+          135deg,
+          var(--color-primary),
+          var(--color-primary-dark)
+        );
+      }
+    }
+
+    .menu-overlay {
+      display: none;
+    }
+
+    .toggle-wrapper {
+      margin-left: 0.5rem;
+      width: auto;
+      margin-bottom: 0;
+      order: 999;
+    }
+
+    .toggle-row {
+      display: flex;
+      flex-direction: row;
+      gap: 0.35rem;
+    }
+
+    .theme-toggle-item,
+    .language-toggle-item {
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    // Összes többi menüpont sorrend
+    > li:not(.toggle-wrapper) {
+      order: 1;
+    }
+  }
+}
+
+/* Dark Mode Toggle */
+.theme-toggle-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+  order: -1;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  z-index: 103;
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(26, 115, 232, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(26, 115, 232, 0.3);
+  border-radius: 50px;
+  padding: 0.34rem 0.51rem;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--color-primary);
+    background: rgba(26, 115, 232, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.icon {
+  font-size: 0.85rem;
+  transition: all 0.4s ease;
+  opacity: 0.4;
+  transform: scale(0.85);
+  color: var(--color-text);
+
+  &.active {
+    opacity: 1;
+    transform: scale(1.1);
+    color: var(--color-primary);
+  }
+
+  // Sun icon
+  &.fa-sun.active {
+    animation: sunRotate 0.8s ease-in-out;
+    color: #edc900 !important;
+  }
+
+  // Moon icon
+  &.fa-moon.active {
+    animation: moonRotate 0.8s ease-in-out;
+  }
+}
+
+@keyframes sunRotate {
+  0% {
+    transform: scale(0.85) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+@keyframes moonRotate {
+  0% {
+    transform: scale(0.85) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.2) rotate(-180deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(-360deg);
+    opacity: 1;
+  }
+}
+
+// Dark mode specifikus stílusok
+:host-context(body.dark-mode) .theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Language Toggle - ugyanaz a stílus mint a theme toggle */
+.language-toggle-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+  order: -1;
+}
+
+.language-toggle {
+  display: flex;
+  align-items: center;
+  z-index: 103;
+}
+
+.language-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(26, 115, 232, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(26, 115, 232, 0.3);
+  border-radius: 50px;
+  padding: 0.34rem 0.51rem;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: var(--color-primary);
+    background: rgba(26, 115, 232, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.lang-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.4s ease;
+  opacity: 0.4;
+  transform: scale(0.85);
+  color: var(--color-text);
+  letter-spacing: 0;
+  line-height: 1;
+
+  &.active {
+    opacity: 1;
+    transform: scale(1.1);
+    color: var(--color-primary);
+    animation: langSwitch 0.8s ease-in-out;
+  }
+}
+
+@keyframes langSwitch {
+  0% {
+    transform: scale(0.85) rotateY(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.2) rotateY(180deg);
+  }
+  100% {
+    transform: scale(1.1) rotateY(360deg);
+    opacity: 1;
+  }
+}
+
+// Dark mode specifikus stílusok a language toggle-hoz
+:host-context(body.dark-mode) .language-toggle-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// Dark mode specifikus stílusok az értesítésekhez
+:host-context(body.dark-mode) {
+  // Desktop - notification dropdown header
+  .notification-header {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: rgba(26, 115, 232, 0.15);
+    }
+
+    .notification-title strong {
+      color: var(--color-primary, #1a73e8);
+    }
+  }
+
+  // Mobile - notification dropdown header
+  .mobile-notification-header {
+    &:hover {
+      background: rgba(26, 115, 232, 0.15);
+    }
+
+    .nav-link {
+      color: var(--color-primary, #1a73e8);
+    }
+  }
+}
+
+// Desktop layout - language toggle pozíció
+@media (min-width: 768px) {
+  .navbar {
+    .language-toggle-item {
+      width: auto;
+      margin-bottom: 0;
+      margin-left: 0;
+      order: 0;
+    }
+  }
+}
+
+// Mobile layout - toggle wrapper és row mobilnézetben
+@media (max-width: 767px) {
+  .toggle-wrapper {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .toggle-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .theme-toggle-item,
+  .language-toggle-item {
+    display: inline-flex;
+    width: auto;
+    margin-bottom: 0;
+  }
+
+  // Fehér árnyék mobilnézetben a toggle gombokra
+  .theme-toggle-btn,
+  .language-toggle-btn {
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+  }
+}
+
+.navbar .profile-trigger {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar .profile-trigger .profile-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.navbar .profile-trigger .profile-icon i {
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.navbar .profile-trigger:hover .profile-icon,
+.navbar .profile-trigger:focus .profile-icon {
+  background: rgba(255, 255, 255, 0.16);
+  transform: scale(1.04);
+}
+
+.navbar .profile-trigger::after {
+  display: none; // dropdown nyíl eltüntetése
+}
+
+/* ════════════════════════════════════════════
+   NESTED DROPDOWN (Desktop) - Advertiser Panel
+   ════════════════════════════════════════════ */
+@media (min-width: 992px) {
+  .dropend {
+    position: relative;
+
+    .dropdown-menu {
+      top: 0;
+      left: 100%;
+      margin-top: 0;
+      margin-left: 0.125rem;
+    }
+
+    .dropdown-toggle::after {
+      display: inline-block;
+      margin-left: 0.255em;
+      vertical-align: 0.255em;
+      content: "";
+      border-top: 0.3em solid transparent;
+      border-right: 0;
+      border-bottom: 0.3em solid transparent;
+      border-left: 0.3em solid;
+    }
+  }
+}
+
+/* Mobile submenu header styling */
+.mobile-submenu-header {
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+  .nav-link {
+    padding: 0.25rem 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+
+    &::after {
+      display: none;
+    }
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.6);
+      transform: none;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-submenu-header {
+    display: none;
+  }
+}
+
+// .profile-icon {
+//   position: relative;
+//   display: inline-block;
+//   font-size: 1.5rem;
+// }
+
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  background: var(--color-primary, #1a73e8);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-bg-light);
+
+  &::after {
+    content: attr(data-count);
+  }
+}
+
+// Notification dropdown items
+.notification-header {
+  padding: 0.75rem 1rem 0.5rem;
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: var(--color-bg-soft, #f8f9fa);
+  }
+}
+
+.notification-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+
+  strong {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .notification-count {
+    font-size: 0.85rem;
+    color: var(--color-primary, #1a73e8);
+  }
+
+  .notification-header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .collapse-toggle {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted, #666);
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary, #1a73e8);
+    }
+  }
+}
+
+.notification-controls {
+  padding: 0;
+  border-bottom: none;
+  background: transparent;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  .mark-all-read {
+    padding: 0;
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: var(--color-primary, #1a73e8);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.notification-item {
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border-light, #f0f0f0);
+
+  &:hover {
+    background: var(--color-bg-soft, #f8f9fa);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.notification-content {
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+
+  &.unread {
+    background: rgba(26, 115, 232, 0.05);
+    border-left: 3px solid var(--color-primary, #1a73e8);
+  }
+}
+
+.notification-text {
+  flex: 1;
+  min-width: 0;
+
+  strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-text, #333);
+    margin-bottom: 0.25rem;
+  }
+}
+
+.notification-message {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #666);
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.notification-time {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-subtle, #999);
+  margin-top: 0.25rem;
+}
+
+.notification-icons {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.notification-icon-btn {
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #666);
+  transition: all 0.2s ease;
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &.dismiss-btn {
+    color: var(--color-success, #28a745);
+
+    &:hover {
+      color: var(--color-success, #28a745);
+      background: rgba(40, 167, 69, 0.1);
+    }
+  }
+
+  &.delete-btn {
+    color: var(--color-danger, #dc3545);
+
+    &:hover {
+      color: var(--color-danger, #dc3545);
+      background: rgba(220, 53, 69, 0.1);
+    }
+  }
+}
+
+.notification-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+
+  p {
+    margin: 0;
+    color: var(--color-text-muted, #666);
+    font-size: 0.9rem;
+  }
+}
+
+// Max height for notification list to prevent overflow
+@media (min-width: 992px) {
+  .dropdown-menu {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+}
+
+.mobile-notifications {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  padding: 0 !important;
+}
+
+.mobile-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mobile-notif-badge {
+    background: var(--color-primary, #1a73e8);
+    color: white;
+    border-radius: 12px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .collapse-toggle-mobile {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+.mobile-notification-controls {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mobile-notification-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  .mark-all-read-mobile {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+
+    &:hover {
+      color: white;
+      text-decoration: underline;
+    }
+  }
+}
+
+.mobile-notification-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.mobile-notification-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &.unread {
+    background: rgba(26, 115, 232, 0.1);
+    border-left: 3px solid var(--color-primary, #1a73e8);
+  }
+
+  .notification-text {
+    flex: 1;
+    min-width: 0;
+
+    strong {
+      display: block;
+      color: white;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  .notification-message {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+
+  .notification-time {
+    display: block;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 0.25rem;
+  }
+
+  .notification-icons {
+    display: flex;
+    gap: 0.25rem;
+    flex-shrink: 0;
+
+    .notification-icon-btn {
+      background: transparent;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.6);
+      transition: all 0.2s ease;
+      border-radius: 4px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &.dismiss-btn {
+        color: #4caf50;
+
+        &:hover {
+          color: #66bb6a;
+          background: rgba(76, 175, 80, 0.2);
+        }
+      }
+
+      &.delete-btn {
+        color: #f44336;
+
+        &:hover {
+          color: #ef5350;
+          background: rgba(244, 67, 54, 0.2);
+        }
+      }
+    }
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.mobile-notification-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+  }
+}

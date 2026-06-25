@@ -1,0 +1,457 @@
+/* 
+ * Bootstrap Variable Customization
+ * Define custom variables BEFORE importing Bootstrap
+ */
+
+// Color system
+$primary: #1a73e8;
+$secondary: #1557b0;
+$light: whitesmoke;
+$dark: #333;
+
+// Body
+$body-bg: $light;
+$body-color: $dark;
+
+// Typography
+$font-family-base: "Michroma", sans-serif;
+$font-size-base: 1rem;
+
+// Border radius
+$border-radius: 0.625rem; // 10px
+$border-radius-sm: 0.5rem; // 8px
+$border-radius-lg: 0.9375rem; // 15px
+$border-radius-xl: 1.5625rem; // 25px
+
+// Shadows
+$box-shadow-sm: 0 4px 8px rgba(0, 0, 0, 0.05);
+$box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+$box-shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.25);
+
+// Transitions
+$transition-base: all 0.3s ease;
+
+// Breakpoints (Bootstrap defaults - can be customized)
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+// Import Bootstrap with custom variables
+@import "bootstrap/scss/bootstrap";
+
+/* src/styles.scss */
+@import "@angular/cdk/overlay-prebuilt.css";
+
+/* 
+ * Additional CSS Variables for runtime theming
+ */
+:root {
+  --color-primary: #{$primary};
+  --color-primary-dark: #{$secondary};
+  --color-text: #{$dark};
+  --color-muted: #666;
+  --color-bg-light: #{$light};
+
+  --radius-sm: #{$border-radius};
+  --radius-md: #{$border-radius-lg};
+  --radius-lg: #{$border-radius-xl};
+
+  --shadow-soft: #{$box-shadow-sm};
+  --shadow-medium: #{$box-shadow};
+  --shadow-large: #{$box-shadow-lg};
+
+  --transition-base: #{$transition-base};
+
+  --navbar-height: 94px;
+  --navbar-gap: 8px;
+
+  --flights-surface: #ffffff;
+  --flights-border: #e9eef5;
+}
+
+/* Dark mode témaszínek */
+body.dark-mode {
+  --color-primary: #4a9eff;
+  --color-primary-dark: #3d8ce7;
+  --color-text: #e4e4e4;
+  --color-muted: #a0a0a0;
+  --color-bg-light: #1a1a1a;
+
+  --shadow-soft: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 8px 16px rgba(0, 0, 0, 0.4);
+  --shadow-large: 0 20px 40px rgba(0, 0, 0, 0.6);
+
+  --flights-surface: #2a2a2a;
+  --flights-border: #404040;
+}
+
+/* 
+ * Global Styles - Mobile First
+ */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  // padding: 0;
+  overflow-x: hidden;
+  background-color: var(--color-bg-light);
+  color: var(--color-text);
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
+}
+
+input[type="date"] {
+  color-scheme: light;
+}
+
+.currency-eur {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+// Responsive Typography using Bootstrap mixins
+h1 {
+  font-size: 1.6rem; // Mobile
+
+  @include media-breakpoint-up(sm) {
+    font-size: 2rem; // Tablet
+  }
+
+  @include media-breakpoint-up(md) {
+    font-size: 2.5rem; // Laptop
+  }
+
+  @include media-breakpoint-up(lg) {
+    font-size: 3rem; // Desktop
+  }
+}
+
+p {
+  font-size: 0.9rem; // Mobile
+
+  @include media-breakpoint-up(sm) {
+    font-size: 1rem; // Tablet
+  }
+
+  @include media-breakpoint-up(md) {
+    font-size: 1.1rem; // Laptop
+  }
+
+  @include media-breakpoint-up(lg) {
+    font-size: 1.25rem; // Desktop
+  }
+}
+
+// Utility: Smooth scrolling
+html {
+  scroll-behavior: smooth;
+}
+
+// Remove focus outline, but keep for accessibility
+*:focus-visible {
+  outline: 2px solid $primary;
+  outline-offset: 2px;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main.app-content {
+  padding-top: calc(var(--navbar-height));
+  flex: 1;
+  display: flex;
+}
+
+/* 
+ * Dark Mode Overrides for Bootstrap Components
+ */
+body.dark-mode {
+  // Cards
+  .card {
+    background-color: #2a2a2a;
+    border-color: #404040;
+    color: var(--color-text);
+
+    .card-header,
+    .card-footer {
+      background-color: #333;
+      border-color: #404040;
+    }
+
+    .card-body {
+      color: var(--color-text);
+    }
+
+    .card-title {
+      color: var(--color-text);
+    }
+
+    .card-text {
+      color: var(--color-muted);
+    }
+  }
+
+  // Forms
+  .form-control,
+  .form-select {
+    background-color: #2a2a2a;
+    border-color: #404040;
+    color: var(--color-text);
+
+    &:focus {
+      background-color: #2a2a2a;
+      border-color: var(--color-primary);
+      color: var(--color-text);
+    }
+
+    &::placeholder {
+      color: #666;
+    }
+  }
+
+  // Form floating labels
+  .form-floating > label {
+    color: var(--color-muted);
+  }
+
+  .form-floating > .form-control:focus ~ label,
+  .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: var(--color-primary);
+  }
+
+  input[type="date"] {
+    color-scheme: dark;
+    background-color: #2a2a2a;
+    color: var(--color-text);
+    border-color: #404040;
+
+    &::-webkit-calendar-picker-indicator {
+      filter: invert(1) brightness(0.9);
+      cursor: pointer;
+    }
+  }
+
+  // Badges
+  .badge {
+    &.text-dark {
+      color: var(--color-text) !important;
+    }
+  }
+
+  // List groups
+  .list-group-item {
+    background-color: #2a2a2a;
+    border-color: #404040;
+    color: var(--color-text);
+  }
+
+  // Modals
+  .modal-content {
+    background-color: #2a2a2a;
+    color: var(--color-text);
+
+    .modal-header,
+    .modal-footer {
+      border-color: #404040;
+    }
+  }
+
+  // Price breakdown box
+  .price-breakdown {
+    background-color: #2a2a2a !important;
+    color: var(--color-text) !important;
+    border-color: #404040 !important;
+  }
+
+  // Service badges (accommodation details)
+  .service-badge {
+    background-color: #2a2a2a !important;
+    color: var(--color-text) !important;
+    border-color: #404040 !important;
+  }
+
+  .table {
+    --bs-table-bg: #2a2a2a;
+    --bs-table-color: var(--color-text);
+    --bs-table-border-color: #404040;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.04);
+    --bs-table-striped-color: var(--color-text);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.08);
+    --bs-table-hover-color: var(--color-text);
+    --bs-table-active-bg: rgba(255, 255, 255, 0.1);
+    --bs-table-active-color: var(--color-text);
+
+    color: var(--color-text);
+    border-color: #404040;
+
+    thead {
+      background-color: #232323;
+      color: var(--color-text);
+
+      th {
+        border-color: #404040;
+        background-color: #232323;
+        color: var(--color-text);
+      }
+    }
+
+    tbody tr td,
+    tbody tr th {
+      border-color: #404040;
+    }
+  }
+
+  .table-responsive {
+    background-color: #2a2a2a;
+    border-radius: 0.375rem;
+  }
+
+  // Dropdown menus (e.g. profile dropdown in navbar)
+  .dropdown-menu {
+    background-color: #2a2a2a;
+    border-color: #404040;
+    color: var(--color-text);
+
+    .dropdown-item {
+      color: var(--color-text);
+
+      &:hover,
+      &:focus {
+        background-color: #383838;
+        color: var(--color-text);
+      }
+
+      &:active {
+        background-color: var(--color-primary);
+        color: #fff;
+      }
+    }
+
+    .dropdown-divider {
+      border-color: #404040;
+    }
+
+    .notification-header {
+      color: var(--color-text);
+    }
+
+    .notification-item {
+      border-bottom-color: #404040;
+
+      &:hover {
+        background: #383838;
+      }
+    }
+
+    .notification-content.unread {
+      background: rgba(74, 158, 255, 0.08);
+    }
+
+    .notification-text strong {
+      color: var(--color-text);
+    }
+
+    .notification-message {
+      color: var(--color-muted);
+    }
+
+    .notification-time {
+      color: #777;
+    }
+
+    .notification-icon-btn {
+      color: var(--color-muted);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    .collapse-toggle {
+      color: var(--color-muted);
+
+      &:hover {
+        color: var(--color-text);
+      }
+    }
+  }
+
+  // Text colors
+  .text-muted {
+    color: var(--color-muted) !important;
+  }
+
+  // Links
+  a:not(.btn):not(.nav-link) {
+    color: var(--color-primary);
+
+    &:hover {
+      color: var(--color-primary-dark);
+    }
+  }
+}
+
+/* ================================
+   Dark mode: CDK Overlay calendar
+================================ */
+.dark-mode .calendar-overlay-card {
+  background: #1f1f1f !important;
+  border: 1px solid #3f3f3f;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+}
+
+.dark-mode .calendar-pane .mat-calendar {
+  background: #1f1f1f !important;
+  color: #e6e6e6 !important;
+}
+
+.dark-mode .calendar-pane .mat-calendar-content,
+.dark-mode .calendar-pane .mat-calendar-table,
+.dark-mode .calendar-pane .mat-month-view,
+.dark-mode .calendar-pane .mat-year-view,
+.dark-mode .calendar-pane .mat-multi-year-view {
+  background: #1f1f1f !important;
+}
+
+.dark-mode .calendar-pane .mat-calendar-body-cell-content {
+  color: #e6e6e6 !important;
+}
+
+.dark-mode .calendar-pane .mat-calendar-body-label,
+.dark-mode .calendar-pane .mat-calendar-table-header th {
+  color: #a8b8cc !important;
+}
+
+.dark-mode .calendar-pane .mat-calendar-body-selected {
+  background-color: #4a9eff !important;
+  color: #05111f !important;
+}
+
+.dark-mode .calendar-pane .mat-calendar-body-in-range::before,
+.dark-mode .calendar-pane .mat-calendar-body-comparison-bridge-start::before,
+.dark-mode .calendar-pane .mat-calendar-body-comparison-bridge-end::before {
+  background: rgba(74, 158, 255, 0.22) !important;
+}
+
+.dark-mode .calendar-pane .mat-calendar-period-button,
+.dark-mode .calendar-pane .mat-calendar-previous-button,
+.dark-mode .calendar-pane .mat-calendar-next-button {
+  color: #d9e7f6 !important;
+}

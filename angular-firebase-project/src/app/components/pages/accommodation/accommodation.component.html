@@ -1,0 +1,231 @@
+<div class="container p-2 my-4">
+  <section class="container text-center card border-2 border rounded-5">
+    <h2 class="mb-4">{{ "accommodation.whereAreWeGoing" | translate }}</h2>
+
+    <div
+      class="row g-3 justify-content-center align-items-start text-start mb-2"
+    >
+      <!-- Város kereső -->
+      <div class="col-12 col-md-4 col-lg-3 position-relative m-3">
+        <h6>{{ "accommodation.city" | translate }}</h6>
+        <input
+          type="text"
+          class="form-control"
+          [placeholder]="'accommodation.cityPlaceholder' | translate"
+          [(ngModel)]="lodgingFilter.city"
+          (keyup)="citySugest()"
+        />
+        <!-- Javaslatok listája stílusozva -->
+        <ul
+          *ngIf="citySuggestions$ | async as cities"
+          class="list-group mt-1 position-absolute z-3 w-100 pe-3"
+        >
+          <li
+            *ngFor="let city of cities; trackBy: trackByValue"
+            (click)="selectCity(city)"
+            class="list-group-item list-group-item-action shadow-sm"
+            style="cursor: pointer"
+          >
+            {{ city }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Dátumválasztó -->
+      <div class="col-12 col-md-4 col-lg-3 p-1 m-3">
+        <h6>{{ "accommodation.date" | translate }}</h6>
+        <app-date-picker
+          (dateRangeChanged)="onDateRangePicked($event)"
+        ></app-date-picker>
+      </div>
+
+      <!-- Vendégek száma -->
+      <div class="col-12 col-md-4 col-lg-3">
+        <h6>{{ "accommodation.persons" | translate }}</h6>
+        <select
+          class="form-select"
+          [(ngModel)]="lodgingFilter.persons"
+          (change)="getFiltered()"
+        >
+          <option selected disabled hidden [value]="0">
+            {{ "accommodation.guestsCount" | translate }}
+          </option>
+          <option [value]="1">{{ "accommodation.guest_1" | translate }}</option>
+          <option [value]="2">{{ "accommodation.guest_2" | translate }}</option>
+          <option [value]="3">{{ "accommodation.guest_3" | translate }}</option>
+          <option [value]="4">{{ "accommodation.guest_4" | translate }}</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-fluid">
+    <div class="row align-items-start">
+      <aside
+        class="col-md-3 p-3 border-2 border rounded-5 card mt-3 align-self-start"
+      >
+        <div class="d-flex flex-column gap-4">
+          <div class="filter-group">
+            <h6>{{ "accommodation.maxPrice" | translate }}</h6>
+            <select
+              class="form-select"
+              [(ngModel)]="lodgingFilter.maxPrice"
+              (change)="getFiltered()"
+            >
+              <option selected [value]="0">
+                {{ "accommodation.none" | translate }}
+              </option>
+              <option
+                *ngFor="let maxPrice of maxPrice; trackBy: trackByValue"
+                [value]="maxPrice"
+              >
+                {{ maxPrice }}
+              </option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <h6>{{ "accommodation.lodgingType" | translate }}</h6>
+            <select
+              class="form-select"
+              [(ngModel)]="lodgingFilter.type"
+              (change)="getFiltered()"
+            >
+              <option selected value="all">
+                {{ "accommodation.all" | translate }}
+              </option>
+              <option
+                *ngFor="let lodgingtype of lodgingtype; trackBy: trackByValue"
+                [value]="lodgingtype"
+              >
+                {{ lodgingtype }}
+              </option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <h6>{{ "accommodation.rating" | translate }}</h6>
+            <select
+              class="form-select"
+              [(ngModel)]="lodgingFilter.travelers_rating"
+              (change)="getFiltered()"
+            >
+              <option selected [value]="0">
+                {{ "accommodation.all" | translate }}
+              </option>
+              <option
+                *ngFor="let rating of rating; trackBy: trackByValue"
+                [value]="rating"
+              >
+                {{ rating }}
+              </option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <h6>{{ "accommodation.services" | translate }}</h6>
+            <ul class="list-unstyled">
+              <li *ngFor="let services of services; trackBy: trackByValue">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    (click)="serviceChecked(services)"
+                    [id]="services"
+                  />
+                  <label class="form-check-label" [for]="services">{{
+                    "accommodation.serviceOptions." + services | translate
+                  }}</label>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <main class="col-md-9 p-3">
+        <section class="row">
+          <div
+            class="col-12 mb-4"
+            *ngFor="
+              let lodgingFilered of lodgingFilered$ | async;
+              trackBy: trackByLodgingId
+            "
+          >
+            <div class="card border-0 shadow-sm overflow-hidden">
+              <div class="row g-0 align-items-stretch">
+                <div
+                  class="col-md-4 col-lg-3 text-center mb-3 mb-md-0 position-relative"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-favorite"
+                    [class.favorited]="
+                      accommodationFavoriteIds.has(lodgingFilered.id)
+                    "
+                    (click)="
+                      toggleAccommodationFavorite(lodgingFilered.id, $event)
+                    "
+                    [attr.aria-label]="
+                      accommodationFavoriteIds.has(lodgingFilered.id)
+                        ? ('offers.removeFromFavorites' | translate)
+                        : ('offers.addToFavorites' | translate)
+                    "
+                  >
+                    <i class="fa-solid fa-heart"></i>
+                  </button>
+                  <img
+                    [src]="lodgingFilered.imageUrl"
+                    class="img-fluid list-image object-fit-cover"
+                    alt="lodging image"
+                  />
+                </div>
+
+                <div class="col-md-8 col-lg-9">
+                  <div class="card-body p-3 p-md-4 d-flex flex-column h-100">
+                    <div
+                      class="d-flex justify-content-between align-items-start mb-2"
+                    >
+                      <h5 class="card-title fw-bold mb-0 text-truncate me-2">
+                        {{ lodgingFilered.name }}
+                      </h5>
+                      <span
+                        class="badge bg-warning text-secondary flex-shrink-0"
+                      >
+                        {{ lodgingFilered.travelers_rating }}
+                        <i class="bi bi-star-fill small"></i>
+                      </span>
+                    </div>
+
+                    <p class="card-text text-muted small mb-3">
+                      <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                      {{ lodgingFilered.city }} • {{ lodgingFilered.type }}
+                    </p>
+
+                    <div
+                      class="mt-auto d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3"
+                    >
+                      <div class="price-tag">
+                        <h4 class="fw-bold mb-0 text-primary">
+                          {{ lodgingFilered.price | smartPrice }}
+                          {{ "accommodation.perNight" | translate }}
+                        </h4>
+                      </div>
+
+                      <button
+                        class="btn btn-primary px-4 rounded-pill fw-bold"
+                        (click)="goToDetails(lodgingFilered.id)"
+                      >
+                        {{ "accommodation.details" | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,271 @@
+/* ================================
+   Overlay doboz
+================================ */
+
+.date-trigger-surface {
+  border-color: #212529;
+  background: #ffffff;
+  padding: 0.5rem 0.75rem;
+}
+
+.date-trigger-value {
+  color: #212529;
+}
+
+.calendar-overlay-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  min-width: 700px;
+}
+
+/* ================================
+   Két naptár layout
+================================ */
+
+.calendar-flex {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.calendar-pane {
+  width: 320px;
+
+  ::ng-deep {
+    /* Header */
+    .mat-calendar-header {
+      padding: 0;
+    }
+
+    /* Táblázat fix 7 oszlopos grid */
+    .mat-calendar-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    /* Napnevek */
+    .mat-calendar-table-header th {
+      width: 14.28%;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 8px 0;
+      color: #777;
+    }
+
+    .cdk-visually-hidden {
+      display: none;
+    }
+
+    /* Nap cellák */
+    .mat-calendar-body-cell {
+      width: 14.28%;
+      padding: 0;
+      height: 40px;
+    }
+
+    .mat-calendar-body-cell-content {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      border-radius: 50%;
+    }
+
+    /* Megtartjuk a helyfoglalást, de eltüntetjük a tartalmat */
+    .mat-calendar-body-label {
+      visibility: hidden !important; /* Láthatatlan lesz */
+      line-height: 0 !important; /* Nem foglal függőleges helyet a szövegnek */
+      font-size: 0 !important; /* A betűk mérete nulla */
+      padding: 0 !important;
+      height: 0 !important; /* A sor magassága nulla, de a cella létezik */
+    }
+
+    /* Esetleges form-field maradék eltüntetése */
+    .mat-form-field {
+      display: none;
+    }
+
+    /* ================================
+       Navigációs nyilak pozicionálása
+    ================================ */
+
+    .mat-calendar-header {
+      padding: 0 !important; /* Eltávolítunk minden külső keretet */
+      margin-bottom: 8px;
+    }
+
+    .mat-calendar-controls {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      width: 100% !important;
+      margin: 0 !important; /* Nullázzuk a Material alapértelmezett margóját */
+    }
+
+    /* A hónap/év gomb (középső rész) */
+    .mat-calendar-period-button {
+      order: 2 !important;
+      flex: 1 1 auto !important; /* Hagyjuk, hogy kitöltse a középső részt */
+      text-align: center !important;
+      padding: 0 !important;
+
+      /* A gomb belsejében lévő szöveg középre igazítása */
+      .mat-button-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+    }
+
+    /* Nyilak kényszerítése a szélekre */
+    .mat-calendar-previous-button {
+      order: 1 !important;
+      margin-right: 0 !important; /* Megszüntetjük a jobbra tolást */
+      min-width: 40px !important; /* Fix szélesség a gombnak */
+    }
+
+    .mat-calendar-next-button {
+      order: 3 !important;
+      margin-left: 0 !important; /* Megszüntetjük a balra tolást */
+      min-width: 40px !important;
+    }
+
+    /* A gombok közötti felesleges térköz (spacer) eltüntetése, ha van */
+    .mat-calendar-spacer {
+      display: none !important;
+    }
+  }
+
+  /* Alkalmazzuk a speciális rejtést a bal/jobb naptárakra */
+  .left-calendar ::ng-deep {
+    .mat-calendar-next-button {
+      display: none !important;
+    }
+    /* Biztosítjuk, hogy a period button ne tolódjon el, ha hiányzik az egyik nyíl */
+    .mat-calendar-controls::after {
+      content: "";
+      width: 40px; /* Ugyanolyan széles, mint a gomb, így a szöveg középen marad */
+      order: 3;
+    }
+  }
+
+  .right-calendar ::ng-deep {
+    .mat-calendar-previous-button {
+      display: none !important;
+    }
+    /* Biztosítjuk a szimmetriát itt is */
+    .mat-calendar-controls::before {
+      content: "";
+      width: 40px;
+      order: 1;
+    }
+  }
+}
+
+/* Bal naptár: a maradék "vissza" gomb maradjon a bal szélen */
+.left-calendar ::ng-deep .mat-calendar-next-button {
+  display: none !important;
+}
+
+/* Jobb naptár: a maradék "előre" gomb maradjon a jobb szélen */
+.right-calendar ::ng-deep .mat-calendar-previous-button {
+  display: none !important;
+}
+
+:host-context(body.dark-mode) .date-trigger-surface {
+  background: #2a2a2a;
+  border-color: #4a4a4a;
+}
+
+:host-context(body.dark-mode) .date-trigger-value {
+  color: #e6e6e6;
+}
+
+:host-context(body.dark-mode) .calendar-overlay-card,
+.dark-mode .calendar-overlay-card {
+  background: #1f1f1f;
+  border: 1px solid #3f3f3f;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+}
+
+:host-context(body.dark-mode) .calendar-pane ::ng-deep .mat-calendar,
+.dark-mode .calendar-pane ::ng-deep .mat-calendar {
+  background: #1f1f1f;
+  color: #e6e6e6;
+}
+
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-body-cell-content,
+.dark-mode .calendar-pane ::ng-deep .mat-calendar-body-cell-content {
+  color: #e6e6e6;
+}
+
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-body-selected,
+.dark-mode .calendar-pane ::ng-deep .mat-calendar-body-selected {
+  background-color: #4a9eff;
+  color: #05111f;
+}
+
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-body-in-range::before,
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-body-comparison-bridge-start::before,
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-body-comparison-bridge-end::before,
+.dark-mode .calendar-pane ::ng-deep .mat-calendar-body-in-range::before,
+.dark-mode
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-body-comparison-bridge-start::before,
+.dark-mode
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-body-comparison-bridge-end::before {
+  background: rgba(74, 158, 255, 0.22);
+}
+
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-table-header
+  th,
+.dark-mode .calendar-pane ::ng-deep .mat-calendar-table-header th {
+  color: #a8b8cc;
+}
+
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-period-button,
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-previous-button,
+:host-context(body.dark-mode)
+  .calendar-pane
+  ::ng-deep
+  .mat-calendar-next-button,
+.dark-mode .calendar-pane ::ng-deep .mat-calendar-period-button,
+.dark-mode .calendar-pane ::ng-deep .mat-calendar-previous-button,
+.dark-mode .calendar-pane ::ng-deep .mat-calendar-next-button {
+  color: #d9e7f6;
+}

@@ -1,0 +1,237 @@
+<!-- MODAL OVERLAY -->
+<div
+  class="modal-backdrop fade"
+  [class.show]="show"
+  *ngIf="show"
+  (click)="close()"
+></div>
+
+<!-- MODAL -->
+<div
+  class="modal fade"
+  [class.show]="show"
+  [style.display]="show ? 'block' : 'none'"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content" *ngIf="offer && analytics">
+      <!-- HEADER -->
+      <div class="modal-header">
+        <div class="modal-header-content">
+          <h5 class="modal-title">
+            <i class="fa-solid fa-chart-line me-2"></i>
+            {{ offer.title }}
+          </h5>
+          <div class="offer-meta">
+            <span class="badge bg-primary me-2">{{
+              offer.travelCategory
+            }}</span>
+            <span class="text-muted"
+              >{{ offer.location }}, {{ offer.country }}</span
+            >
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="close()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+        <!-- OFFER IMAGE -->
+        <div
+          class="offer-image-container mb-4"
+          *ngIf="offer.images && offer.images.length > 0"
+        >
+          <img
+            [src]="offer.images[0]"
+            [alt]="offer.title"
+            class="offer-image"
+          />
+        </div>
+
+        <!-- SECTION 1: PERFORMANCE -->
+        <div class="analytics-section mb-4">
+          <h6 class="section-title">
+            <i class="fa-solid fa-chart-bar me-2"></i>
+            Performance
+          </h6>
+          <div class="row g-3">
+            <div class="col-md-3 col-6">
+              <div class="stat-card">
+                <div class="stat-icon bg-info">
+                  <i class="fa-solid fa-eye"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-label">Views</div>
+                  <div class="stat-value">{{ analytics.viewCount || 0 }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="stat-card">
+                <div class="stat-icon bg-danger">
+                  <i class="fa-solid fa-heart"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-label">Favorites</div>
+                  <div class="stat-value">
+                    {{ analytics.favoriteCount || 0 }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="stat-card">
+                <div class="stat-icon bg-success">
+                  <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-label">Bookings</div>
+                  <div class="stat-value">
+                    {{ analytics.bookingCount || 0 }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-6">
+              <div class="stat-card">
+                <div class="stat-icon bg-warning">
+                  <i class="fa-solid fa-percent"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-label">Conversion</div>
+                  <div class="stat-value">
+                    {{ formatPercent(analytics.conversionRate) }}%
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: BUSINESS VALUE -->
+        <div class="analytics-section mb-4">
+          <h6 class="section-title">
+            <i class="fa-solid fa-euro-sign me-2"></i>
+            Business Value
+          </h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="stat-card">
+                <div class="stat-icon bg-success">
+                  <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-label">Total Revenue</div>
+                  <div class="stat-value">
+                    {{ formatCurrency(analytics.totalRevenue) }}
+                    {{ offer.currency }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="stat-card">
+                <div class="stat-icon bg-primary">
+                  <i class="fa-solid fa-calculator"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-label">Avg Booking Value</div>
+                  <div class="stat-value">
+                    {{ formatCurrency(analytics.avgBookingValue) }}
+                    {{ offer.currency }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: DEMAND SIGNAL -->
+        <div class="analytics-section mb-4">
+          <h6 class="section-title">
+            <i class="fa-solid fa-signal me-2"></i>
+            Demand Signal
+          </h6>
+          <div class="capacity-stats mb-3">
+            <div class="capacity-row">
+              <span class="capacity-label">Total Capacity:</span>
+              <span class="capacity-value"
+                >{{ analytics.totalCapacity }} persons</span
+              >
+            </div>
+            <div class="capacity-row">
+              <span class="capacity-label">Booked Capacity:</span>
+              <span class="capacity-value"
+                >{{ analytics.bookedCapacity }} persons</span
+              >
+            </div>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-label mb-2">
+              <strong>Utilization Rate:</strong>
+              <span
+                class="badge"
+                [class.bg-success]="analytics.utilizationRate >= 70"
+                [class.bg-warning]="
+                  analytics.utilizationRate >= 40 &&
+                  analytics.utilizationRate < 70
+                "
+                [class.bg-danger]="analytics.utilizationRate < 40"
+              >
+                {{ formatPercent(analytics.utilizationRate) }}%
+              </span>
+            </div>
+            <div class="progress" style="height: 30px">
+              <div
+                class="progress-bar"
+                [class.bg-success]="analytics.utilizationRate >= 70"
+                [class.bg-warning]="
+                  analytics.utilizationRate >= 40 &&
+                  analytics.utilizationRate < 70
+                "
+                [class.bg-danger]="analytics.utilizationRate < 40"
+                [style.width.%]="analytics.utilizationRate"
+                role="progressbar"
+              >
+                {{ formatPercent(analytics.utilizationRate) }}%
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: TREND (OPTIONAL) -->
+        <div
+          class="analytics-section"
+          *ngIf="analytics.last7DaysViews !== undefined"
+        >
+          <h6 class="section-title">
+            <i class="fa-solid fa-trending-up me-2"></i>
+            Recent Trend
+          </h6>
+          <div class="stat-card">
+            <div class="stat-icon bg-info">
+              <i class="fa-solid fa-calendar-week"></i>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Last 7 Days Views</div>
+              <div class="stat-value">{{ analytics.last7DaysViews }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

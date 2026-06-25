@@ -1,0 +1,277 @@
+<div class="filters-card">
+  <!-- Header -->
+  <div class="filters-header">
+    <div class="filters-header__left">
+      <h5>{{ "flights.filters.title" | translate }}</h5>
+      <span *ngIf="activeFilterCount > 0" class="filters-count">{{
+        activeFilterCount
+      }}</span>
+    </div>
+    <button
+      class="filters-reset"
+      type="button"
+      (click)="resetFilters()"
+      *ngIf="activeFilterCount > 0"
+    >
+      {{ "flights.filters.reset" | translate }}
+    </button>
+  </div>
+
+  <!-- Price + Duration -->
+  <div class="filter-section">
+    <button
+      type="button"
+      class="filter-section__toggle"
+      (click)="toggleSection('price')"
+    >
+      <span class="filter-section__title">{{
+        "flights.filters.price" | translate
+      }}</span>
+      <i
+        class="bi"
+        [ngClass]="collapsed['price'] ? 'bi-chevron-down' : 'bi-chevron-up'"
+      ></i>
+    </button>
+    <div *ngIf="!collapsed['price']" class="filter-section__body">
+      <div class="slider-wrap">
+        <input
+          type="range"
+          class="form-range"
+          min="50"
+          max="1500"
+          step="10"
+          [value]="filters.maxPrice"
+          (input)="onPriceChange($any($event.target).value)"
+        />
+        <div class="slider-labels">
+          <span>50 €</span>
+          <span class="slider-val">≤ {{ filters.maxPrice }} €</span>
+        </div>
+      </div>
+
+      <div class="filter-section__title mt-3 mb-2 small fw-semibold">
+        {{ "flights.filters.duration" | translate }}
+      </div>
+      <div class="slider-wrap">
+        <input
+          type="range"
+          class="form-range"
+          min="60"
+          max="1440"
+          step="15"
+          [value]="filters.maxDuration"
+          (input)="onDurationChange($any($event.target).value)"
+        />
+        <div class="slider-labels">
+          <span>1h</span>
+          <span class="slider-val">≤ {{ filters.maxDuration }} min</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stops -->
+  <div class="filter-section">
+    <button
+      type="button"
+      class="filter-section__toggle"
+      (click)="toggleSection('stops')"
+    >
+      <span class="filter-section__title">{{
+        "flights.filters.stops" | translate
+      }}</span>
+      <i
+        class="bi"
+        [ngClass]="collapsed['stops'] ? 'bi-chevron-down' : 'bi-chevron-up'"
+      ></i>
+    </button>
+    <div *ngIf="!collapsed['stops']" class="filter-section__body">
+      <label class="filter-opt">
+        <input
+          type="checkbox"
+          [checked]="filters.stops.includes(0)"
+          (change)="toggleArrayValue('stops', 0)"
+        />
+        <span>{{ "flights.filters.direct" | translate }}</span>
+        <span class="filter-opt__badge filter-opt__badge--green"></span>
+      </label>
+      <label class="filter-opt">
+        <input
+          type="checkbox"
+          [checked]="filters.stops.includes(1)"
+          (change)="toggleArrayValue('stops', 1)"
+        />
+        <span>{{ "flights.filters.oneStop" | translate }}</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Airlines -->
+  <div class="filter-section" *ngIf="airlineList.length > 0">
+    <button
+      type="button"
+      class="filter-section__toggle"
+      (click)="toggleSection('airline')"
+    >
+      <span class="filter-section__title">{{
+        "flights.filters.airline" | translate
+      }}</span>
+      <i
+        class="bi"
+        [ngClass]="collapsed['airline'] ? 'bi-chevron-down' : 'bi-chevron-up'"
+      ></i>
+    </button>
+    <div *ngIf="!collapsed['airline']" class="filter-section__body">
+      <label
+        class="filter-opt"
+        *ngFor="let airline of airlineList; trackBy: trackByAirline"
+      >
+        <input
+          type="checkbox"
+          [checked]="filters.airlines.includes(airline)"
+          (change)="toggleArrayValue('airlines', airline)"
+        />
+        <span>{{ airline }}</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Departure time -->
+  <div class="filter-section">
+    <button
+      type="button"
+      class="filter-section__toggle"
+      (click)="toggleSection('departure')"
+    >
+      <span class="filter-section__title">{{
+        "flights.filters.departure" | translate
+      }}</span>
+      <i
+        class="bi"
+        [ngClass]="collapsed['departure'] ? 'bi-chevron-down' : 'bi-chevron-up'"
+      ></i>
+    </button>
+    <div
+      *ngIf="!collapsed['departure']"
+      class="filter-section__body filter-section__body--time-grid"
+    >
+      <label
+        class="filter-time-chip"
+        [class.filter-time-chip--active]="
+          filters.departureSlots.includes('morning')
+        "
+        (click)="toggleArrayValue('departureSlots', 'morning')"
+      >
+        <i class="bi bi-sunrise"></i>
+        <span>{{ "flights.filters.morning" | translate }}</span>
+      </label>
+      <label
+        class="filter-time-chip"
+        [class.filter-time-chip--active]="
+          filters.departureSlots.includes('afternoon')
+        "
+        (click)="toggleArrayValue('departureSlots', 'afternoon')"
+      >
+        <i class="bi bi-sun"></i>
+        <span>{{ "flights.filters.afternoon" | translate }}</span>
+      </label>
+      <label
+        class="filter-time-chip"
+        [class.filter-time-chip--active]="
+          filters.departureSlots.includes('evening')
+        "
+        (click)="toggleArrayValue('departureSlots', 'evening')"
+      >
+        <i class="bi bi-moon-stars"></i>
+        <span>{{ "flights.filters.evening" | translate }}</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Arrival time -->
+  <div class="filter-section">
+    <button
+      type="button"
+      class="filter-section__toggle"
+      (click)="toggleSection('arrival')"
+    >
+      <span class="filter-section__title">{{
+        "flights.filters.arrival" | translate
+      }}</span>
+      <i
+        class="bi"
+        [ngClass]="collapsed['arrival'] ? 'bi-chevron-down' : 'bi-chevron-up'"
+      ></i>
+    </button>
+    <div
+      *ngIf="!collapsed['arrival']"
+      class="filter-section__body filter-section__body--time-grid"
+    >
+      <label
+        class="filter-time-chip"
+        [class.filter-time-chip--active]="
+          filters.arrivalSlots.includes('morning')
+        "
+        (click)="toggleArrayValue('arrivalSlots', 'morning')"
+      >
+        <i class="bi bi-sunrise"></i>
+        <span>{{ "flights.filters.morning" | translate }}</span>
+      </label>
+      <label
+        class="filter-time-chip"
+        [class.filter-time-chip--active]="
+          filters.arrivalSlots.includes('afternoon')
+        "
+        (click)="toggleArrayValue('arrivalSlots', 'afternoon')"
+      >
+        <i class="bi bi-sun"></i>
+        <span>{{ "flights.filters.afternoon" | translate }}</span>
+      </label>
+      <label
+        class="filter-time-chip"
+        [class.filter-time-chip--active]="
+          filters.arrivalSlots.includes('evening')
+        "
+        (click)="toggleArrayValue('arrivalSlots', 'evening')"
+      >
+        <i class="bi bi-moon-stars"></i>
+        <span>{{ "flights.filters.evening" | translate }}</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Extras -->
+  <div class="filter-section">
+    <button
+      type="button"
+      class="filter-section__toggle"
+      (click)="toggleSection('extras')"
+    >
+      <span class="filter-section__title">{{
+        "flights.filters.extras" | translate
+      }}</span>
+      <i
+        class="bi"
+        [ngClass]="collapsed['extras'] ? 'bi-chevron-down' : 'bi-chevron-up'"
+      ></i>
+    </button>
+    <div *ngIf="!collapsed['extras']" class="filter-section__body">
+      <label class="filter-opt">
+        <input
+          type="checkbox"
+          [checked]="filters.refundableOnly"
+          (change)="onBooleanChange('refundableOnly', $event)"
+        />
+        <span>{{ "flights.filters.refundableOnly" | translate }}</span>
+      </label>
+      <label class="filter-opt">
+        <input
+          type="checkbox"
+          [checked]="filters.baggageOnly"
+          (change)="onBooleanChange('baggageOnly', $event)"
+        />
+        <span>{{ "flights.filters.baggageOnly" | translate }}</span>
+      </label>
+    </div>
+  </div>
+</div>

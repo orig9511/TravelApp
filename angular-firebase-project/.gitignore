@@ -1,0 +1,17 @@
+.angular
+.angular/
+node_modules
+.angular
+.tsbuildinfo
+dist
+
+# Firebase
+.firebase
+*-debug.log
+.runtimeconfig.json
+scripts/serviceAccountKey.json
+serviceAccountKey.json
+*-firebase-adminsdk-*.json
+.env
+
+.angular

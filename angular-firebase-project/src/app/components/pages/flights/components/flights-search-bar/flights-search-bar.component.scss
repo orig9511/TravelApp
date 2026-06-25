@@ -1,0 +1,243 @@
+:host {
+  display: block;
+}
+
+// ── Hero wrapper ──────────────────────────────────────────────────────────────
+section {
+  background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+  padding: 2rem 0 !important;
+}
+
+// ── Search card ───────────────────────────────────────────────────────────────
+.card {
+  background: var(--flights-surface, #fff) !important;
+  border: none !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 40px rgba(15, 23, 42, 0.14) !important;
+}
+
+.card-body {
+  background: transparent;
+}
+
+// ── Trip-type toggle buttons ───────────────────────────────────────────────────
+.btn-sm.btn-primary,
+.btn-sm.btn-outline-primary {
+  border-radius: 20px !important;
+  padding: 0.3rem 1rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+}
+
+// ── Field cells ───────────────────────────────────────────────────────────────
+.border.rounded {
+  background: var(--flights-surface, #f8fafc) !important;
+  border: 1.5px solid var(--flights-border, #e9eef5) !important;
+  border-radius: 12px !important;
+  position: relative;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    background-color var(--transition-base);
+
+  &:hover {
+    border-color: rgba(26, 115, 232, 0.4) !important;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.07) !important;
+    cursor: default;
+  }
+
+  &:focus-within {
+    border-color: rgba(26, 115, 232, 0.6) !important;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1) !important;
+  }
+}
+
+// ── Autocomplete dropdown ─────────────────────────────────────────────────────
+.fsb__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--flights-surface, #fff);
+  border: 1.5px solid var(--flights-border, #e9eef5);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.fsb__group-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-muted, #6c757d);
+  padding: 0.5rem 0.85rem 0.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.fsb__option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:hover,
+  &--active {
+    background: rgba(26, 115, 232, 0.07);
+  }
+}
+
+.fsb__option-code {
+  font-weight: 700;
+  color: var(--color-primary, #1a73e8);
+  width: 2.5rem;
+  flex-shrink: 0;
+}
+
+.fsb__option-label {
+  color: var(--color-text);
+  font-size: 0.85rem;
+}
+
+.fsb__loading {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+// ── Field labels ──────────────────────────────────────────────────────────────
+.text-muted.small,
+.text-muted.mb-1 {
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted, #6c757d) !important;
+}
+
+// ── Inputs ────────────────────────────────────────────────────────────────────
+.form-control {
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: var(--color-text) !important;
+  background: transparent !important;
+
+  &::placeholder {
+    font-weight: 400 !important;
+    color: var(--color-muted, #adb5bd) !important;
+  }
+
+  &:focus {
+    box-shadow: none !important;
+    outline: none !important;
+  }
+}
+
+// Airport suggestion buttons
+.btn.btn-sm.btn-outline-secondary {
+  border-radius: 8px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  padding: 0.25rem 0.6rem !important;
+}
+
+// ── Passengers field value ────────────────────────────────────────────────────
+.fw-semibold:not(.passenger-counter-value) {
+  font-size: 0.95rem;
+}
+
+// ── Search button ─────────────────────────────────────────────────────────────
+.btn.btn-primary.w-100.h-100 {
+  background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
+  min-height: 64px;
+  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.3) !important;
+  transition:
+    box-shadow 0.15s,
+    transform 0.1s !important;
+
+  &:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 7px 22px rgba(26, 115, 232, 0.42) !important;
+  }
+
+  &:active {
+    transform: translateY(0) !important;
+  }
+}
+
+// ── Passengers dropdown ───────────────────────────────────────────────────────
+.passengers-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 20;
+
+  .card {
+    border-radius: 14px !important;
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.14) !important;
+  }
+}
+
+.passenger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.passenger-counter {
+  display: grid;
+  grid-template-columns: 2rem 2.5rem 2rem;
+  align-items: center;
+  justify-items: center;
+  column-gap: 0.35rem;
+}
+
+.passenger-counter-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  text-align: center;
+  font-size: 1rem !important;
+}
+
+.passenger-counter .btn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  line-height: 1;
+  border-radius: 50% !important;
+}
+
+// ── Recent searches ───────────────────────────────────────────────────────────
+.btn.btn-sm.btn-outline-secondary {
+  border-radius: 20px !important;
+}
+
+// Recent-search chip variant (in the recent section)
+.border-top .btn-outline-secondary {
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  padding: 0.3rem 0.8rem !important;
+  color: var(--color-text) !important;
+  border-color: var(--flights-border, #dee2e6) !important;
+  background: transparent;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+
+  &:hover {
+    background: rgba(26, 115, 232, 0.07) !important;
+    border-color: rgba(26, 115, 232, 0.3) !important;
+    color: var(--color-primary, #1a73e8) !important;
+  }
+}

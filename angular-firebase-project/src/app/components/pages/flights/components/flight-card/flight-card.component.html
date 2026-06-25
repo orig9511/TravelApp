@@ -1,0 +1,180 @@
+<div class="fc" role="article">
+  <div class="fc__body">
+    <!-- Airline column -->
+    <div class="fc__airline">
+      <div class="fc__airline-icon" aria-hidden="true">
+        {{ flight.airline | slice: 0 : 2 | uppercase }}
+      </div>
+      <span class="fc__airline-name">{{ flight.airline }}</span>
+    </div>
+
+    <!-- Route timeline -->
+    <div class="fc__timeline">
+      <div class="fc__endpoint">
+        <span class="fc__time">{{ flight.depart }}</span>
+        <span class="fc__code">{{ flight.from }}</span>
+      </div>
+
+      <div class="fc__middle">
+        <span class="fc__dur">{{ flight.duration }}</span>
+        <div class="fc__track">
+          <span class="fc__track-dot"></span>
+          <i class="bi bi-airplane-fill fc__plane" aria-hidden="true"></i>
+          <span class="fc__track-dot"></span>
+        </div>
+        <span
+          class="fc__stops-chip"
+          [ngClass]="
+            flight.stopsCount === 0
+              ? 'fc__stops-chip--direct'
+              : 'fc__stops-chip--stop'
+          "
+          >{{ flight.stopsLabel }}</span
+        >
+      </div>
+
+      <div class="fc__endpoint">
+        <span class="fc__time">{{ flight.arrive }}</span>
+        <span class="fc__code">{{ flight.to }}</span>
+      </div>
+    </div>
+
+    <!-- Separator on mobile -->
+    <div class="fc__sep d-md-none"></div>
+
+    <!-- Price + action -->
+    <div class="fc__price-panel">
+      <div class="fc__extras" *ngIf="flight.isRefundable || flight.hasBaggage">
+        <span *ngIf="flight.isRefundable" class="fc__pill fc__pill--green">
+          <i class="bi bi-arrow-counterclockwise"></i>
+          {{ "flights.filters.refundableOnly" | translate }}
+        </span>
+        <span *ngIf="flight.hasBaggage" class="fc__pill fc__pill--blue">
+          <i class="bi bi-luggage-fill"></i>
+          {{ "flights.filters.baggageOnly" | translate }}
+        </span>
+      </div>
+      <div class="fc__price-row">
+        <span class="fc__price">{{ totalPrice | smartPrice }}</span>
+        <span class="fc__currency">&nbsp;<span class="currency-eur">&euro;</span></span>
+      </div>
+      <div class="fc__per-person">
+        {{
+          "flights.card.forPassengers" | translate: { count: totalPassengers }
+        }}
+      </div>
+      <button type="button" class="fc__cta" (click)="onExpandClick()">
+        {{
+          isExpanded
+            ? ("flights.card.collapse" | translate)
+            : ("flights.card.viewDetails" | translate)
+        }}
+        <i
+          class="bi"
+          [ngClass]="isExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"
+          aria-hidden="true"
+        ></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Detail panel (expand/collapse) -->
+  <div class="fc__detail-panel" [class.fc__detail-panel--open]="isExpanded">
+    <div class="fc__detail-inner">
+      <div class="fc__detail-row" *ngIf="flight.departDate">
+        <span class="fc__detail-label">{{
+          "flights.card.departDate" | translate
+        }}</span>
+        <span class="fc__detail-value">{{ flight.departDate }}</span>
+      </div>
+
+      <div class="fc__detail-row" *ngIf="flight.fromLabel || flight.toLabel">
+        <span class="fc__detail-label">{{
+          "flights.card.route" | translate
+        }}</span>
+        <span class="fc__detail-value"
+          >{{ flight.fromLabel || flight.from }} →
+          {{ flight.toLabel || flight.to }}</span
+        >
+      </div>
+
+      <div class="fc__detail-row">
+        <span class="fc__detail-label">{{
+          "flights.card.seatsLeft" | translate
+        }}</span>
+        <span
+          class="fc__detail-value"
+          [class.fc__detail-value--warn]="flight.availableSeats <= 5"
+        >
+          {{ flight.availableSeats }}
+          <span *ngIf="flight.availableSeats <= 5"> ⚠</span>
+        </span>
+      </div>
+
+      <div class="fc__detail-row">
+        <span class="fc__detail-label">{{
+          "flights.card.baggage" | translate
+        }}</span>
+        <span class="fc__detail-value">
+          {{
+            flight.hasBaggage
+              ? ("flights.card.baggageIncluded" | translate)
+              : ("flights.card.baggageNotIncluded" | translate)
+          }}
+        </span>
+      </div>
+
+      <div class="fc__detail-row">
+        <span class="fc__detail-label">{{
+          "flights.card.cancellation" | translate
+        }}</span>
+        <span class="fc__detail-value">
+          {{
+            flight.isRefundable
+              ? ("flights.card.refundable" | translate)
+              : ("flights.card.nonRefundable" | translate)
+          }}
+        </span>
+      </div>
+
+      <div class="fc__price-breakdown">
+        <div class="fc__price-row-sm" *ngIf="passengers.adults > 0">
+          <span
+            >{{ "flights.search.adult" | translate }} ×
+            {{ passengers.adults }}</span
+          >
+          <span>{{ pricePerAdult * passengers.adults | smartPrice }} <span class="currency-eur">&euro;</span></span>
+        </div>
+        <div class="fc__price-row-sm" *ngIf="passengers.children > 0">
+          <span
+            >{{ "flights.search.child" | translate }} ×
+            {{ passengers.children }}</span
+          >
+          <span>{{ pricePerAdult * passengers.children | smartPrice }} <span class="currency-eur">&euro;</span></span>
+        </div>
+        <div class="fc__price-row-sm" *ngIf="passengers.seniors > 0">
+          <span
+            >{{ "flights.search.senior" | translate }} ×
+            {{ passengers.seniors }}</span
+          >
+          <span>{{ pricePerAdult * passengers.seniors | smartPrice }} <span class="currency-eur">&euro;</span></span>
+        </div>
+        <div class="fc__price-total">
+          <span>{{
+            "flights.card.totalForAll" | translate: { count: totalPassengers }
+          }}</span>
+          <span>{{ totalPrice | smartPrice }} <span class="currency-eur">&euro;</span></span>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="fc__cta fc__cta--book"
+        (click)="onBookClick()"
+      >
+        <i class="bi bi-calendar-check me-1" aria-hidden="true"></i>
+        {{ "flights.card.bookFlight" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

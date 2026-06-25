@@ -1,0 +1,418 @@
+<!-- LOADING -->
+<div *ngIf="loading" class="container py-5 text-center">
+  <div class="spinner-border text-primary" role="status"></div>
+  <p class="mt-3 text-muted">
+    {{ "accommodationDetails.loading" | translate }}
+  </p>
+</div>
+
+<!-- ERROR -->
+<div *ngIf="!loading && error" class="container py-5">
+  <div class="alert alert-danger">{{ error }}</div>
+</div>
+
+<!-- CONTENT -->
+<div *ngIf="!loading && accommodation" class="accommodation-detail-page">
+  <!-- HERO SECTION -->
+  <div
+    class="hero-section position-relative mb-4"
+    style="height: 420px; overflow: hidden; background: #1a1a2e"
+  >
+    <img
+      [src]="
+        accommodation.imageUrl ||
+        'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200'
+      "
+      [alt]="accommodation.name"
+      class="w-100 h-100"
+      style="object-fit: cover; opacity: 0.75"
+    />
+    <div
+      class="position-absolute bottom-0 start-0 w-100 p-4"
+      style="background: linear-gradient(transparent, rgba(0, 0, 0, 0.8))"
+    >
+      <div class="container">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="badge bg-primary">{{
+            accommodation.type || "Szálloda"
+          }}</span>
+          <span
+            *ngIf="accommodation.travelers_rating"
+            class="badge bg-warning text-dark"
+          >
+            <i class="fa-solid fa-star me-1"></i
+            >{{ accommodation.travelers_rating | number: "1.1-1" }}
+          </span>
+        </div>
+        <div class="d-flex align-items-end justify-content-between">
+          <div>
+            <h1 class="text-white mb-1 fw-bold">{{ accommodation.name }}</h1>
+            <p class="text-white-50 mb-0">
+              <i class="fa-solid fa-map-marker-alt me-2"></i
+              >{{ accommodation.city }}, {{ accommodation.address }}
+            </p>
+          </div>
+          <button
+            *ngIf="isLoggedIn"
+            class="btn btn-lg"
+            [class.btn-danger]="isFavorited"
+            [class.btn-outline-light]="!isFavorited"
+            (click)="toggleFavorite($event)"
+            style="border-radius: 50%; width: 52px; height: 52px; padding: 0"
+            title="{{ 'accommodationDetails.favorites' | translate }}"
+          >
+            <i
+              class="fa-heart"
+              [class.fa-solid]="isFavorited"
+              [class.fa-regular]="!isFavorited"
+            ></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-5">
+    <div class="row g-4">
+      <!-- LEFT: Details -->
+      <div class="col-lg-8">
+        <!-- OVERVIEW CARDS -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3">
+            <div class="card text-center py-3 h-100">
+              <i class="fa-solid fa-door-open fa-2x text-primary mb-2"></i>
+              <div class="small text-muted">
+                {{ "accommodationDetails.rooms" | translate }}
+              </div>
+              <div class="fw-bold">{{ accommodation.rooms || "—" }}</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card text-center py-3 h-100">
+              <i class="fa-solid fa-users fa-2x text-success mb-2"></i>
+              <div class="small text-muted">
+                {{ "accommodationDetails.maxGuests" | translate }}
+              </div>
+              <div class="fw-bold">
+                {{ accommodation.persons || "—" }}
+                {{ "accommodationDetails.guestsUnit" | translate }}
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card text-center py-3 h-100">
+              <i class="fa-solid fa-star fa-2x text-warning mb-2"></i>
+              <div class="small text-muted">
+                {{ "accommodationDetails.rating" | translate }}
+              </div>
+              <div class="fw-bold">
+                {{ accommodation.travelers_rating || "—" }}
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card text-center py-3 h-100">
+              <i class="fa-solid fa-moon fa-2x text-info mb-2"></i>
+              <div class="small text-muted">
+                {{ "accommodationDetails.pricePerNight" | translate }}
+              </div>
+              <div class="fw-bold">
+                {{ accommodation.price }}
+                <span class="currency-eur">&euro;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-circle-info me-2 text-primary"></i
+              >{{ "accommodationDetails.descriptionTitle" | translate }}
+            </h5>
+            <p class="text-muted mb-0">
+              {{
+                currentDescription ||
+                  ("accommodationDetails.noDescription" | translate)
+              }}
+            </p>
+          </div>
+        </div>
+
+        <!-- SERVICES / AMENITIES -->
+        <div
+          class="card mb-4"
+          *ngIf="accommodation.services && accommodation.services.length > 0"
+        >
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-concierge-bell me-2 text-success"></i
+              >{{ "accommodationDetails.servicesTitle" | translate }}
+            </h5>
+            <div class="d-flex flex-wrap gap-2">
+              <span
+                class="badge rounded-pill service-badge border"
+                *ngFor="let service of accommodation.services"
+              >
+                <i class="fa-solid fa-check text-success me-1"></i>{{ service }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOCATION -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-map-pin me-2 text-danger"></i
+              >{{ "accommodationDetails.locationTitle" | translate }}
+            </h5>
+            <p class="mb-1">
+              <strong>{{ "accommodationDetails.address" | translate }}</strong>
+              {{ accommodation.address }}, {{ accommodation.zip_code }}
+              {{ accommodation.city }}
+            </p>
+            <p class="mb-1">
+              <strong>{{ "accommodationDetails.country" | translate }}</strong>
+              {{ accommodation.country }}
+            </p>
+            <p class="mb-0">
+              <strong>{{
+                "accommodationDetails.continent" | translate
+              }}</strong>
+              {{ accommodation.continent }}
+            </p>
+          </div>
+        </div>
+
+        <!-- HOTEL POLICIES -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-clipboard-list me-2 text-warning"></i
+              >{{ "accommodationDetails.policiesTitle" | translate }}
+            </h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="d-flex align-items-start gap-2">
+                  <i class="fa-solid fa-right-to-bracket text-success mt-1"></i>
+                  <div>
+                    <div class="fw-bold small">
+                      {{ "accommodationDetails.checkIn" | translate }}
+                    </div>
+                    <div class="text-muted small">
+                      {{ "accommodationDetails.checkInTime" | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex align-items-start gap-2">
+                  <i
+                    class="fa-solid fa-right-from-bracket text-danger mt-1"
+                  ></i>
+                  <div>
+                    <div class="fw-bold small">
+                      {{ "accommodationDetails.checkOut" | translate }}
+                    </div>
+                    <div class="text-muted small">
+                      {{ "accommodationDetails.checkOutTime" | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex align-items-start gap-2">
+                  <i class="fa-solid fa-ban text-danger mt-1"></i>
+                  <div>
+                    <div class="fw-bold small">
+                      {{ "accommodationDetails.smoking" | translate }}
+                    </div>
+                    <div class="text-muted small">
+                      {{ "accommodationDetails.smokingPolicy" | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex align-items-start gap-2">
+                  <i class="fa-solid fa-paw text-warning mt-1"></i>
+                  <div>
+                    <div class="fw-bold small">
+                      {{ "accommodationDetails.pets" | translate }}
+                    </div>
+                    <div class="text-muted small">
+                      {{ "accommodationDetails.petsPolicy" | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex align-items-start gap-2">
+                  <i class="fa-solid fa-rotate-left text-info mt-1"></i>
+                  <div>
+                    <div class="fw-bold small">
+                      {{ "accommodationDetails.cancellation" | translate }}
+                    </div>
+                    <div class="text-muted small">
+                      {{
+                        "accommodationDetails.cancellationPolicy" | translate
+                      }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex align-items-start gap-2">
+                  <i class="fa-solid fa-credit-card text-success mt-1"></i>
+                  <div>
+                    <div class="fw-bold small">
+                      {{ "accommodationDetails.payment" | translate }}
+                    </div>
+                    <div class="text-muted small">
+                      {{ "accommodationDetails.paymentPolicy" | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div
+          class="card mb-4"
+          *ngIf="accommodation.email || accommodation.phone_number"
+        >
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-phone me-2 text-primary"></i
+              >{{ "accommodationDetails.contactTitle" | translate }}
+            </h5>
+            <p class="mb-1" *ngIf="accommodation.email">
+              <i class="fa-solid fa-envelope me-2 text-muted"></i
+              >{{ accommodation.email }}
+            </p>
+            <p class="mb-0" *ngIf="accommodation.phone_number">
+              <i class="fa-solid fa-phone me-2 text-muted"></i
+              >{{ accommodation.phone_number }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Booking widget -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm sticky-top" style="top: 80px">
+          <div class="card-body p-4">
+            <h5 class="card-title mb-1 fw-bold">
+              {{ accommodation.price }}
+              <span class="currency-eur">&euro;</span>
+              <small class="text-muted fw-normal fs-6"
+                >/ {{ "accommodationDetails.nightUnit" | translate }}</small
+              >
+            </h5>
+            <p class="text-muted small mb-3">
+              <i class="fa-solid fa-star text-warning me-1"></i>
+              {{
+                accommodation.travelers_rating ||
+                  ("accommodationDetails.noRating" | translate)
+              }}
+            </p>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">{{
+                "accommodationDetails.checkInLabel" | translate
+              }}</label>
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="startDate"
+                [min]="minCheckin"
+                [attr.lang]="currentLang"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">{{
+                "accommodationDetails.checkOutLabel" | translate
+              }}</label>
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="endDate"
+                [min]="minCheckout"
+                [attr.lang]="currentLang"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">{{
+                "accommodationDetails.guestsLabel" | translate
+              }}</label>
+              <input
+                type="number"
+                class="form-control"
+                min="1"
+                [max]="accommodation.persons || 20"
+                [(ngModel)]="persons"
+              />
+            </div>
+
+            <!-- Price breakdown -->
+            <div
+              *ngIf="nights > 0"
+              class="border rounded p-3 mb-3 price-breakdown"
+            >
+              <div class="d-flex justify-content-between small mb-1">
+                <span
+                  >{{ accommodation.price }}
+                  <span class="currency-eur">&euro;</span> × {{ nights }}
+                  {{ "accommodationDetails.nightUnit" | translate }} ×
+                  {{ persons }}
+                  {{ "accommodationDetails.guestsUnit" | translate }}</span
+                >
+              </div>
+              <hr class="my-2" />
+              <div class="d-flex justify-content-between fw-bold">
+                <span>{{ "accommodationDetails.total" | translate }}</span>
+                <span
+                  >{{ totalPrice }}
+                  <span class="currency-eur">&euro;</span></span
+                >
+              </div>
+            </div>
+
+            <button
+              class="btn btn-primary w-100"
+              [disabled]="!startDate || !endDate || nights < 1 || !isLoggedIn"
+              (click)="goToReservation()"
+            >
+              <i class="fa-solid fa-calendar-check me-2"></i>
+              {{
+                !isLoggedIn
+                  ? ("accommodationDetails.loginRequired" | translate)
+                  : ("accommodationDetails.bookNow" | translate)
+              }}
+            </button>
+
+            <div *ngIf="!isLoggedIn" class="text-center mt-2">
+              <small class="text-muted"
+                >{{ "accommodationDetails.loginPromptText" | translate }}
+                <a routerLink="/login">{{
+                  "accommodationDetails.loginLinkText" | translate
+                }}</a></small
+              >
+            </div>
+
+            <p class="text-center text-muted small mt-3 mb-0">
+              <i class="fa-solid fa-shield-halved me-1"></i>
+              {{ "accommodationDetails.noCharge" | translate }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

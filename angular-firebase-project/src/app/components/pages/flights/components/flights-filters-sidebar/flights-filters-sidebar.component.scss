@@ -1,0 +1,183 @@
+:host {
+  display: block;
+}
+
+.filters-card {
+  background: var(--flights-surface, #fff);
+  border: 1.5px solid var(--flights-border, #e9eef5);
+  border-radius: 20px;
+  padding: 1.1rem 1.15rem;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+  position: sticky;
+  top: 1rem;
+  color: var(--color-text);
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.filters-header__left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  h5 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+}
+
+.filters-count {
+  background: var(--color-primary, #1a73e8);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+}
+
+.filters-reset {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-primary, #1a73e8);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.75;
+  }
+}
+
+// ── Sections ──────────────────────────────────────────────────────────────────
+.filter-section {
+  border-top: 1px solid var(--flights-border, #eef2f7);
+  padding: 0.1rem 0;
+}
+
+.filter-section__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.6rem 0;
+  cursor: pointer;
+  color: var(--color-text);
+  text-align: left;
+
+  i {
+    font-size: 0.75rem;
+    color: var(--color-muted, #6c757d);
+    transition: transform 0.15s;
+  }
+}
+
+.filter-section__title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.filter-section__body {
+  padding: 0.15rem 0 0.6rem;
+}
+
+.filter-section__body--time-grid {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+// ── Sliders ───────────────────────────────────────────────────────────────────
+.slider-wrap {
+  .form-range {
+    width: 100%;
+    margin-bottom: 0.2rem;
+    accent-color: var(--color-primary, #1a73e8);
+  }
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--color-muted, #6c757d);
+}
+
+.slider-val {
+  font-weight: 600;
+  color: var(--color-primary, #1a73e8);
+}
+
+// ── Checkbox options ──────────────────────────────────────────────────────────
+.filter-opt {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+  font-size: 0.88rem;
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+
+  input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--color-primary, #1a73e8);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+// ── Time chips ────────────────────────────────────────────────────────────────
+.filter-time-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--flights-border, #e9eef5);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-muted, #6c757d);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+  user-select: none;
+
+  i {
+    font-size: 0.8rem;
+  }
+
+  &:hover {
+    background: rgba(26, 115, 232, 0.06);
+    border-color: rgba(26, 115, 232, 0.2);
+    color: var(--color-primary, #1a73e8);
+  }
+
+  &--active {
+    background: rgba(26, 115, 232, 0.1);
+    border-color: rgba(26, 115, 232, 0.3);
+    color: var(--color-primary, #1a73e8);
+  }
+}

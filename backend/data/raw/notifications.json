@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "9zSE3sBz228wEZUBNi37",
+    "type": "booking",
+    "title": "Booking Confirmed",
+    "message": "Your booking for \"New York városi kaland\" has been confirmed.",
+    "relatedId": "ncUevB2mukU5RZBsLtmR",
+    "createdAt": "2026-04-12T18:16:17.119Z",
+    "read": false,
+    "userId": "RyBFkGMdnFTqn0lG9IQF5UoPjbC3"
+  },
+  {
+    "_id": "hyMykOIrnGO8RUWmeOU7",
+    "userId": "RyBFkGMdnFTqn0lG9IQF5UoPjbC3",
+    "type": "booking",
+    "title": "Booking Confirmed",
+    "message": "Your booking for \"Marokkói karavánutazás: Marrakesh és a Szahara\" has been confirmed.",
+    "relatedId": "20SontkB7i7GEsTt5hXH",
+    "read": false,
+    "createdAt": "2026-04-17T17:59:21.356Z"
+  }
+]

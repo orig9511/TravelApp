@@ -1,0 +1,19 @@
+.reservation-summary {
+  position: sticky;
+  top: 84px;
+}
+
+:host-context(body.dark-mode) .reservation-summary {
+  border-color: #404040;
+}
+
+.currency-eur {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+}

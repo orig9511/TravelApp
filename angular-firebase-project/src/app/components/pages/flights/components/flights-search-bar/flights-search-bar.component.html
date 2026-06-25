@@ -1,0 +1,425 @@
+<section class="py-4">
+  <div class="container">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-3 p-md-4">
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <button
+            type="button"
+            class="btn btn-sm"
+            [ngClass]="
+              tripType === 'oneWay' ? 'btn-primary' : 'btn-outline-primary'
+            "
+            (click)="tripType = 'oneWay'; returnDate = ''"
+          >
+            {{ "flights.search.oneWay" | translate }}
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-sm"
+            [ngClass]="
+              tripType === 'roundTrip' ? 'btn-primary' : 'btn-outline-primary'
+            "
+            (click)="tripType = 'roundTrip'"
+          >
+            {{ "flights.search.roundTrip" | translate }}
+          </button>
+
+          <div class="ms-auto d-flex align-items-center gap-2 text-muted small">
+            <span class="badge text-bg-light">
+              <ng-container *ngIf="from && to">{{
+                "flights.search.summaryFromTo"
+                  | translate: { from: from, to: to }
+              }}</ng-container>
+              <ng-container *ngIf="from && !to">{{
+                "flights.search.summaryFrom" | translate: { from: from }
+              }}</ng-container>
+              <ng-container *ngIf="!from && to">{{
+                "flights.search.summaryTo" | translate: { to: to }
+              }}</ng-container>
+              <ng-container *ngIf="!from && !to">{{
+                "flights.search.summaryDefault" | translate
+              }}</ng-container>
+            </span>
+          </div>
+        </div>
+
+        <div class="row g-2 g-md-3 align-items-stretch">
+          <!-- From field -->
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="border rounded p-3 h-100">
+              <div class="text-muted small mb-1">
+                {{ "flights.search.departureLabel" | translate }}
+              </div>
+              <input
+                type="text"
+                class="form-control border-0 p-0 fw-semibold"
+                [value]="from"
+                (input)="onFromInput($any($event.target).value)"
+                (focus)="onFromFocus()"
+                (blur)="closeDropdown('from')"
+                (keydown)="onKeydown($event, 'from')"
+                [placeholder]="'flights.search.fromPlaceholder' | translate"
+                autocomplete="off"
+              />
+
+              <div
+                class="fsb__dropdown"
+                *ngIf="fromDropdownOpen"
+                role="listbox"
+              >
+                <div class="fsb__group-label">
+                  {{
+                    fromSuggestions.length > 0
+                      ? ("flights.search.results" | translate)
+                      : ("flights.search.popular" | translate)
+                  }}
+                </div>
+                <div
+                  class="fsb__option"
+                  role="option"
+                  *ngFor="
+                    let s of getSuggestions('from');
+                    let i = index;
+                    trackBy: trackByAirport
+                  "
+                  [class.fsb__option--active]="i === activeFromIndex"
+                  (mousedown)="selectSuggestion(s, 'from')"
+                >
+                  <span class="fsb__option-code">{{ s.code }}</span>
+                  <span class="fsb__option-label">{{ s.label }}</span>
+                </div>
+                <div class="fsb__loading" *ngIf="isFromLoading">
+                  <span
+                    class="spinner-border spinner-border-sm text-primary"
+                  ></span>
+                </div>
+              </div>
+
+              <div class="small text-muted">
+                {{ "flights.search.cityOrAirport" | translate }}
+              </div>
+
+              <div *ngIf="fromError" class="small text-danger mt-1">
+                {{ fromError }}
+              </div>
+            </div>
+          </div>
+
+          <!-- To field -->
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="border rounded p-3 h-100">
+              <div class="text-muted small mb-1">
+                {{ "flights.search.arrivalLabel" | translate }}
+              </div>
+              <input
+                type="text"
+                class="form-control border-0 p-0 fw-semibold"
+                [value]="to"
+                (input)="onToInput($any($event.target).value)"
+                (focus)="onToFocus()"
+                (blur)="closeDropdown('to')"
+                (keydown)="onKeydown($event, 'to')"
+                [placeholder]="'flights.search.toPlaceholder' | translate"
+                autocomplete="off"
+              />
+
+              <div class="fsb__dropdown" *ngIf="toDropdownOpen" role="listbox">
+                <div class="fsb__group-label">
+                  {{
+                    toSuggestions.length > 0
+                      ? ("flights.search.results" | translate)
+                      : ("flights.search.popular" | translate)
+                  }}
+                </div>
+                <div
+                  class="fsb__option"
+                  role="option"
+                  *ngFor="
+                    let s of getSuggestions('to');
+                    let i = index;
+                    trackBy: trackByAirport
+                  "
+                  [class.fsb__option--active]="i === activeToIndex"
+                  (mousedown)="selectSuggestion(s, 'to')"
+                >
+                  <span class="fsb__option-code">{{ s.code }}</span>
+                  <span class="fsb__option-label">{{ s.label }}</span>
+                </div>
+                <div class="fsb__loading" *ngIf="isToLoading">
+                  <span
+                    class="spinner-border spinner-border-sm text-primary"
+                  ></span>
+                </div>
+              </div>
+
+              <div class="small text-muted">
+                {{ "flights.search.cityOrAirport" | translate }}
+              </div>
+
+              <div *ngIf="toError" class="small text-danger mt-1">
+                {{ toError }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Date field -->
+          <div class="col-12 col-md-6 col-lg-2">
+            <div class="border rounded p-3 h-100">
+              <div class="text-muted small mb-1">
+                {{ "flights.search.departureDateLabel" | translate }}
+              </div>
+              <input
+                type="date"
+                class="form-control border-0 p-0 fw-semibold"
+                [value]="departDate"
+                [min]="minDate"
+                (input)="departDate = $any($event.target).value"
+              />
+
+              <div class="small text-muted">
+                {{ "flights.search.chooseDateHint" | translate }}
+              </div>
+
+              <div *ngIf="returnDateError" class="small text-danger mt-1">
+                {{ returnDateError }}
+              </div>
+
+              <div *ngIf="dateError" class="small text-danger mt-1">
+                {{ dateError }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Passengers field -->
+          <div class="col-12 col-md-6 col-lg-2 position-relative">
+            <div class="border rounded p-3 h-100">
+              <button
+                type="button"
+                class="btn w-100 d-flex align-items-center justify-content-between p-0 border-0 bg-transparent text-start"
+                (click)="isPassengersOpen = !isPassengersOpen"
+              >
+                <div>
+                  <div class="text-muted small">
+                    {{ "flights.search.passengers" | translate }}
+                  </div>
+                  <div class="fw-semibold">
+                    {{
+                      "flights.search.passengersCount"
+                        | translate: { count: totalPassengers }
+                    }}
+                  </div>
+                </div>
+                <span class="small text-muted">{{
+                  isPassengersOpen ? "-" : "+"
+                }}</span>
+              </button>
+
+              <div *ngIf="passengersError" class="small text-danger mt-2">
+                {{ passengersError }}
+              </div>
+            </div>
+
+            <div
+              *ngIf="isPassengersOpen"
+              class="card shadow border-0 passengers-dropdown"
+            >
+              <div class="card-body p-3">
+                <div class="passenger-row mb-3">
+                  <div>
+                    <div class="fw-semibold">
+                      {{ "flights.search.adult" | translate }}
+                    </div>
+                    <div class="small text-muted">
+                      {{ "flights.search.adultsAge" | translate }}
+                    </div>
+                  </div>
+                  <div class="passenger-counter">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm passenger-counter-btn"
+                      (click)="decreasePassengers('adults')"
+                    >
+                      -
+                    </button>
+                    <span class="fw-semibold passenger-counter-value">{{
+                      passengers.adults
+                    }}</span>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm passenger-counter-btn"
+                      (click)="increasePassengers('adults')"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div class="passenger-row mb-3">
+                  <div>
+                    <div class="fw-semibold">
+                      {{ "flights.search.child" | translate }}
+                    </div>
+                    <div class="small text-muted">
+                      {{ "flights.search.childrenAge" | translate }}
+                    </div>
+                  </div>
+                  <div class="passenger-counter">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm passenger-counter-btn"
+                      (click)="decreasePassengers('children')"
+                    >
+                      -
+                    </button>
+                    <span class="fw-semibold passenger-counter-value">{{
+                      passengers.children
+                    }}</span>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm passenger-counter-btn"
+                      (click)="increasePassengers('children')"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div class="passenger-row">
+                  <div>
+                    <div class="fw-semibold">
+                      {{ "flights.search.senior" | translate }}
+                    </div>
+                    <div class="small text-muted">
+                      {{ "flights.search.seniorsAge" | translate }}
+                    </div>
+                  </div>
+                  <div class="passenger-counter">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm passenger-counter-btn"
+                      (click)="decreasePassengers('seniors')"
+                    >
+                      -
+                    </button>
+                    <span class="fw-semibold passenger-counter-value">{{
+                      passengers.seniors
+                    }}</span>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm passenger-counter-btn"
+                      (click)="increasePassengers('seniors')"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search button -->
+          <div class="col-12 col-lg-2">
+            <button
+              type="button"
+              class="btn btn-primary w-100 h-100"
+              (click)="onSearch()"
+            >
+              {{ "flights.search.searchButton" | translate }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Round-trip return date row -->
+        <div *ngIf="tripType === 'roundTrip'" class="row g-2 g-md-3 mt-2">
+          <div class="col-12">
+            <div class="border rounded p-3">
+              <div class="fw-semibold mb-3">
+                {{ "flights.search.roundTrip" | translate }}
+              </div>
+              <div class="row g-2 g-md-3 align-items-stretch">
+                <div class="col-12 col-md-4">
+                  <div class="border rounded p-3 h-100">
+                    <div class="text-muted small mb-1">
+                      {{ "flights.search.returnDepartureLabel" | translate }}
+                    </div>
+                    <div class="fw-semibold">{{ to || "-" }}</div>
+                    <div class="small text-muted">
+                      {{ "flights.search.returnDepartureAuto" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="border rounded p-3 h-100">
+                    <div class="text-muted small mb-1">
+                      {{ "flights.search.returnArrivalLabel" | translate }}
+                    </div>
+                    <div class="fw-semibold">{{ from || "-" }}</div>
+                    <div class="small text-muted">
+                      {{ "flights.search.returnArrivalAuto" | translate }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="border rounded p-3 h-100">
+                    <div class="text-muted small mb-1">
+                      {{ "flights.search.returnDateLabel" | translate }}
+                    </div>
+                    <input
+                      type="date"
+                      class="form-control border-0 p-0 fw-semibold"
+                      [value]="returnDate"
+                      [min]="departDate || minDate"
+                      (input)="returnDate = $any($event.target).value"
+                    />
+                    <div class="small text-muted">
+                      {{ "flights.search.chooseDateHint" | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <h5 class="mb-1">
+            <ng-container *ngIf="from && to">{{
+              "flights.search.summaryFromTo" | translate: { from: from, to: to }
+            }}</ng-container>
+            <ng-container *ngIf="from && !to">{{
+              "flights.search.summaryFrom" | translate: { from: from }
+            }}</ng-container>
+            <ng-container *ngIf="!from && to">{{
+              "flights.search.summaryTo" | translate: { to: to }
+            }}</ng-container>
+            <ng-container *ngIf="!from && !to">{{
+              "flights.search.summaryDefault" | translate
+            }}</ng-container>
+          </h5>
+          <div class="small text-muted">
+            {{ "flights.search.hint" | translate }}
+          </div>
+        </div>
+
+        <!-- Recent searches -->
+        <div *ngIf="recentSearches.length > 0" class="mt-3 pt-3 border-top">
+          <div class="small text-muted mb-2">
+            {{ "flights.recentSearches" | translate }}
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button
+              *ngFor="let r of recentSearches; trackBy: trackByRecent"
+              type="button"
+              class="btn btn-sm btn-outline-secondary"
+              (click)="applyRecentSearch(r)"
+            >
+              {{ r.from.split(" - ")[0] }} → {{ r.to.split(" - ")[0] }}
+              <span class="text-muted ms-1">{{ r.departDate }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

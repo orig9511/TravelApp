@@ -1,0 +1,45 @@
+.card {
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.table {
+  font-size: 0.9rem;
+}
+
+.clickable-row {
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+:host-context(body.dark-mode) {
+  .clickable-row:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: var(--color-text);
+  }
+}
+
+.font-monospace {
+  font-family: monospace;
+}
+
+.currency-eur {
+  font-family: Arial, sans-serif;
+}
+.currency-eur {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+}

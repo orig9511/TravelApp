@@ -1,0 +1,366 @@
+<div class="container mt-4 mb-5">
+  <div class="reporting-header mb-4">
+    <h2>
+      <i class="fa-solid fa-chart-line me-2"></i>
+      {{ "reporting.title" | translate }}
+    </h2>
+    <p class="text-muted">
+      {{ "reporting.subtitle" | translate }}
+    </p>
+  </div>
+
+  <!-- LOADING -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <!-- NO OFFERS -->
+  <div *ngIf="!loading && myOffers.length === 0" class="alert alert-info">
+    <i class="fa-solid fa-info-circle me-2"></i>
+    {{ "reporting.noOffers" | translate }}
+  </div>
+
+  <!-- REPORTS CONTENT -->
+  <div *ngIf="!loading && myOffers.length > 0">
+    <!-- MY OFFERS LIST -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">
+          <i class="fa-solid fa-tag me-2"></i>
+          {{ "reporting.myOffers" | translate }} ({{ myOffers.length }})
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>{{ "reporting.offerTitle" | translate }}</th>
+                <th>{{ "reporting.location" | translate }}</th>
+                <th class="text-center">
+                  {{ "reporting.confirmedCount" | translate }}
+                </th>
+                <th class="text-center">
+                  {{ "reporting.cancelledCount" | translate }}
+                </th>
+                <th class="text-center">
+                  {{ "reporting.actions" | translate }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of reportData; trackBy: trackByReportData">
+                <td>
+                  <strong>{{ data.offer.title }}</strong>
+                </td>
+                <td>{{ data.offer.location }}, {{ data.offer.country }}</td>
+                <td class="text-center">
+                  <span class="badge bg-success">{{
+                    data.confirmedCount
+                  }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="badge bg-danger">{{ data.cancelledCount }}</span>
+                </td>
+                <td class="text-center">
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    (click)="openOfferDetails(data)"
+                  >
+                    <i class="fa-solid fa-chart-bar me-1"></i>
+                    {{ "reporting.details" | translate }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKING STATUS CHARTS -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            <h6 class="mb-0">
+              <i class="fa-solid fa-check-circle me-2"></i>
+              {{ "reporting.confirmedChart" | translate }}
+            </h6>
+          </div>
+          <div class="card-body booking-chart-body">
+            <div class="chart-container">
+              <div
+                *ngFor="let data of reportData; trackBy: trackByReportData"
+                class="chart-bar-row"
+                [title]="
+                  data.offer.title + ': ' + data.confirmedCount + ' foglalÃ¡s'
+                "
+              >
+                <div class="chart-label">
+                  {{ data.offer.title | slice: 0 : 25
+                  }}{{ data.offer.title.length > 25 ? "..." : "" }}
+                </div>
+                <div class="chart-bar-container">
+                  <div
+                    class="chart-bar bg-success"
+                    [style.width.%]="
+                      getBarWidth(data.confirmedCount, 'confirmed')
+                    "
+                  ></div>
+                  <span class="chart-value">{{ data.confirmedCount }}</span>
+                </div>
+              </div>
+              <div
+                *ngIf="reportData.length === 0"
+                class="text-muted text-center py-3"
+              >
+                {{ "reporting.noData" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-danger text-white">
+            <h6 class="mb-0">
+              <i class="fa-solid fa-times-circle me-2"></i>
+              {{ "reporting.cancelledChart" | translate }}
+            </h6>
+          </div>
+          <div class="card-body booking-chart-body">
+            <div class="chart-container">
+              <div
+                *ngFor="let data of reportData; trackBy: trackByReportData"
+                class="chart-bar-row"
+                [title]="
+                  data.offer.title + ': ' + data.cancelledCount + ' foglalÃ¡s'
+                "
+              >
+                <div class="chart-label">
+                  {{ data.offer.title | slice: 0 : 25
+                  }}{{ data.offer.title.length > 25 ? "..." : "" }}
+                </div>
+                <div class="chart-bar-container">
+                  <div
+                    class="chart-bar bg-danger"
+                    [style.width.%]="
+                      getBarWidth(data.cancelledCount, 'cancelled')
+                    "
+                  ></div>
+                  <span class="chart-value">{{ data.cancelledCount }}</span>
+                </div>
+              </div>
+              <div
+                *ngIf="reportData.length === 0"
+                class="text-muted text-center py-3"
+              >
+                {{ "reporting.noData" | translate }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS SECTION -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-info text-white">
+            <h6 class="mb-0">
+              <i class="fa-solid fa-eye me-2"></i>
+              {{ "reporting.mostViewed" | translate }}
+            </h6>
+          </div>
+          <div class="card-body">
+            <div *ngIf="mostViewedOffers$ | async as offers; else noData">
+              <div
+                *ngIf="offers.length === 0"
+                class="text-muted text-center py-3"
+              >
+                {{ "reporting.noViews" | translate }}
+              </div>
+              <div class="analytics-list">
+                <div
+                  *ngFor="
+                    let offer of offers;
+                    let i = index;
+                    trackBy: trackByOfferId
+                  "
+                  class="analytics-item"
+                >
+                  <div class="analytics-rank">{{ i + 1 }}</div>
+                  <div class="analytics-content">
+                    <div class="analytics-title">
+                      {{ offer.title | slice: 0 : 40
+                      }}{{ offer.title.length > 40 ? "..." : "" }}
+                    </div>
+                    <div class="analytics-subtitle">
+                      {{ offer.location }}, {{ offer.country }}
+                    </div>
+                  </div>
+                  <div class="analytics-badge">
+                    <i class="fa-solid fa-eye text-info"></i>
+                    <strong>{{ offer.viewCount || 0 }}</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-template #noData>
+              <div class="text-center py-3">
+                <div
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                ></div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-danger text-white">
+            <h6 class="mb-0">
+              <i class="fa-solid fa-heart me-2"></i>
+              {{ "reporting.mostFavorited" | translate }}
+            </h6>
+          </div>
+          <div class="card-body">
+            <div *ngIf="mostFavoritedOffers$ | async as offers; else noData">
+              <div
+                *ngIf="offers.length === 0"
+                class="text-muted text-center py-3"
+              >
+                {{ "reporting.noFavorites" | translate }}
+              </div>
+              <div class="analytics-list">
+                <div
+                  *ngFor="
+                    let offer of offers;
+                    let i = index;
+                    trackBy: trackByOfferId
+                  "
+                  class="analytics-item"
+                >
+                  <div class="analytics-rank">{{ i + 1 }}</div>
+                  <div class="analytics-content">
+                    <div class="analytics-title">
+                      {{ offer.title | slice: 0 : 40
+                      }}{{ offer.title.length > 40 ? "..." : "" }}
+                    </div>
+                    <div class="analytics-subtitle">
+                      {{ offer.location }}, {{ offer.country }}
+                    </div>
+                  </div>
+                  <div class="analytics-badge">
+                    <i class="fa-solid fa-heart text-danger"></i>
+                    <strong>{{ offer.favoriteCount || 0 }}</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SELECTED OFFER DETAILS (OCCUPANCY) -->
+    <div *ngIf="selectedOffer" class="card border-primary">
+      <div
+        class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+      >
+        <h5 class="mb-0">
+          <i class="fa-solid fa-info-circle me-2"></i>
+          {{ "reporting.detailsTitle" | translate }}:
+          {{ selectedOffer.offer.title }}
+        </h5>
+        <button class="btn btn-sm btn-light" (click)="clearSelection()">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="stat-box">
+              <div class="stat-label">
+                {{ "reporting.statLocation" | translate }}
+              </div>
+              <div class="stat-value">{{ selectedOffer.offer.location }}</div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="stat-box">
+              <div class="stat-label">
+                {{ "reporting.statConfirmed" | translate }}
+              </div>
+              <div class="stat-value text-success">
+                {{ selectedOffer.confirmedCount }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="stat-box">
+              <div class="stat-label">
+                {{ "reporting.statCancelled" | translate }}
+              </div>
+              <div class="stat-value text-danger">
+                {{ selectedOffer.cancelledCount }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr />
+
+        <h6 class="mb-3">
+          <i class="fa-solid fa-percentage me-2"></i>
+          {{ "reporting.occupancy" | translate }}
+        </h6>
+        <div class="occupancy-widget">
+          <div class="occupancy-label">
+            <span
+              >{{ "reporting.booked" | translate }}:
+              {{ selectedOffer.totalBooked }}
+              {{ "reporting.person" | translate }}</span
+            >
+            <span
+              >{{ "reporting.capacity" | translate }}:
+              {{ selectedOffer.totalCapacity }}
+              {{ "reporting.person" | translate }}</span
+            >
+          </div>
+          <div class="progress" style="height: 30px">
+            <div
+              class="progress-bar"
+              [class.bg-success]="selectedOffer.occupancyRate >= 70"
+              [class.bg-warning]="
+                selectedOffer.occupancyRate >= 40 &&
+                selectedOffer.occupancyRate < 70
+              "
+              [class.bg-danger]="selectedOffer.occupancyRate < 40"
+              role="progressbar"
+              [style.width.%]="selectedOffer.occupancyRate"
+              [attr.aria-valuenow]="selectedOffer.occupancyRate"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              {{ selectedOffer.occupancyRate }}%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OFFER DETAILS MODAL -->
+<app-offer-details-modal
+  [offer]="modalOffer"
+  [analytics]="modalAnalytics"
+  [show]="showModal"
+  (closeModal)="closeModal()"
+></app-offer-details-modal>

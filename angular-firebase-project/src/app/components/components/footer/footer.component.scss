@@ -1,0 +1,144 @@
+/* 
+ * Mobile-first responsive design
+ */
+
+.footer {
+  background: var(--color-bg-light);
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.05);
+}
+
+// Footer links
+.footer-links {
+  list-style: none;
+  padding: 0;
+  display: none;
+
+  @media (min-width: 576px) {
+    display: flex;
+  }
+
+  li {
+    a {
+      position: relative;
+      font-size: 0.65rem; // Small on tablet
+      color: var(--color-muted);
+      text-decoration: none;
+      padding-bottom: 0.2rem;
+      transition:
+        color var(--transition-base),
+        padding-left var(--transition-base);
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        height: 1px;
+        background: var(--color-primary);
+        transition: width var(--transition-base);
+      }
+
+      &:hover {
+        color: var(--color-primary);
+        padding-left: 0.3rem;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  // Responsive font sizes - gradually increase
+  @media (min-width: 768px) {
+    li a {
+      font-size: 0.7rem; // Laptop
+    }
+  }
+
+  @media (min-width: 992px) {
+    li a {
+      font-size: 0.75rem; // Desktop - still smaller than navbar
+    }
+  }
+
+  @media (min-width: 1200px) {
+    li a {
+      font-size: 0.8rem; // Large desktop
+    }
+  }
+}
+
+// Social links
+.social-links {
+  .social-link {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base);
+
+    i {
+      font-size: 1rem;
+    }
+
+    &:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  .facebook {
+    background: linear-gradient(135deg, #1877f2, #0f5dc4);
+  }
+
+  .instagram {
+    background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
+  }
+
+  .twitter {
+    background: linear-gradient(135deg, #000000, #333333);
+  }
+
+  // Larger icons on desktop
+  @media (min-width: 992px) {
+    .social-link {
+      width: 40px;
+      height: 40px;
+
+      i {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+// Copyright - responsive sizes
+.copyright {
+  font-size: 0.65rem; // Mobile - very small
+  color: var(--color-muted);
+  transition: color var(--transition-base);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+
+  @media (min-width: 576px) {
+    font-size: 0.7rem; // Tablet
+  }
+
+  @media (min-width: 992px) {
+    font-size: 0.75rem; // Desktop
+  }
+
+  @media (min-width: 1200px) {
+    font-size: 0.8rem; // Large desktop
+  }
+}

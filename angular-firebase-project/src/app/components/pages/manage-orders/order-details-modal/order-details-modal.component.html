@@ -1,0 +1,164 @@
+<div class="modal-backdrop" *ngIf="show" (click)="close()"></div>
+
+<div class="modal-dialog" *ngIf="show && booking">
+  <div class="modal-content">
+    <!-- HEADER -->
+    <div class="modal-header">
+      <h5 class="modal-title">
+        <i class="fa-solid fa-receipt me-2"></i>
+        Foglalás részletei
+      </h5>
+      <button
+        type="button"
+        class="btn-close"
+        (click)="close()"
+        aria-label="Close"
+      ></button>
+    </div>
+
+    <!-- BODY -->
+    <div class="modal-body">
+      <!-- OFFER INFO -->
+      <div class="section mb-4">
+        <h6 class="section-title">
+          <i class="fa-solid fa-tag me-2"></i>
+          Ajánlat
+        </h6>
+        <p class="mb-1">
+          <strong>{{ booking.offer?.title || "N/A" }}</strong>
+        </p>
+        <p class="text-muted mb-0" *ngIf="booking.offer">
+          {{ booking.offer.location }}, {{ booking.offer.country }}
+        </p>
+      </div>
+
+      <!-- DATES -->
+      <div class="section mb-4">
+        <h6 class="section-title">
+          <i class="fa-solid fa-calendar me-2"></i>
+          Időpont
+        </h6>
+        <p class="mb-1">
+          <strong>Indulás:</strong>
+          {{ booking.instance?.departureDate | isoDate }}
+        </p>
+        <p class="mb-0">
+          <strong>Visszaérkezés:</strong>
+          {{ booking.instance?.returnDate | isoDate }}
+        </p>
+      </div>
+
+      <!-- PASSENGERS -->
+      <div
+        class="section mb-4"
+        *ngIf="booking.passengers && booking.passengers.length > 0"
+      >
+        <h6 class="section-title">
+          <i class="fa-solid fa-users me-2"></i>
+          Utasok ({{ booking.passengers.length }} fő)
+        </h6>
+        <div
+          *ngFor="
+            let passenger of booking.passengers;
+            let i = index;
+            trackBy: trackByIndex
+          "
+          class="passenger-card mb-3"
+        >
+          <div class="passenger-header">{{ i + 1 }}. Utas</div>
+          <div class="passenger-body">
+            <p class="mb-1">
+              <i class="fa-solid fa-user me-2 text-muted"></i>
+              <strong>{{ passenger.fullName }}</strong>
+            </p>
+            <p class="mb-1" *ngIf="passenger.phoneNumber">
+              <i class="fa-solid fa-phone me-2 text-muted"></i>
+              {{ passenger.phoneNumber }}
+            </p>
+            <p class="mb-1">
+              <i class="fa-solid fa-home me-2 text-muted"></i>
+              {{ passenger.address }}
+            </p>
+            <p class="mb-0">
+              <i class="fa-solid fa-id-card me-2 text-muted"></i>
+              {{
+                passenger.documentType === "passport" ? "Útlevél" : "Személyi"
+              }}: {{ passenger.documentNumber }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXTRAS -->
+      <div
+        class="section mb-4"
+        *ngIf="
+          booking.extras &&
+          (booking.extras.extraBaggage > 0 || booking.extras.extraLegroom > 0)
+        "
+      >
+        <h6 class="section-title">
+          <i class="fa-solid fa-plus-circle me-2"></i>
+          Extrák
+        </h6>
+        <p class="mb-1" *ngIf="booking.extras.extraBaggage > 0">
+          <i class="fa-solid fa-suitcase me-2 text-muted"></i>
+          Extra poggyász: {{ booking.extras.extraBaggage }} db
+          <span class="text-muted"
+            >({{ booking.extras.extraBaggage * 50 }}
+            <span class="currency-eur">&euro;</span>)</span
+          >
+        </p>
+        <p class="mb-0" *ngIf="booking.extras.extraLegroom > 0">
+          <i class="fa-solid fa-chair me-2 text-muted"></i>
+          Extra lábtér: {{ booking.extras.extraLegroom }} db
+          <span class="text-muted"
+            >({{ booking.extras.extraLegroom * 30 }}
+            <span class="currency-eur">&euro;</span>)</span
+          >
+        </p>
+      </div>
+
+      <!-- PRICE SUMMARY -->
+      <div class="section">
+        <h6 class="section-title">
+          <i class="fa-solid fa-euro-sign me-2"></i>
+          Ár
+        </h6>
+        <div class="price-row">
+          <span>Ár/fő:</span>
+          <strong
+            >{{ booking.pricePerPerson }}
+            <span class="currency-eur">&euro;</span></strong
+          >
+        </div>
+        <div class="price-row">
+          <span>Személyek száma:</span>
+          <strong>{{ booking.quantity }} fő</strong>
+        </div>
+        <div class="price-row" *ngIf="getTotalExtrasPrice() > 0">
+          <span>Extrák:</span>
+          <strong
+            >{{ getTotalExtrasPrice() }}
+            <span class="currency-eur">&euro;</span></strong
+          >
+        </div>
+        <hr />
+        <div class="price-row total">
+          <span>Végösszeg:</span>
+          <strong class="text-success"
+            >{{ booking.totalPrice }}
+            <span class="currency-eur">&euro;</span></strong
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="close()">
+        Bezárás
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,250 @@
+<!-- Hero filter bar -->
+<section class="pkg-hero">
+  <div class="container">
+    <h1 class="pkg-hero__title">{{ "package.title" | translate }}</h1>
+    <p class="pkg-hero__subtitle">{{ "package.subtitle" | translate }}</p>
+    <div class="pkg-filter-bar">
+      <label class="pkg-filter-bar__label" for="citySelect">
+        <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
+        {{ "package.destinationCity" | translate }}
+      </label>
+      <select
+        id="citySelect"
+        class="pkg-filter-bar__select"
+        [(ngModel)]="selectedCity"
+        (change)="onCityChange()"
+      >
+        <option value="">{{ "package.allCities" | translate }}</option>
+        <option
+          *ngFor="let city of availableCities$ | async; trackBy: trackByCity"
+          [value]="city"
+        >
+          {{ city }}
+        </option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<div class="container pb-5">
+  <!-- Loading state -->
+  <ng-container *ngIf="packages$ | async as packages; else packagesLoading">
+    <!-- Empty state -->
+    <div *ngIf="packages.length === 0" class="pkg-empty">
+      <i class="bi bi-search pkg-empty__icon" aria-hidden="true"></i>
+      <h5>{{ "package.noDeals" | translate }}</h5>
+    </div>
+
+    <!-- Package cards -->
+    <div class="pkg-grid">
+      <article
+        class="pkg-card"
+        *ngFor="let deal of packages; trackBy: trackByDeal"
+      >
+        <!-- Image section -->
+        <div class="pkg-card__image-wrap">
+          <button
+            type="button"
+            class="pkg-card__fav"
+            [class.pkg-card__fav--active]="
+              accommodationFavoriteIds.has(deal.accommodation.id)
+            "
+            (click)="toggleAccommodationFavorite(deal.accommodation.id, $event)"
+            [attr.aria-label]="
+              accommodationFavoriteIds.has(deal.accommodation.id)
+                ? ('offers.removeFromFavorites' | translate)
+                : ('offers.addToFavorites' | translate)
+            "
+          >
+            <i class="fa-solid fa-heart"></i>
+          </button>
+          <img
+            [src]="optimizeImageUrl(deal.accommodation.imageUrl)"
+            class="pkg-card__img"
+            [alt]="deal.accommodation.name"
+            loading="lazy"
+            decoding="async"
+            (error)="onImgError($event)"
+          />
+          <div class="pkg-card__dest-badge">
+            <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
+            {{ deal.accommodation.city }}, {{ deal.accommodation.country }}
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="pkg-card__content">
+          <!-- Relevancy badge -->
+          <div
+            class="pkg-relevancy-badge"
+            *ngIf="deal.label"
+            [ngClass]="{
+              'pkg-relevancy-badge--best-value': deal.label === 'Best Value',
+              'pkg-relevancy-badge--top-rated': deal.label === 'Top Rated',
+              'pkg-relevancy-badge--all-included':
+                deal.label === 'All Included',
+            }"
+          >
+            {{ deal.label }}
+          </div>
+
+          <!-- Regional match note (L2/L3 fallback) -->
+          <div class="pkg-regional-note" *ngIf="deal.matchLevel > 1">
+            <i class="bi bi-geo-alt" aria-hidden="true"></i>
+            {{
+              "package.regionalNote" | translate: { code: deal.flight.toCode }
+            }}
+          </div>
+
+          <!-- Hotel info -->
+          <div class="pkg-card__hotel">
+            <div class="pkg-card__hotel-header">
+              <h3 class="pkg-card__hotel-name">
+                {{ deal.accommodation.name }}
+              </h3>
+              <div class="pkg-card__rating">
+                <i class="bi bi-star-fill" aria-hidden="true"></i>
+                {{ deal.accommodation.travelers_rating }}
+              </div>
+            </div>
+            <div class="pkg-card__hotel-meta">
+              <span
+                ><i class="bi bi-building me-1" aria-hidden="true"></i
+                >{{ deal.accommodation.type }}</span
+              >
+              <span>
+                <i class="bi bi-people-fill me-1" aria-hidden="true"></i>
+                {{
+                  "package.maxPersons"
+                    | translate: { count: deal.accommodation.persons }
+                }}
+              </span>
+            </div>
+            <div class="pkg-card__hotel-price">
+              {{ deal.accommodation.price | number }} <span class="currency-eur">&euro;</span>
+              <span class="pkg-card__price-unit">{{
+                "package.perNight" | translate
+              }}</span>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="pkg-card__divider">
+            <span class="pkg-card__divider-chip">
+              <i class="bi bi-airplane-fill" aria-hidden="true"></i>
+              {{ "package.flights" | translate }}
+            </span>
+          </div>
+
+          <!-- Flight strip -->
+          <div class="pkg-card__flight">
+            <div class="pkg-card__flight-airline">
+              {{ deal.flight.airline }}
+            </div>
+            <div class="pkg-card__flight-route">
+              <div class="pkg-card__flt-point">
+                <span class="pkg-card__flt-time">{{
+                  deal.flight.departAt
+                }}</span>
+                <span class="pkg-card__flt-code">{{
+                  deal.flight.fromCode
+                }}</span>
+              </div>
+              <div class="pkg-card__flt-mid">
+                <span class="pkg-card__flt-dur">{{
+                  formatDuration(deal.flight.durationMinutes)
+                }}</span>
+                <div class="pkg-card__flt-track">
+                  <span class="pkg-card__flt-dot"></span>
+                  <i
+                    class="bi bi-airplane-fill pkg-card__flt-plane"
+                    aria-hidden="true"
+                  ></i>
+                  <span class="pkg-card__flt-dot"></span>
+                </div>
+                <span
+                  class="pkg-card__flt-stops"
+                  [class.pkg-card__flt-stops--direct]="
+                    deal.flight.stopsCount === 0
+                  "
+                >
+                  {{
+                    deal.flight.stopsCount === 0
+                      ? ("package.direct" | translate)
+                      : ("package.stops"
+                        | translate: { count: deal.flight.stopsCount })
+                  }}
+                </span>
+              </div>
+              <div class="pkg-card__flt-point">
+                <span class="pkg-card__flt-time">{{
+                  deal.flight.arriveAt
+                }}</span>
+                <span class="pkg-card__flt-code">{{ deal.flight.toCode }}</span>
+              </div>
+            </div>
+            <div class="pkg-card__flight-badges">
+              <span
+                *ngIf="deal.flight.isRefundable"
+                class="pkg-badge pkg-badge--green"
+              >
+                <i class="bi bi-arrow-counterclockwise"></i>
+                {{ "package.refundable" | translate }}
+              </span>
+              <span
+                *ngIf="deal.flight.hasBaggage"
+                class="pkg-badge pkg-badge--blue"
+              >
+                <i class="bi bi-luggage-fill"></i>
+                {{ "package.baggage" | translate }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="pkg-card__footer">
+            <div class="pkg-card__total">
+              <span class="pkg-card__total-label">{{
+                "package.totalLabel" | translate
+              }}</span>
+              <span class="pkg-card__total-price">
+                {{ deal.totalPrice | number }} <span class="currency-eur">&euro;</span>
+              </span>
+            </div>
+            <div class="pkg-card__actions">
+              <button
+                class="pkg-btn pkg-btn--secondary"
+                (click)="goToFlights()"
+                type="button"
+              >
+                <i class="bi bi-airplane" aria-hidden="true"></i>
+                {{ "package.flights" | translate }}
+              </button>
+              <button
+                class="pkg-btn pkg-btn--primary"
+                (click)="goToAccommodation(deal.accommodation.id)"
+                type="button"
+              >
+                {{ "package.details" | translate }}
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #packagesLoading>
+  <div class="container">
+    <div class="pkg-skeleton" *ngFor="let i of [1, 2, 3]">
+      <div class="pkg-sk-img"></div>
+      <div class="pkg-sk-content">
+        <div class="pkg-sk-line pkg-sk-line--wide"></div>
+        <div class="pkg-sk-line"></div>
+        <div class="pkg-sk-line pkg-sk-line--short"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>

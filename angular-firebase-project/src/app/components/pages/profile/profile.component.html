@@ -1,0 +1,114 @@
+<div class="container py-4">
+  <h2>{{ "profile.title" | translate }}</h2>
+
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="mt-4">
+    <div class="mb-3">
+      <label class="form-label">{{ "profile.firstName" | translate }}</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="first_name"
+        [readonly]="!isEditMode"
+      />
+      @if (
+        profileForm.get("first_name")?.touched &&
+        profileForm.get("first_name")?.invalid
+      ) {
+        <div class="text-danger mt-1">
+          {{ "profile.firstNameRequired" | translate }}
+        </div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">{{ "profile.lastName" | translate }}</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="last_name"
+        [readonly]="!isEditMode"
+      />
+      @if (
+        profileForm.get("last_name")?.touched &&
+        profileForm.get("last_name")?.invalid
+      ) {
+        <div class="text-danger mt-1">
+          {{ "profile.lastNameRequired" | translate }}
+        </div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">{{ "profile.username" | translate }}</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="username"
+        [readonly]="!isEditMode"
+      />
+      @if (
+        profileForm.get("username")?.touched &&
+        profileForm.get("username")?.invalid
+      ) {
+        <div class="text-danger mt-1">
+          {{ "profile.usernameRequired" | translate }}
+        </div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">{{ "profile.email" | translate }}</label>
+      <input
+        type="email"
+        class="form-control"
+        formControlName="email"
+        readonly
+      />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">{{ "profile.dateOfBirth" | translate }}</label>
+      <input
+        type="date"
+        class="form-control"
+        formControlName="date_of_birth"
+        [readonly]="!isEditMode"
+      />
+    </div>
+
+    @if (errorMessage) {
+      <div class="alert alert-danger">{{ errorMessage }}</div>
+    }
+
+    @if (successMessage) {
+      <div class="alert alert-success">{{ successMessage }}</div>
+    }
+
+    <div class="d-flex gap-2">
+      @if (!isEditMode) {
+        <button type="button" class="btn btn-primary" (click)="enableEdit()">
+          {{ "profile.edit" | translate }}
+        </button>
+      }
+
+      @if (isEditMode) {
+        <button type="submit" class="btn btn-success" [disabled]="isSaving">
+          {{
+            isSaving
+              ? ("profile.saving" | translate)
+              : ("profile.save" | translate)
+          }}
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="cancelEdit()"
+          [disabled]="isSaving"
+        >
+          {{ "profile.cancel" | translate }}
+        </button>
+      }
+    </div>
+  </form>
+</div>

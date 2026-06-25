@@ -1,0 +1,332 @@
+<app-flights-search-bar
+  #searchBarRef
+  (search)="onSearch($event)"
+></app-flights-search-bar>
+
+<div *ngIf="loadError" class="container mt-3">
+  <div class="alert alert-danger mb-0">{{ loadError }}</div>
+</div>
+
+<div *ngIf="isLoading" class="container mt-4">
+  <app-flights-loading></app-flights-loading>
+</div>
+
+<!-- Discovery section: shown on page load before any search -->
+<div *ngIf="!isSearched && !isLoading" class="flt-discovery">
+  <div *ngIf="discoveryFlights.length > 0" class="container pb-5">
+    <div class="flt-discovery__header">
+      <h4 class="flt-discovery__title">
+        {{ "flights.discovery.title" | translate }}
+      </h4>
+      <p class="flt-discovery__subtitle">
+        {{ "flights.discovery.subtitle" | translate }}
+      </p>
+    </div>
+    <div class="flt-discovery__grid">
+      <article
+        *ngFor="
+          let f of discoveryFlights;
+          let i = index;
+          trackBy: trackByFlight
+        "
+        class="flt-disc-card"
+        role="button"
+        tabindex="0"
+        (click)="onDiscoveryCardClick(f)"
+        (keydown.enter)="onDiscoveryCardClick(f)"
+      >
+        <ng-container *ngIf="discoveryBadge(f, i) as badge">
+          <span
+            class="flt-disc-card__badge"
+            [ngClass]="'flt-disc-card__badge--' + badge"
+          >
+            {{ discoveryBadgeLabel(badge) }}
+          </span>
+        </ng-container>
+        <div class="flt-disc-card__route">
+          <span class="flt-disc-card__code">{{ f.from }}</span>
+          <i
+            class="bi bi-airplane-fill flt-disc-card__arrow"
+            aria-hidden="true"
+          ></i>
+          <span class="flt-disc-card__code">{{ f.to }}</span>
+        </div>
+        <div class="flt-disc-card__airline">{{ f.airline }}</div>
+        <div class="flt-disc-card__bottom">
+          <span
+            class="flt-disc-card__stops"
+            [class.flt-disc-card__stops--direct]="f.stopsCount === 0"
+          >
+            {{ f.stopsLabel }}
+          </span>
+          <span class="flt-disc-card__price">
+            {{ f.price | number: "1.0-0" }}&nbsp;<span class="currency-eur">&euro;</span>
+          </span>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+<!-- Fallback banners: shown when exact search had no results -->
+<div
+  *ngIf="
+    isSearched && !isLoading && fallbackSearchLevel === 1 && fallbackDateRange
+  "
+  class="container mt-3"
+>
+  <div class="alert alert-warning d-flex align-items-center gap-2 mb-0">
+    <i class="bi bi-calendar-range"></i>
+    {{
+      "flights.fallback.dateRange"
+        | translate
+          : { from: fallbackDateRange!.from, to: fallbackDateRange!.to }
+    }}
+  </div>
+</div>
+
+<div *ngIf="dateChips.length > 0" class="container mt-2 mb-1">
+  <div class="flt-date-chips">
+    <span class="flt-date-chips__label">{{
+      "flights.fallback.available" | translate
+    }}</span>
+    <button
+      *ngFor="let chip of dateChips"
+      type="button"
+      class="flt-date-chip"
+      [class.flt-date-chip--active]="chip.date === searchCriteria.departDate"
+      (click)="onDateChipClick(chip.date)"
+    >
+      {{ chip.dayLabel }}
+      <span class="flt-date-chip__price"
+        >{{ "flights.fallback.from" | translate }}
+        {{ chip.fromPrice | smartPrice }} <span class="currency-eur">&euro;</span></span
+      >
+    </button>
+  </div>
+</div>
+
+<div
+  *ngIf="isSearched && !isLoading && fallbackSearchLevel === 2"
+  class="container mt-3"
+>
+  <div class="alert alert-info d-flex align-items-center gap-2 mb-0">
+    <i class="bi bi-search"></i>
+    {{ "flights.fallback.noResults" | translate }}
+  </div>
+</div>
+
+<div *ngIf="isSearched && !isLoading" class="container">
+  <div class="row mt-4">
+    <div class="col-lg-3 mb-3 d-none d-lg-block">
+      <app-flights-filters-sidebar
+        [availableAirlines]="availableAirlines"
+        [initialFilters]="activeFilters"
+        (filtersChange)="onFiltersChange($event)"
+      ></app-flights-filters-sidebar>
+    </div>
+    <div class="col-lg-9">
+      <div class="small text-muted mb-2">
+        {{
+          "flights.passengersSummary"
+            | translate
+              : {
+                  adults: searchCriteria.passengers.adults,
+                  children: searchCriteria.passengers.children,
+                  seniors: searchCriteria.passengers.seniors,
+                }
+        }}
+      </div>
+
+      <app-flights-sort-bar
+        class="d-block mb-3"
+        [activeSort]="activeSort"
+        (sortChange)="onSortChange($event)"
+      ></app-flights-sort-bar>
+
+      <div *ngIf="roundTripSelectionMessage" class="alert alert-info py-2 mb-3">
+        {{ roundTripSelectionMessage }}
+      </div>
+
+      <h5 class="mb-3">{{ "flights.outboundFlights" | translate }}</h5>
+
+      <app-flights-results-list
+        *ngIf="displayFlights.length > 0"
+        [flights]="displayFlights"
+        [passengers]="searchCriteria.passengers"
+        [expandedFlightId]="expandedFlightId"
+        (selectFlight)="onSelectOutboundFlight($event)"
+        (expandToggle)="onExpandToggle($event)"
+      ></app-flights-results-list>
+
+      <div
+        *ngIf="displayFlights.length === 0"
+        class="flt-empty"
+        [class.flt-empty--filter]="isFilterCaused"
+      >
+        <i
+          class="bi flt-empty__icon"
+          [ngClass]="isFilterCaused ? 'bi-funnel' : 'bi-airplane'"
+        ></i>
+        <h5 class="flt-empty__title">
+          {{
+            isFilterCaused
+              ? ("flights.empty.filterTitle" | translate)
+              : searchCriteria.tripType === "roundTrip"
+                ? ("flights.noOutboundResults" | translate)
+                : ("flights.empty.noRouteTitle" | translate)
+          }}
+        </h5>
+        <p class="flt-empty__desc">
+          {{
+            isFilterCaused
+              ? ("flights.empty.filterDesc" | translate)
+              : searchCriteria.tripType === "roundTrip"
+                ? ("flights.noOutboundResultsDesc" | translate)
+                : ("flights.empty.noRouteDesc" | translate)
+          }}
+        </p>
+        <button
+          *ngIf="isFilterCaused"
+          type="button"
+          class="btn btn-outline-primary rounded-pill"
+          (click)="onResetFilters()"
+        >
+          <i class="bi bi-x-circle me-1"></i>
+          {{ "flights.filters.reset" | translate }}
+        </button>
+
+        <div
+          *ngIf="!isFilterCaused && discoveryFlights.length > 0"
+          class="flt-empty__suggestions"
+        >
+          <p class="flt-empty__suggestions-label">
+            {{ "flights.empty.tryThese" | translate }}
+          </p>
+          <div class="flt-discovery__grid flt-empty__discovery-grid">
+            <article
+              *ngFor="
+                let f of discoveryFlights | slice: 0 : 4;
+                let i = index;
+                trackBy: trackByFlight
+              "
+              class="flt-disc-card"
+              role="button"
+              tabindex="0"
+              (click)="onDiscoveryCardClick(f)"
+              (keydown.enter)="onDiscoveryCardClick(f)"
+            >
+              <span
+                class="flt-disc-card__badge flt-disc-card__badge--trending"
+                *ngIf="i < 3"
+                >Trending</span
+              >
+              <div class="flt-disc-card__route">
+                <span class="flt-disc-card__code">{{ f.from }}</span>
+                <i
+                  class="bi bi-airplane-fill flt-disc-card__arrow"
+                  aria-hidden="true"
+                ></i>
+                <span class="flt-disc-card__code">{{ f.to }}</span>
+              </div>
+              <div class="flt-disc-card__airline">{{ f.airline }}</div>
+              <div class="flt-disc-card__bottom">
+                <span
+                  class="flt-disc-card__stops"
+                  [class.flt-disc-card__stops--direct]="f.stopsCount === 0"
+                  >{{ f.stopsLabel }}</span
+                >
+                <span class="flt-disc-card__price"
+                  >{{ f.price | number: "1.0-0" }}&nbsp;{{ f.currency }}</span
+                >
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="searchCriteria.tripType === 'roundTrip'" class="mt-4">
+        <h5 class="mb-3">{{ "flights.returnFlights" | translate }}</h5>
+
+        <app-flights-results-list
+          *ngIf="displayReturnFlights.length > 0"
+          [flights]="displayReturnFlights"
+          [passengers]="searchCriteria.passengers"
+          [expandedFlightId]="expandedFlightId"
+          (selectFlight)="onSelectReturnFlight($event)"
+          (expandToggle)="onExpandToggle($event)"
+        ></app-flights-results-list>
+
+        <div
+          *ngIf="displayReturnFlights.length === 0"
+          class="card shadow-sm border-0 p-4"
+        >
+          <h5>{{ "flights.noReturnResults" | translate }}</h5>
+          <p class="mb-0">{{ "flights.noReturnResultsDesc" | translate }}</p>
+        </div>
+      </div>
+
+      <app-flights-booking-modal
+        *ngIf="isBookingOpen"
+        [outboundFlight]="selectedOutboundFlight"
+        [returnFlight]="selectedReturnFlight"
+        [passengers]="searchCriteria.passengers"
+        (close)="closeBooking()"
+      >
+      </app-flights-booking-modal>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile: Filters FAB (shown only after search, on small screens) -->
+<button
+  *ngIf="isSearched && !isLoading"
+  type="button"
+  class="flt-filter-fab d-lg-none"
+  (click)="openFilterDrawer()"
+>
+  <i class="bi bi-sliders"></i>
+  {{ "flights.filters.title" | translate }}
+  <span *ngIf="activeFilterCount > 0" class="flt-filter-fab__count">{{
+    activeFilterCount
+  }}</span>
+</button>
+
+<!-- Mobile: Filter drawer backdrop -->
+<div
+  *ngIf="isFilterDrawerOpen"
+  class="flt-filter-backdrop d-lg-none"
+  (click)="closeFilterDrawer()"
+></div>
+
+<!-- Mobile: Filter drawer -->
+<div
+  class="flt-filter-drawer d-lg-none"
+  [class.flt-filter-drawer--open]="isFilterDrawerOpen"
+>
+  <div class="flt-filter-drawer__header">
+    <span>{{ "flights.filters.title" | translate }}</span>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="closeFilterDrawer()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <app-flights-filters-sidebar
+    [availableAirlines]="availableAirlines"
+    [initialFilters]="activeFilters"
+    (filtersChange)="onFiltersChange($event)"
+  ></app-flights-filters-sidebar>
+</div>
+
+<!-- Mobile: Sticky scroll-back-to-search CTA -->
+<button
+  *ngIf="showStickyCTA && isSearched"
+  type="button"
+  class="flt-sticky-cta d-lg-none"
+  (click)="scrollToSearchBar()"
+>
+  <i class="bi bi-search"></i>
+  {{ "flights.search.newSearch" | translate }}
+</button>

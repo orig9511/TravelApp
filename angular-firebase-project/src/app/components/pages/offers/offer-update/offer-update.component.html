@@ -1,0 +1,97 @@
+<div class="container mt-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="mb-0">Ajánlatok kezelése</h2>
+
+    <button
+      class="btn btn-outline-danger btn-sm"
+      (click)="resetAndSeed()"
+      [disabled]="resetting || loading"
+    >
+      {{ resetting ? "⏳ Reset folyamatban..." : "🔄 Reset + Seed Offers" }}
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-muted">Betöltés...</div>
+
+  <table *ngIf="!loading" class="table table-striped table-hover mt-3">
+    <thead>
+      <tr>
+        <th>Cím</th>
+        <th>Kontinens</th>
+        <th>Típus</th>
+        <th>Ár</th>
+        <th>Időszak</th>
+        <th>Státusz</th>
+        <th>Műveletek</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let offer of offers; trackBy: trackByOfferId"
+        [class.table-secondary]="offer.isInactive"
+        [class.table-dark]="offer.notShowable"
+      >
+        <td>{{ offer.title }}</td>
+        <td>{{ offer.continent }}</td>
+        <td>{{ offer.travelCategory }}</td>
+        <td>{{ offer.price }}</td>
+        <td>
+          {{ offer.travelPeriodStart | isoDate }} –
+          {{ offer.travelPeriodEnd | isoDate }}
+        </td>
+        <td>
+          <span *ngIf="offer.notShowable" class="badge bg-danger">Rejtett</span>
+          <span
+            *ngIf="offer.isInactive && !offer.notShowable"
+            class="badge bg-warning text-dark"
+            >Inaktív</span
+          >
+          <span
+            *ngIf="!offer.isInactive && !offer.notShowable"
+            class="badge bg-success"
+            >Aktív</span
+          >
+        </td>
+        <td>
+          <button
+            class="btn btn-sm btn-primary me-2"
+            (click)="editOffer(offer.id)"
+            title="Szerkesztés"
+          >
+            ✏️
+          </button>
+
+          <button
+            class="btn btn-sm me-2"
+            [class.btn-warning]="!offer.isInactive"
+            [class.btn-outline-warning]="offer.isInactive"
+            (click)="toggleInactive(offer)"
+            [disabled]="offer.notShowable"
+            title="Inaktív állapot váltása"
+          >
+            {{ offer.isInactive ? "✓" : "⊘" }}
+          </button>
+
+          <button
+            class="btn btn-sm me-2"
+            [class.btn-dark]="!offer.notShowable"
+            [class.btn-outline-dark]="offer.notShowable"
+            (click)="toggleNotShowable(offer)"
+            title="Láthatóság váltása"
+          >
+            {{ offer.notShowable ? "👁" : "🚫" }}
+          </button>
+
+          <button
+            class="btn btn-sm btn-danger"
+            (click)="deleteOffer(offer.id)"
+            title="Törlés"
+          >
+            🗑
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

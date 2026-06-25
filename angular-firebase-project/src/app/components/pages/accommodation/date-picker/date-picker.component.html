@@ -1,0 +1,45 @@
+<div #dateTrigger class="date-input-container" (click)="toggleCalendar()">
+  <div
+    class="date-trigger-surface d-flex align-items-center gap-2 border border-2 rounded-2"
+  >
+    <i class="bi bi-calendar3 text-muted"></i>
+    <div>
+      <span class="d-block small text-muted">{{
+        "accommodation.dateLabel" | translate
+      }}</span>
+      <span class="fw-bold date-trigger-value">
+        {{
+          (selectedStart | date: "MMM d.") ||
+            ("accommodation.selectDate" | translate)
+        }}
+        <span *ngIf="selectedEnd"> — {{ selectedEnd | date: "MMM d." }}</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<ng-template #calendarOverlayTemplate>
+  <div class="calendar-overlay-card">
+    <div class="calendar-flex">
+      <div class="calendar-pane left-calendar">
+        <mat-calendar
+          [startAt]="viewDate"
+          [selected]="selectedRange"
+          (selectedChange)="onDateSelected($event)"
+          (monthSelected)="changeMonth(-1)"
+        >
+        </mat-calendar>
+      </div>
+
+      <div class="calendar-pane right-calendar">
+        <mat-calendar
+          [startAt]="nextMonth"
+          [selected]="selectedRange"
+          (selectedChange)="onDateSelected($event)"
+          (monthSelected)="changeMonth(1)"
+        >
+        </mat-calendar>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,219 @@
+[
+  {
+    "_id": "20SontkB7i7GEsTt5hXH",
+    "bookingType": "offer",
+    "offerId": "8XmEkUzBD6172fs2kLWo",
+    "offerInstanceId": "of1iuLdqs67QFqxZXpx3",
+    "userId": "RyBFkGMdnFTqn0lG9IQF5UoPjbC3",
+    "userEmail": "tszabados9@gmail.com",
+    "userName": "Tamara Takács-Szabados",
+    "offerTitle": "Marokkói karavánutazás: Marrakesh és a Szahara",
+    "selectedDate": "2026-06-17",
+    "quantity": 1,
+    "pricePerPerson": 1349,
+    "totalPrice": 1349,
+    "createdAt": "2026-04-17T16:24:08.160Z",
+    "passengers": [
+      {
+        "fullName": "Takács-Szabados Tamara",
+        "phoneNumber": "+36301234567",
+        "address": "Pécs Fő utca 1",
+        "documentType": "passport",
+        "documentNumber": "AB123456"
+      }
+    ],
+    "extras": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "status": "confirmed",
+    "updatedAt": "2026-04-17T17:59:21.127Z"
+  },
+  {
+    "_id": "ZlVwoNFZYHbyNX1uSuvP",
+    "bookingType": "offer",
+    "offerId": "8XmEkUzBD6172fs2kLWo",
+    "offerInstanceId": "BjrqtgIQn1ONBUx7VJ3Z",
+    "userId": "OhqcqSI7DRONfi66aww2BkIoAzN2",
+    "userEmail": "nviliam7@gmail.com",
+    "userName": "Viliam Nagy",
+    "offerTitle": "Marokkói karavánutazás: Marrakesh és a Szahara",
+    "selectedDate": "2026-07-22",
+    "quantity": 1,
+    "pricePerPerson": 1420,
+    "totalPrice": 1420,
+    "createdAt": "2026-04-15T10:37:00.539Z",
+    "passengers": [
+      {
+        "fullName": "Nagy Viliam",
+        "phoneNumber": "+368404564",
+        "address": "Buda",
+        "documentType": "passport",
+        "documentNumber": "AB123456"
+      }
+    ],
+    "extras": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "status": "confirmed",
+    "updatedAt": "2026-04-15T15:12:57.102Z"
+  },
+  {
+    "_id": "ipaeCuy5rxQzpmElkyoL",
+    "offerId": "8pPkQ9wGuzqpceGvEPaJ",
+    "offerInstanceId": "zqCzmdWJoiUC35N9MnQq",
+    "userId": "N1nkoYXQI8TjAPu0Yv9pn4izKC92",
+    "quantity": 1,
+    "pricePerPerson": 825,
+    "totalPrice": 875,
+    "createdAt": "2026-04-09T23:07:01.077Z",
+    "passengers": [
+      {
+        "fullName": "Teszt Lajos",
+        "address": "Debrecen Kossuth 31",
+        "documentType": "id",
+        "documentNumber": "ab123456"
+      }
+    ],
+    "extras": {
+      "extraBaggage": 1,
+      "extraLegroom": 0
+    },
+    "status": "confirmed",
+    "updatedAt": "2026-04-11T11:11:42.743Z"
+  },
+  {
+    "_id": "koxgMKcTxyPn8hS8XecY",
+    "userId": "n3u9Jscll8SwPZjBvUHSJg99uyA3",
+    "contact": {
+      "lastName": "Kiss",
+      "firstName": "Géza",
+      "email": "geza@gmail.com",
+      "phone": "+36704564564"
+    },
+    "passengers": {
+      "adults": 1,
+      "children": 1,
+      "seniors": 0
+    },
+    "outboundFlight": {
+      "airline": "Lufthansa",
+      "from": "BUD",
+      "to": "JFK",
+      "depart": "06:20",
+      "arrive": "15:10",
+      "price": 549,
+      "currency": "EUR",
+      "stopsLabel": "1 átszállás"
+    },
+    "returnFlight": {
+      "airline": "Lufthansa",
+      "from": "JFK",
+      "to": "BUD",
+      "depart": "08:30",
+      "arrive": "22:10",
+      "price": 579,
+      "currency": "EUR",
+      "stopsLabel": "1 átszállás"
+    },
+    "baggage": {
+      "cabin": 0,
+      "checked": 1,
+      "priority": 1
+    },
+    "pricing": {
+      "outboundPrice": 549,
+      "returnPrice": 579,
+      "basePrice": 2256,
+      "baggagePrice": 70,
+      "totalPrice": 2326,
+      "currency": "EUR"
+    },
+    "status": "confirmed",
+    "createdAt": "2026-04-17T17:49:03.561Z",
+    "bookingType": "flight",
+    "updatedAt": "2026-04-17T17:49:03.562Z"
+  },
+  {
+    "_id": "m2SMgTv4huNdHvJ7IXMM",
+    "bookingType": "offer",
+    "offerId": "8pPkQ9wGuzqpceGvEPaJ",
+    "offerInstanceId": "zqCzmdWJoiUC35N9MnQq",
+    "userId": "N1nkoYXQI8TjAPu0Yv9pn4izKC92",
+    "userEmail": "orig9511@gmail.com",
+    "userName": "Gergő Őri",
+    "offerTitle": "New York városi kaland",
+    "selectedDate": "2026-04-01",
+    "quantity": 1,
+    "pricePerPerson": 825,
+    "totalPrice": 825,
+    "createdAt": "2026-04-13T15:22:05.723Z",
+    "passengers": [
+      {
+        "fullName": "Őri Gergő",
+        "phoneNumber": "12321",
+        "address": "12312",
+        "documentType": "passport",
+        "documentNumber": "12312312"
+      }
+    ],
+    "extras": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "status": "confirmed",
+    "updatedAt": "2026-04-17T17:59:23.266Z"
+  },
+  {
+    "_id": "ncUevB2mukU5RZBsLtmR",
+    "bookingType": "offer",
+    "offerId": "8pPkQ9wGuzqpceGvEPaJ",
+    "offerInstanceId": "zqCzmdWJoiUC35N9MnQq",
+    "userId": "N1nkoYXQI8TjAPu0Yv9pn4izKC92",
+    "userEmail": "orig9511@gmail.com",
+    "userName": "Gergő Őri",
+    "offerTitle": "New York városi kaland",
+    "selectedDate": "2026-04-01",
+    "quantity": 1,
+    "pricePerPerson": 825,
+    "totalPrice": 825,
+    "createdAt": "2026-04-12T18:12:25.433Z",
+    "passengers": [
+      {
+        "fullName": "Őri Gergő",
+        "phoneNumber": "12341234",
+        "address": "12341234",
+        "documentType": "passport",
+        "documentNumber": "12341234"
+      }
+    ],
+    "extras": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "status": "confirmed",
+    "updatedAt": "2026-04-12T18:16:16.794Z"
+  },
+  {
+    "_id": "pAPUhimD9iE8XvPxUftA",
+    "bookingType": "offer",
+    "offerId": "Y8304hXFz5GygFhEog9z",
+    "offerInstanceId": "ErOsc66o3KxAbKSwnp9a",
+    "userId": "N1nkoYXQI8TjAPu0Yv9pn4izKC92",
+    "userEmail": "orig9511@gmail.com",
+    "userName": "Gergő Őri",
+    "offerTitle": "Budapest hétvége — Városi relaxáció",
+    "selectedDate": "2026-06-13",
+    "quantity": 1,
+    "pricePerPerson": 361,
+    "totalPrice": 361,
+    "createdAt": "2026-04-11T15:12:48.828Z",
+    "extras": {
+      "extraBaggage": 0,
+      "extraLegroom": 0
+    },
+    "status": "cancelled",
+    "updatedAt": "2026-04-15T15:13:01.447Z"
+  }
+]

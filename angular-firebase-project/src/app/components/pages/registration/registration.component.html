@@ -1,0 +1,218 @@
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100 registration-wrapper"
+>
+  <form
+    class="w-100 registration-form"
+    style="max-width: 500px"
+    [formGroup]="registrationForm"
+    (ngSubmit)="register()"
+  >
+    <!-- LAST NAME -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        [placeholder]="'registration.lastNameLabel' | translate"
+        formControlName="lastName"
+      />
+      <label>{{ "registration.lastNameLabel" | translate }}</label>
+    </div>
+    <div class="error-slot">
+      <small
+        class="text-danger"
+        *ngIf="lastName?.touched && lastName?.errors?.['required']"
+      >
+        {{ "registration.lastNameRequired" | translate }}
+      </small>
+    </div>
+
+    <!-- FIRST NAME -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        [placeholder]="'registration.firstNameLabel' | translate"
+        formControlName="firstName"
+      />
+      <label>{{ "registration.firstNameLabel" | translate }}</label>
+    </div>
+    <div class="error-slot">
+      <small
+        class="text-danger"
+        *ngIf="firstName?.touched && firstName?.errors?.['required']"
+      >
+        {{ "registration.firstNameRequired" | translate }}
+      </small>
+    </div>
+
+    <!-- DATE OF BIRTH -->
+    <div class="form-floating mb-3">
+      <input
+        type="date"
+        class="form-control"
+        [placeholder]="'registration.birthDateLabel' | translate"
+        formControlName="birthDate"
+      />
+      <label>{{ "registration.birthDateLabel" | translate }}</label>
+    </div>
+    <div class="error-slot">
+      <small
+        class="text-danger"
+        *ngIf="birthDate?.touched && birthDate?.errors?.['required']"
+      >
+        {{ "registration.birthDateRequired" | translate }}
+      </small>
+    </div>
+
+    <!-- USERNAME -->
+    <div class="form-floating mb-3">
+      <input
+        type="text"
+        class="form-control"
+        [placeholder]="'registration.usernameLabel' | translate"
+        formControlName="username"
+      />
+      <label>{{ "registration.usernameLabel" | translate }}</label>
+    </div>
+    <div class="error-slot">
+      <small
+        class="text-danger"
+        *ngIf="username?.touched && username?.errors?.['required']"
+      >
+        {{ "registration.usernameRequired" | translate }}
+      </small>
+      <small
+        class="text-danger"
+        *ngIf="username?.touched && username?.errors?.['minlength']"
+      >
+        {{ "registration.usernameMinLength" | translate }}
+      </small>
+    </div>
+
+    <!-- EMAIL -->
+    <div class="form-floating mb-3">
+      <input
+        type="email"
+        class="form-control"
+        [placeholder]="'registration.emailLabel' | translate"
+        formControlName="email"
+      />
+      <label>{{ "registration.emailLabel" | translate }}</label>
+    </div>
+    <div class="error-slot">
+      <small
+        class="text-danger"
+        *ngIf="email?.touched && email?.errors?.['required']"
+      >
+        {{ "registration.emailRequired" | translate }}
+      </small>
+      <small
+        class="text-danger"
+        *ngIf="email?.touched && email?.errors?.['email']"
+      >
+        {{ "registration.emailInvalid" | translate }}
+      </small>
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="form-floating mb-3">
+      <input
+        type="password"
+        class="form-control"
+        [placeholder]="'registration.passwordLabel' | translate"
+        formControlName="password"
+      />
+      <label>{{ "registration.passwordLabel" | translate }}</label>
+    </div>
+    <div class="error-slot">
+      <small
+        class="text-danger"
+        *ngIf="password?.touched && password?.errors?.['required']"
+      >
+        {{ "registration.passwordRequired" | translate }}
+      </small>
+      <small
+        class="text-danger"
+        *ngIf="password?.touched && password?.errors?.['pattern']"
+      >
+        {{ "registration.passwordPattern" | translate }}
+      </small>
+    </div>
+
+    <!-- CONFIRM PASSWORD -->
+    <div class="form-floating mb-3">
+      <input
+        type="password"
+        class="form-control"
+        [placeholder]="'registration.confirmPasswordLabel' | translate"
+        formControlName="confirmPassword"
+      />
+      <label>{{ "registration.confirmPasswordLabel" | translate }}</label>
+      <small
+        class="text-danger"
+        *ngIf="
+          confirmPassword?.touched &&
+          registrationForm.errors?.['passwordMismatch']
+        "
+      >
+        {{ "registration.passwordMismatch" | translate }}
+      </small>
+    </div>
+
+    <!-- GLOBAL ERROR -->
+    <div class="mb-3" *ngIf="registrationError">
+      <small class="text-danger">{{ registrationError }}</small>
+    </div>
+
+    <!-- BUTTON -->
+    <div class="d-grid">
+      <button
+        class="btn btn-primary login-btn"
+        [disabled]="registrationForm.invalid || isLoading"
+      >
+        <span
+          *ngIf="isLoading"
+          class="spinner-border spinner-border-sm me-2"
+        ></span>
+        {{
+          isLoading
+            ? ("registration.registering" | translate)
+            : ("registration.registerButton" | translate)
+        }}
+      </button>
+    </div>
+    <div class="text-center mt-3">
+      <p>
+        {{ "registration.hasAccount" | translate }}
+        <a routerLink="/login">{{ "registration.loginLink" | translate }}</a>
+      </p>
+    </div>
+  </form>
+</div>
+
+<div
+  *ngIf="showSuccessModal"
+  class="register-success-modal-backdrop"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="registerSuccessTitle"
+>
+  <div class="register-success-modal card shadow-lg border-0">
+    <div class="card-body text-center p-4">
+      <i class="fa-solid fa-circle-check text-success fs-1 mb-3"></i>
+      <h4 id="registerSuccessTitle" class="mb-2">
+        {{ "registration.successTitle" | translate }}
+      </h4>
+      <p class="text-muted mb-3">
+        {{ "registration.successMessage" | translate }}
+      </p>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="closeSuccessModal()"
+      >
+        {{ "registration.successButton" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,820 @@
+<div class="container mt-4 mb-5" *ngIf="offer">
+  <h2 class="mb-4">
+    {{ isEditMode ? "✏️ Ajánlat szerkesztése" : "➕ Új ajánlat létrehozása" }}
+  </h2>
+
+  <form #offerForm="ngForm" (ngSubmit)="save()" class="card p-4 shadow-sm">
+    <!-- ══════════════════════════════════════════
+         1. ÁLTALÁNOS ADATOK
+    ══════════════════════════════════════════ -->
+    <h5 class="mb-3">📋 Általános adatok</h5>
+
+    <div class="mb-3">
+      <label class="form-label">Cím *</label>
+      <input
+        class="form-control"
+        placeholder="pl. Görög napok Santoriníban"
+        [(ngModel)]="offer.title"
+        name="title"
+        required
+        #titleField="ngModel"
+      />
+      <div
+        *ngIf="titleField.invalid && titleField.touched"
+        class="text-danger small mt-1"
+      >
+        A cím megadása kötelező.
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Helyszín</label>
+        <input
+          class="form-control"
+          placeholder="pl. Santorini"
+          [(ngModel)]="offer.location"
+          name="location"
+        />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Ország</label>
+        <input
+          class="form-control"
+          placeholder="pl. Görögország"
+          [(ngModel)]="offer.country"
+          name="country"
+        />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Kontinens *</label>
+      <select
+        class="form-select"
+        [(ngModel)]="offer.continent"
+        name="continent"
+        required
+        #continentField="ngModel"
+      >
+        <option value="">— válassz kontinenst —</option>
+        <option *ngFor="let c of continents; trackBy: trackByIndex" [value]="c">{{ c }}</option>
+      </select>
+      <div
+        *ngIf="continentField.invalid && continentField.touched"
+        class="text-danger small mt-1"
+      >
+        A kontinens kiválasztása kötelező.
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- ══════════════════════════════════════════
+         2. UTAZÁS ADATAI
+    ══════════════════════════════════════════ -->
+    <h5 class="mb-3">✈️ Utazás adatai</h5>
+
+    <div class="mb-3">
+      <label class="form-label">Utazás típusa</label>
+      <select
+        class="form-select"
+        [(ngModel)]="offer.travelCategory"
+        name="travelCategory"
+      >
+        <option value="flight">Repülős</option>
+        <option value="individual">Egyéni</option>
+        <option value="tour">Körutazás</option>
+      </select>
+    </div>
+
+    <!-- Repülőtér mezők — csak flight / tour esetén -->
+    <ng-container *ngIf="needsFlightFields">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label class="form-label">Indulási repülőtér *</label>
+          <input
+            class="form-control"
+            placeholder="pl. Budapest (BUD)"
+            [(ngModel)]="offer.departureAirport"
+            name="departureAirport"
+            required
+            #depAirport="ngModel"
+          />
+          <div
+            *ngIf="depAirport.invalid && depAirport.touched"
+            class="text-danger small mt-1"
+          >
+            Az indulási repülőtér megadása kötelező.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Érkezési repülőtér *</label>
+          <input
+            class="form-control"
+            placeholder="pl. London (LHR)"
+            [(ngModel)]="offer.arrivalAirport"
+            name="arrivalAirport"
+            required
+            #arrAirport="ngModel"
+          />
+          <div
+            *ngIf="arrAirport.invalid && arrAirport.touched"
+            class="text-danger small mt-1"
+          >
+            Az érkezési repülőtér megadása kötelező.
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="mb-3">
+      <label class="form-label">📅 Utazási időszak</label>
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-label small text-muted">Kezdete</label>
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="offer.travelPeriodStart"
+            name="travelPeriodStart"
+          />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small text-muted">Vége</label>
+          <input
+            type="date"
+            class="form-control"
+            [class.is-invalid]="!datesValid"
+            [(ngModel)]="offer.travelPeriodEnd"
+            name="travelPeriodEnd"
+          />
+          <div *ngIf="!datesValid" class="invalid-feedback d-block">
+            A záró dátum nem lehet korábbi a kezdő dátumnál.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">Napok</label>
+        <input
+          type="number"
+          class="form-control"
+          placeholder="0"
+          [(ngModel)]="offer.days"
+          name="days"
+          min="0"
+        />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Éjszakák</label>
+        <input
+          type="number"
+          class="form-control"
+          placeholder="0"
+          [(ngModel)]="offer.nights"
+          name="nights"
+          min="0"
+        />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Személyek</label>
+        <input
+          type="number"
+          class="form-control"
+          placeholder="1"
+          [(ngModel)]="offer.persons"
+          name="persons"
+          min="1"
+        />
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- ══════════════════════════════════════════
+         3. HOTEL ADATAI
+    ══════════════════════════════════════════ -->
+    <h5 class="mb-3">🏨 Hotel adatai</h5>
+
+    <div class="row mb-3">
+      <div class="col-md-8">
+        <label class="form-label">Hotel neve</label>
+        <input
+          class="form-control"
+          placeholder="Hotel neve"
+          [(ngModel)]="offer.hotelName"
+          name="hotelName"
+        />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Csillagok (0–5)</label>
+        <input
+          type="number"
+          class="form-control"
+          placeholder="0"
+          [(ngModel)]="offer.hotelStars"
+          name="hotelStars"
+          min="0"
+          max="5"
+        />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Hotel címe</label>
+      <input
+        class="form-control"
+        placeholder="Utca, szám, város"
+        [(ngModel)]="offer.hotelAddress"
+        name="hotelAddress"
+      />
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Telefon</label>
+        <input
+          class="form-control"
+          placeholder="+36 1 234 5678"
+          [(ngModel)]="offer.hotelPhone"
+          name="hotelPhone"
+        />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">E-mail</label>
+        <input
+          type="email"
+          class="form-control"
+          placeholder="hotel@example.com"
+          [(ngModel)]="offer.hotelEmail"
+          name="hotelEmail"
+        />
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- ══════════════════════════════════════════
+         4. ÁRAZÁS
+    ══════════════════════════════════════════ -->
+    <h5 class="mb-3">💶 Árazás</h5>
+
+    <div class="mb-3">
+      <label class="form-label"
+        >Ár / fő <span class="currency-eur">&euro;</span> *</label
+      >
+      <input
+        type="number"
+        class="form-control"
+        placeholder="0"
+        [(ngModel)]="offer.price"
+        name="price"
+        required
+        min="1"
+        #priceField="ngModel"
+      />
+      <div
+        *ngIf="priceField.invalid && priceField.touched"
+        class="text-danger small mt-1"
+      >
+        Az ár megadása kötelező, és nagyobb mint 0.
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- ══════════════════════════════════════════
+         5. VISIBILITY CONTROLS
+    ══════════════════════════════════════════ -->
+    <h5 class="mb-3">👁️ Láthatóság</h5>
+
+    <div class="mb-3">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="isInactive"
+          [(ngModel)]="offer.isInactive"
+          name="isInactive"
+        />
+        <label class="form-check-label" for="isInactive">
+          <strong>Inaktív</strong> – látható, de nem foglalható
+        </label>
+        <div class="form-text small">
+          Ha be van jelölve, az ajánlat megjelenik a listában, de "Not
+          Available" felirattal, letiltva.
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="notShowable"
+          [(ngModel)]="offer.notShowable"
+          name="notShowable"
+        />
+        <label class="form-check-label" for="notShowable">
+          <strong>Rejtett</strong> – nem jelenik meg a listán
+        </label>
+        <div class="form-text small">
+          Ha be van jelölve, az ajánlat teljesen eltűnik a felhasználói
+          nézetből.
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- ══════════════════════════════════════════
+         6. LEÍRÁS ÉS KÉPEK
+    ══════════════════════════════════════════ -->
+    <h5 class="mb-3">📝 Leírás és képek</h5>
+
+    <div class="mb-3">
+      <label class="form-label">Rövid leírás</label>
+      <textarea
+        class="form-control"
+        rows="2"
+        placeholder="Egy-két mondatos összefoglaló"
+        [(ngModel)]="offer.shortDescription"
+        name="shortDescription"
+      ></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Részletes leírás</label>
+      <textarea
+        class="form-control"
+        rows="4"
+        placeholder="Részletes programleírás, szolgáltatások..."
+        [(ngModel)]="offer.description"
+        name="description"
+      ></textarea>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label fw-semibold">Képek</label>
+
+      <!-- Fájl feltöltés -->
+      <div class="mb-2">
+        <label class="btn btn-outline-primary btn-sm">
+          <i class="fa-solid fa-upload me-1"></i>
+          Kép(ek) feltöltése
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            class="d-none"
+            (change)="onFileSelected($event)"
+          />
+        </label>
+        <span
+          *ngIf="imageUploadLoading"
+          class="ms-2 spinner-border spinner-border-sm text-primary"
+          role="status"
+        ></span>
+        <span *ngIf="!imageUploadLoading" class="ms-2 text-muted small"
+          >max. 5 MB / kép • JPG, PNG, WebP</span
+        >
+      </div>
+
+      <div *ngIf="imageUploadError" class="alert alert-danger small py-2">
+        {{ imageUploadError }}
+      </div>
+
+      <!-- Előnézet -->
+      <div
+        *ngIf="imagePreviewUrls.length > 0"
+        class="d-flex flex-wrap gap-2 mb-2"
+      >
+        <div
+          *ngFor="let url of imagePreviewUrls; let i = index; trackBy: trackByIndex"
+          class="position-relative"
+          style="width: 100px; height: 75px"
+        >
+          <img
+            [src]="url"
+            style="
+              width: 100px;
+              height: 75px;
+              object-fit: cover;
+              border-radius: 6px;
+              border: 1px solid #dee2e6;
+            "
+            loading="lazy"
+            decoding="async"
+            alt="preview"
+          />
+          <button
+            type="button"
+            class="btn btn-danger btn-sm position-absolute"
+            style="top: 2px; right: 2px; padding: 1px 5px; font-size: 0.7rem"
+            (click)="removeImage(i)"
+            title="Eltávolítás"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Fallback: URL-ek manuálisan -->
+      <details class="mt-1">
+        <summary class="text-muted small" style="cursor: pointer">
+          Vagy add meg URL-ekben
+        </summary>
+        <textarea
+          class="form-control mt-1"
+          rows="2"
+          [value]="offer.images.join('\n')"
+          (change)="onImagesChange($event)"
+          placeholder="https://example.com/kep1.jpg&#10;https://example.com/kep2.jpg"
+        ></textarea>
+        <div class="form-text">Egy sor = egy kép URL</div>
+      </details>
+    </div>
+
+    <!-- ══════════════════════════════════════════         7. UTAZÁSI IDŐPONTOK
+    ════════════════════════════════════════════ -->
+    <hr />
+    <h5 class="mb-3">📅 Utazási időpontok</h5>
+
+    <div *ngIf="isEditMode" class="alert alert-info small mb-3">
+      ℹ️ Szerkesztés módban csak új időpontokat adhatsz hozzá. A meglévő
+      időpontok változatlanok maradnak.
+    </div>
+
+    <div
+      *ngFor="let inst of instances; let i = index; trackBy: trackByInstance"
+      class="card mb-3 p-3 border-secondary"
+    >
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <strong>{{ i + 1 }}. időpont</strong>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-danger"
+          (click)="removeInstance(i)"
+        >
+          Eltávolítás
+        </button>
+      </div>
+
+      <div class="row g-2">
+        <div class="col-md-3">
+          <label class="form-label small">Indulás *</label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="inst.departureDate"
+            [name]="'depDate_' + i"
+            required
+            (ngModelChange)="recalcInstanceReturnDate(inst)"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small">Visszatérés (auto)</label>
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            [(ngModel)]="inst.returnDate"
+            [name]="'retDate_' + i"
+            required
+            readonly
+          />
+          <div
+            *ngIf="
+              inst.returnDate &&
+              inst.departureDate &&
+              inst.returnDate <= inst.departureDate
+            "
+            class="text-danger"
+            style="font-size: 0.75rem; margin-top: 2px"
+          >
+            A visszatérés nem lehet korábbi az indulásnál.
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small"
+            >Ár / fő (<span class="currency-eur">&euro;</span>) *</label
+          >
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            [(ngModel)]="inst.pricePerPerson"
+            [name]="'instPrice_' + i"
+            min="1"
+            required
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small">Kapacitás *</label>
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            [(ngModel)]="inst.capacity"
+            [name]="'cap_' + i"
+            min="1"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- Extras Capacity -->
+      <div class="row g-2 mt-2">
+        <div class="col-md-6">
+          <label class="form-label small text-muted">
+            <i class="fa-solid fa-suitcase me-1"></i>
+            Extra poggyász kapacitás
+          </label>
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            [(ngModel)]="inst.extraBaggageCapacity"
+            [name]="'extraBaggage_' + i"
+            min="0"
+            placeholder="0"
+          />
+          <small class="text-muted">Hány extra poggyász foglalható</small>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small text-muted">
+            <i class="fa-solid fa-chair me-1"></i>
+            Extra lábtér kapacitás
+          </label>
+          <input
+            type="number"
+            class="form-control form-control-sm"
+            [(ngModel)]="inst.extraLegroomCapacity"
+            [name]="'extraLegroom_' + i"
+            min="0"
+            placeholder="0"
+          />
+          <small class="text-muted">Hány extra lábtér foglalható</small>
+        </div>
+      </div>
+
+      <!-- Flight Data (only for flight/tour categories) -->
+      <div
+        *ngIf="needsFlightFields && inst.flight"
+        class="mt-3 border-top pt-3"
+      >
+        <h6 class="mb-2 text-primary">
+          <i class="fa-solid fa-plane-departure me-1"></i>
+          Repülési adatok
+        </h6>
+
+        <!-- Outbound Flight -->
+        <div class="card p-2 mb-2 border-secondary">
+          <strong class="small mb-2 d-block">Odaút</strong>
+          <div class="row g-2">
+            <div class="col-md-3">
+              <label class="form-label small">Légitársaság</label>
+              <input
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.outbound.airline"
+                [name]="'outAirline_' + i"
+                placeholder="pl. Wizz Air"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">Járatszám</label>
+              <input
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.outbound.flightNumber"
+                [name]="'outFlightNum_' + i"
+                placeholder="W6 1234"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">Indulás</label>
+              <input
+                type="time"
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.outbound.departureTime"
+                [name]="'outDep_' + i"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">Érkezés</label>
+              <input
+                type="time"
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.outbound.arrivalTime"
+                [name]="'outArr_' + i"
+              />
+            </div>
+          </div>
+          <div class="row g-2 mt-1">
+            <div class="col-md-4">
+              <label class="form-label small">Honnan</label>
+              <input
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.outbound.from"
+                [name]="'outFrom_' + i"
+                placeholder="Budapest"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small">Hova</label>
+              <input
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.outbound.to"
+                [name]="'outTo_' + i"
+                placeholder="London"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Időtartam</label>
+              <div class="row g-1">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <input
+                      type="number"
+                      class="form-control"
+                      [value]="
+                        getDurationHours(inst.flight.outbound.durationMinutes)
+                      "
+                      (input)="setOutboundDurationHours(inst, $event)"
+                      min="0"
+                      max="24"
+                      placeholder="0"
+                    />
+                    <span class="input-group-text">h</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <input
+                      type="number"
+                      class="form-control"
+                      [value]="
+                        getDurationMinutes(inst.flight.outbound.durationMinutes)
+                      "
+                      (input)="setOutboundDurationMinutes(inst, $event)"
+                      min="0"
+                      max="59"
+                      placeholder="0"
+                    />
+                    <span class="input-group-text">m</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Return Flight -->
+        <div *ngIf="inst.flight.return" class="card p-2 mb-2 border-secondary">
+          <strong class="small mb-2 d-block">Visszaút</strong>
+          <div class="row g-2">
+            <div class="col-md-3">
+              <label class="form-label small">Légitársaság</label>
+              <input
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.return.airline"
+                [name]="'retAirline_' + i"
+                placeholder="pl. Wizz Air"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">Járatszám</label>
+              <input
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.return.flightNumber"
+                [name]="'retFlightNum_' + i"
+                placeholder="W6 5678"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">Indulás</label>
+              <input
+                type="time"
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.return.departureTime"
+                [name]="'retDep_' + i"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small">Érkezés</label>
+              <input
+                type="time"
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.return.arrivalTime"
+                [name]="'retArr_' + i"
+              />
+            </div>
+          </div>
+          <div class="row g-2 mt-1">
+            <div class="col-md-4">
+              <label class="form-label small">Honnan</label>
+              <input
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.return.from"
+                [name]="'retFrom_' + i"
+                placeholder="London"
+              />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small">Hova</label>
+              <input
+                class="form-control form-control-sm"
+                [(ngModel)]="inst.flight.return.to"
+                [name]="'retTo_' + i"
+                placeholder="Budapest"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small">Időtartam</label>
+              <div class="row g-1">
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <input
+                      type="number"
+                      class="form-control"
+                      [value]="
+                        getDurationHours(inst.flight.return.durationMinutes)
+                      "
+                      (input)="setReturnDurationHours(inst, $event)"
+                      min="0"
+                      max="24"
+                      placeholder="0"
+                    />
+                    <span class="input-group-text">h</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-group input-group-sm">
+                    <input
+                      type="number"
+                      class="form-control"
+                      [value]="
+                        getDurationMinutes(inst.flight.return.durationMinutes)
+                      "
+                      (input)="setReturnDurationMinutes(inst, $event)"
+                      min="0"
+                      max="59"
+                      placeholder="0"
+                    />
+                    <span class="input-group-text">m</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aircraft -->
+        <div class="row g-2">
+          <div class="col-md-12">
+            <label class="form-label small">Repülőgép típusa</label>
+            <input
+              class="form-control form-control-sm"
+              [(ngModel)]="inst.flight.aircraft"
+              [name]="'aircraft_' + i"
+              placeholder="pl. Boeing 737"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="instances.length === 0" class="alert alert-warning small">
+      ⚠️ Nincs hozzáadott időpont. Az ajánlat menthető időpont nélkül is, de
+      foglalás nem indítható.
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-outline-primary mb-4"
+      (click)="addInstance()"
+    >
+      + Időpont hozzáadása
+    </button>
+
+    <!-- ════════════════════════════════════════════         MENTÉS
+    ══════════════════════════════════════════ -->
+    <div class="d-flex align-items-center gap-3">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="
+          saving || offerForm.invalid || !datesValid || !instancesValid
+        "
+      >
+        {{ saving ? "Mentés..." : isEditMode ? "Frissítés" : "Létrehozás" }}
+      </button>
+
+      <span
+        *ngIf="offerForm.invalid && offerForm.submitted"
+        class="text-danger small"
+      >
+        Kérjük töltsd ki az összes kötelező (*) mezőt.
+      </span>
+    </div>
+  </form>
+</div>

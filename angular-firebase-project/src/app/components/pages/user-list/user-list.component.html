@@ -1,0 +1,64 @@
+<div class="container py-4">
+  <h2 class="mb-4">{{ "userList.title" | translate }}</h2>
+
+  @if (loading) {
+    <p>{{ "userList.loading" | translate }}</p>
+  }
+
+  @if (errorMessage) {
+    <div class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="alert alert-success">
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (!loading && users.length > 0) {
+    <div class="table-responsive">
+      <table class="table table-striped align-middle">
+        <thead>
+          <tr>
+            <th>{{ "userList.name" | translate }}</th>
+            <th>{{ "userList.username" | translate }}</th>
+            <th>{{ "userList.email" | translate }}</th>
+            <th>{{ "userList.role" | translate }}</th>
+            <th>{{ "userList.action" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track trackByUserId($index, user)) {
+            <tr>
+              <td>{{ user.firstName }} {{ user.lastName }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <select class="form-select" #roleSelect [ngModel]="user.role">
+                  @for (role of roles; track role) {
+                    <option [value]="role">{{ role }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <button
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                  (click)="updateRole(user, roleSelect.value)"
+                >
+                  {{ "userList.save" | translate }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (!loading && users.length === 0) {
+    <p>Nincs megjeleníthető felhasználó.</p>
+  }
+</div>

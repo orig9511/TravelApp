@@ -1,0 +1,25 @@
+<div
+  *ngIf="flights.length > 0; else emptyState"
+  class="d-flex flex-column gap-3"
+>
+  <app-flight-card
+    *ngFor="let f of flights; trackBy: trackByFlight"
+    [flight]="f"
+    [passengers]="passengers"
+    [isExpanded]="expandedFlightId === f.id"
+    (viewPrices)="onCardViewPrices($event)"
+    (expandToggle)="onCardExpandToggle($event)"
+  >
+  </app-flight-card>
+</div>
+
+<ng-template #emptyState>
+  <div class="card shadow-sm border-0">
+    <div class="card-body py-5 text-center">
+      <h5 class="mb-2">{{ "flights.noResults" | translate }}</h5>
+      <p class="text-muted mb-0">
+        {{ "flights.noResultsDesc" | translate }}
+      </p>
+    </div>
+  </div>
+</ng-template>

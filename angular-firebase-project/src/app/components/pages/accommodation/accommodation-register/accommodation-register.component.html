@@ -1,0 +1,175 @@
+<div class="register-page">
+  <div class="register-header">
+    <div>
+      <h2>Szállás regisztráció</h2>
+      <p>Adj hozzá új szállást az adatbázishoz néhány mező kitöltésével.</p>
+    </div>
+  </div>
+
+  <form
+    [formGroup]="accommodationForm"
+    (ngSubmit)="onSubmit()"
+    class="register-form"
+  >
+    <section class="form-section">
+      <h3>Alapadatok</h3>
+      <div class="field-grid two-col">
+        <label class="field">
+          <span>Szállás neve</span>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Pl. Danube Grand Hotel"
+          />
+        </label>
+
+        <label class="field">
+          <span>Kép</span>
+          <div class="d-flex flex-column gap-2">
+            <label
+              class="btn btn-outline-primary btn-sm w-fit-content"
+              style="cursor: pointer"
+            >
+              <span *ngIf="!imageUploadLoading"
+                ><i class="fa-solid fa-upload me-1"></i> Kép feltöltése</span
+              >
+              <span
+                *ngIf="imageUploadLoading"
+                class="spinner-border spinner-border-sm"
+                role="status"
+              ></span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                class="d-none"
+                (change)="onFileSelected($event)"
+              />
+            </label>
+            <img
+              *ngIf="imagePreviewUrl"
+              [src]="imagePreviewUrl"
+              style="
+                max-width: 160px;
+                height: 100px;
+                object-fit: cover;
+                border-radius: 8px;
+                border: 1px solid #dee2e6;
+              "
+              loading="lazy"
+              decoding="async"
+              alt="preview"
+            />
+            <input
+              type="text"
+              formControlName="imageUrl"
+              placeholder="vagy: https://..."
+              class="form-control form-control-sm"
+            />
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Típus</span>
+          <select formControlName="type">
+            <option value="">Válassz típust</option>
+            <option value="hotel">Hotel</option>
+            <option value="apartman">Apartman</option>
+            <option value="panzió">Panzió</option>
+            <option value="hostel">Hostel</option>
+            <option value="vendégház">Vendégház</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Leírás</span>
+          <textarea
+            formControlName="description"
+            placeholder="Rövid leírás a szállásról"
+          ></textarea>
+        </label>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h3>Árazás</h3>
+      <div class="field-grid three-col">
+        <label class="field">
+          <span>Ár (EUR/éj)</span>
+          <input type="number" formControlName="pricePerNight" />
+        </label>
+
+        <label class="field">
+          <span>Szobák száma</span>
+          <input type="number" formControlName="roomCount" />
+        </label>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h3>Kapcsolat és cím</h3>
+      <div class="field-grid two-col">
+        <label class="field">
+          <span>Mobil</span>
+          <input type="text" formControlName="mobile" />
+        </label>
+
+        <label class="field">
+          <span>Email</span>
+          <input type="email" formControlName="email" />
+        </label>
+
+        <label class="field">
+          <span>Kontinens</span>
+          <select formControlName="continent">
+            <option value="">Válassz kontinenset</option>
+            <option value="africa">Afrika</option>
+            <option value="asia">Ázsia</option>
+            <option value="europe">Európa</option>
+            <option value="north-america">Észak-Amerika</option>
+            <option value="south-america">Dél-Amerika</option>
+            <option value="australia">Ausztrália</option>
+            <option value="antarctica">Antarktisz</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Ország</span>
+          <input type="text" formControlName="country" />
+        </label>
+
+        <label class="field">
+          <span>Város</span>
+          <input type="text" formControlName="city" />
+        </label>
+
+        <label class="field">
+          <span>Cím</span>
+          <input type="text" formControlName="address" />
+        </label>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h3>További adatok</h3>
+      <div class="field-grid one-col">
+        <label class="field">
+          <span>Szolgáltatások</span>
+          <input
+            type="text"
+            formControlName="services"
+            placeholder="pl: wifi, parkoló, reggeli"
+          />
+        </label>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+        {{ isSubmitting ? "Mentés..." : "Szállás mentése" }}
+      </button>
+    </div>
+
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </form>
+</div>

@@ -1,0 +1,357 @@
+<div class="container mt-4 mb-5">
+  <!-- LOADING -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <!-- ERROR STATE -->
+  <div *ngIf="!loading && error && !confirmed" class="alert alert-danger">
+    {{ error }}
+    <div class="mt-3">
+      <a routerLink="/offers" class="btn btn-outline-secondary btn-sm">
+        Vissza az ajánlatokhoz
+      </a>
+    </div>
+  </div>
+
+  <!-- CONFIRMED STATE -->
+  <div *ngIf="confirmed" class="text-center py-5">
+    <i class="fa-solid fa-circle-check fa-4x text-success mb-4 d-block"></i>
+    <h3>Foglalás sikeres!</h3>
+    <p class="text-muted">
+      A foglalásod rögzítésre került. Hamarosan visszaigazolást kapsz.
+    </p>
+    <a routerLink="/offers" class="btn btn-primary mt-3"
+      >Vissza az ajánlatokhoz</a
+    >
+  </div>
+
+  <!-- BOOKING FORM -->
+  <div *ngIf="!loading && !confirmed && offer && instance">
+    <!-- OFFER TITLE -->
+    <h2 class="mb-1">{{ offer.title }}</h2>
+    <p class="text-muted mb-4">{{ offer.shortDescription }}</p>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <!-- DATES -->
+        <div class="card p-3 mb-3">
+          <h5 class="mb-3">📅 Időpont</h5>
+          <div class="d-flex gap-4">
+            <div>
+              <small class="text-muted d-block">Indulás</small>
+              <strong>{{ instance.departureDate | isoDate }}</strong>
+            </div>
+            <div>
+              <small class="text-muted d-block">Visszaérkezés</small>
+              <strong>{{ instance.returnDate | isoDate }}</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- HOTEL INFO -->
+        <div class="card p-3 mb-3">
+          <h5 class="mb-2">
+            🏨 {{ offer.hotelName }} ({{ offer.hotelStars }}★)
+          </h5>
+          <p class="mb-1">{{ offer.hotelAddress }}</p>
+          <p *ngIf="offer.hotelPhone" class="mb-1">📞 {{ offer.hotelPhone }}</p>
+          <p *ngIf="offer.hotelEmail" class="mb-0">✉️ {{ offer.hotelEmail }}</p>
+        </div>
+
+        <!-- FLIGHT INFO (flight / tour only) -->
+        <div
+          class="card p-3 mb-3"
+          *ngIf="
+            offer.travelCategory === 'flight' || offer.travelCategory === 'tour'
+          "
+        >
+          <h5 class="mb-2">✈️ Repülési adatok</h5>
+
+          <ng-container
+            *ngIf="instance.flightDetails?.outbound; else noFlightData"
+          >
+            <p class="mb-1">
+              <strong>Légitársaság:</strong>
+              {{ instance.flightDetails?.outbound?.airline }}
+            </p>
+            <p class="mb-1">
+              <strong>Járatszám:</strong>
+              {{ instance.flightDetails?.outbound?.flightNumber }}
+            </p>
+            <p class="mb-1">
+              <strong>Indulás:</strong>
+              {{ instance.flightDetails?.outbound?.from }}
+              <span class="text-muted"
+                >({{ instance.flightDetails?.outbound?.departureTime }})</span
+              >
+            </p>
+            <p class="mb-1">
+              <strong>Érkezés:</strong>
+              {{ instance.flightDetails?.outbound?.to }}
+              <span class="text-muted"
+                >({{ instance.flightDetails?.outbound?.arrivalTime }})</span
+              >
+            </p>
+            <p
+              *ngIf="instance.flightDetails?.outbound?.durationMinutes"
+              class="mb-1"
+            >
+              <strong>Repülési idő:</strong>
+              {{
+                formatDuration(
+                  instance.flightDetails!.outbound!.durationMinutes
+                )
+              }}
+            </p>
+            <p *ngIf="instance.flightDetails?.aircraft" class="mb-0">
+              <strong>Repülőgép típus:</strong>
+              {{ instance.flightDetails!.aircraft }}
+            </p>
+          </ng-container>
+
+          <ng-template #noFlightData>
+            <p class="text-muted mb-0">
+              A repülési részletek hamarosan elérhetők.
+            </p>
+          </ng-template>
+        </div>
+
+        <!-- PASSENGER DATA (flight/tour only) -->
+        <div class="card p-3 mb-3" *ngIf="needsPassengerData">
+          <h5 class="mb-3">👤 Utasok adatai</h5>
+          <div
+            *ngFor="
+              let passenger of passengers;
+              let i = index;
+              trackBy: trackByIndex
+            "
+            class="mb-4 pb-3 border-bottom"
+          >
+            <h6 class="text-muted mb-3">{{ i + 1 }}. utas</h6>
+
+            <div class="mb-2">
+              <label class="form-label">Teljes név</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="passenger.fullName"
+                placeholder="Vezetéknév Keresztnév"
+                required
+              />
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">Telefonszám</label>
+              <input
+                type="tel"
+                class="form-control"
+                [(ngModel)]="passenger.phoneNumber"
+                placeholder="+36301234567"
+                required
+              />
+            </div>
+
+            <div class="mb-2">
+              <label class="form-label">Lakcím</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="passenger.address"
+                placeholder="Város, Utca, Házszám"
+                required
+              />
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label class="form-label">Okmány típusa</label>
+                <select
+                  class="form-select"
+                  [(ngModel)]="passenger.documentType"
+                  required
+                >
+                  <option value="passport">Útlevél</option>
+                  <option value="id">Személyi igazolvány</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">Okmány száma</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="passenger.documentNumber"
+                  placeholder="AB123456"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXTRAS -->
+        <div class="card p-3 mb-3" *ngIf="extrasAvailable">
+          <h5 class="mb-3">➕ Extrák</h5>
+
+          <div
+            class="mb-3"
+            *ngIf="
+              instance.extrasCapacity &&
+              instance.extrasCapacity.extraBaggage > 0
+            "
+          >
+            <label class="form-label">
+              Extra poggyász (+50 <span class="currency-eur">&euro;</span> / db)
+              <span class="text-muted small">
+                (Max {{ maxExtraBaggage }} db elérhető)
+              </span>
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="extras.extraBaggage"
+              [min]="0"
+              [max]="maxExtraBaggage"
+            />
+          </div>
+
+          <div
+            class="mb-0"
+            *ngIf="
+              instance.extrasCapacity &&
+              instance.extrasCapacity.extraLegroom > 0
+            "
+          >
+            <label class="form-label">
+              Extra lábtér (+30 <span class="currency-eur">&euro;</span> / db)
+              <span class="text-muted small">
+                (Max {{ maxExtraLegroom }} db elérhető)
+              </span>
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="extras.extraLegroom"
+              [min]="0"
+              [max]="maxExtraLegroom"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOKING PANEL -->
+      <div class="col-lg-5">
+        <div
+          class="card p-4 shadow-sm booking-panel sticky-top"
+          style="top: 80px"
+        >
+          <h5 class="mb-3">Foglalás részletei</h5>
+
+          <!-- QUANTITY -->
+          <label class="form-label fw-semibold">Személyek száma</label>
+          <input
+            type="number"
+            class="form-control mb-1"
+            [(ngModel)]="quantity"
+            (ngModelChange)="onQuantityChange()"
+            [min]="1"
+            [max]="instance.availableCapacity"
+            name="quantity"
+          />
+          <small class="text-muted d-block mb-3">
+            Max. {{ instance.availableCapacity }} fő foglalható
+          </small>
+
+          <!-- PRICE SUMMARY -->
+          <div class="d-flex justify-content-between mb-1">
+            <span>Ár/fő:</span>
+            <strong
+              >{{ instance.pricePerPerson | smartPrice }}
+              <span class="currency-eur">&euro;</span></strong
+            >
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span>Személyek:</span>
+            <strong>{{ quantity }} fő</strong>
+          </div>
+
+          <div
+            *ngIf="extras.extraBaggage > 0"
+            class="d-flex justify-content-between mb-1"
+          >
+            <span>Extra poggyász:</span>
+            <strong
+              >{{ extras.extraBaggage }} × 50
+              <span class="currency-eur">&euro;</span></strong
+            >
+          </div>
+
+          <div
+            *ngIf="extras.extraLegroom > 0"
+            class="d-flex justify-content-between mb-3"
+          >
+            <span>Extra lábtér:</span>
+            <strong
+              >{{ extras.extraLegroom }} × 30
+              <span class="currency-eur">&euro;</span></strong
+            >
+          </div>
+
+          <hr />
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <span class="fs-5 fw-bold">Összesen:</span>
+            <span class="fs-4 fw-bold text-success"
+              >{{ totalPrice | smartPrice }}
+              <span class="currency-eur">&euro;</span></span
+            >
+          </div>
+
+          <!-- ERROR -->
+          <div *ngIf="error" class="alert alert-danger py-2 mb-3">
+            {{ error }}
+          </div>
+
+          <!-- SOLD OUT -->
+          <div
+            *ngIf="instance.availableCapacity === 0"
+            class="alert alert-secondary text-center"
+          >
+            Ez az időpont megtelt.
+          </div>
+
+          <!-- CONFIRM BUTTON -->
+          <button
+            *ngIf="instance.availableCapacity > 0"
+            class="btn btn-primary btn-lg w-100"
+            [disabled]="
+              submitting ||
+              quantity < 1 ||
+              quantity > instance.availableCapacity
+            "
+            (click)="confirmBooking()"
+          >
+            <span
+              *ngIf="submitting"
+              class="spinner-border spinner-border-sm me-2"
+              role="status"
+            ></span>
+            {{
+              submitting ? "Foglalás folyamatban..." : "Foglalás megerősítése"
+            }}
+          </button>
+
+          <button
+            class="btn btn-outline-secondary w-100 mt-2"
+            (click)="goBackToOffer()"
+            [disabled]="submitting"
+          >
+            Vissza az ajánlathoz
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENT LOADING OVERLAY -->
+  <app-payment-loading *ngIf="showPaymentLoading"></app-payment-loading>
+</div>

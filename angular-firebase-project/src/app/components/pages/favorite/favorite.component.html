@@ -1,0 +1,165 @@
+<div class="container py-4">
+  <h2 class="mb-3">{{ "favorite.title" | translate }}</h2>
+
+  <!-- ACCOMMODATION FAVORITES -->
+  <ng-container *ngIf="accommodationFavorites$ | async as accFavs">
+    <div *ngIf="accFavs.length > 0" class="mb-5">
+      <h4 class="mb-3">
+        <i class="fa-solid fa-hotel me-2 text-success"></i>Kedvenc szállások
+      </h4>
+      <div class="row g-3">
+        <div
+          class="col-md-4 mb-4"
+          *ngFor="let fav of accFavs; trackBy: trackByFavId"
+        >
+          <div class="card h-100 shadow-sm favorite-card">
+            <button
+              type="button"
+              class="btn btn-favorite favorited"
+              (click)="removeAccommodationFavorite(fav.accommodationId!)"
+              aria-label="Törlés a kedvencekből"
+            >
+              <i class="fa-solid fa-heart"></i>
+            </button>
+            <div class="offer-image-wrapper">
+              <img
+                [src]="optimizeImageUrl(fav.accommodation?.imageUrl || '')"
+                class="card-img-top offer-image"
+                loading="lazy"
+                [alt]="fav.accommodation?.name"
+              />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ fav.accommodation?.name }}</h5>
+              <p class="card-text text-muted small">
+                <i class="fa-solid fa-map-marker-alt me-1"></i>
+                {{ fav.accommodation?.city }}, {{ fav.accommodation?.country }}
+              </p>
+              <p class="card-text">
+                <strong
+                  >{{ fav.accommodation?.price }}
+                  <span class="currency-eur">&euro;</span></strong
+                >
+                <span class="text-muted"> / éjszaka</span>
+              </p>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+              <a
+                [routerLink]="['/accommodation', fav.accommodationId]"
+                class="btn btn-sm btn-outline-primary"
+              >
+                Részletek
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- OFFER FAVORITES -->
+  <ng-container *ngIf="favoriteOffers$ | async as offers">
+    <div *ngIf="offers.length > 0" class="mb-4">
+      <h4 class="mb-3">
+        <i class="fa-solid fa-suitcase me-2 text-primary"></i>Kedvenc ajánlatok
+      </h4>
+      <div class="row g-3">
+        <div
+          class="col-md-4 mb-4"
+          *ngFor="let offer of offers; trackBy: trackByOfferId"
+        >
+          <div class="card h-100 shadow-sm favorite-card">
+            <button
+              type="button"
+              class="btn btn-favorite favorited"
+              (click)="removeFavorite(offer.id)"
+              [attr.aria-label]="'favorite.title' | translate"
+            >
+              <i class="fa-solid fa-heart"></i>
+            </button>
+            <div class="offer-image-wrapper">
+              <img
+                [src]="optimizeImageUrl(offer.images[0])"
+                class="card-img-top offer-image"
+                loading="lazy"
+                decoding="async"
+                width="400"
+                height="200"
+                [alt]="offer.title"
+              />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">
+                {{
+                  languageService.getLocalizedText(offer.title, offer.titleEn)
+                }}
+              </h5>
+              <p class="card-text">
+                {{
+                  languageService.getLocalizedText(
+                    offer.shortDescription,
+                    offer.shortDescriptionEn
+                  )
+                }}
+              </p>
+
+              <ul class="list-unstyled small">
+                <li>
+                  <strong>{{ "favorite.location" | translate }}</strong>
+                  {{ offer.location }}
+                </li>
+                <li>
+                  <strong>{{ "favorite.hotel" | translate }}</strong>
+                  {{ offer.hotelName }}
+                </li>
+                <li>
+                  <strong>{{ "favorite.stars" | translate }}</strong>
+                  {{ offer.hotelStars }}★
+                </li>
+                <li>
+                  <strong>{{ "favorite.duration" | translate }}</strong>
+                  {{ offer.days }} {{ "favorite.days" | translate }} /
+                  {{ offer.nights }} {{ "favorite.nights" | translate }}
+                </li>
+                <li>
+                  <strong>{{ "favorite.persons" | translate }}</strong>
+                  {{ offer.persons }}
+                </li>
+              </ul>
+            </div>
+
+            <div
+              class="card-footer d-flex justify-content-between align-items-center"
+            >
+              <h3 class="price mb-0">
+                {{ offer.price | smartPrice }}
+                <span class="currency-eur">&euro;</span>
+              </h3>
+              <a
+                [routerLink]="['/offers', offer.id]"
+                class="btn btn-sm btn-outline-primary"
+              >
+                {{ "favorite.details" | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPTY STATE (only when both sections are empty) -->
+    <ng-container *ngIf="accommodationFavorites$ | async as accFavs">
+      <div
+        *ngIf="offers.length === 0 && accFavs.length === 0"
+        class="text-center text-muted py-5"
+      >
+        <i class="fa-regular fa-heart fa-3x mb-3 d-block"></i>
+        <h5>{{ "favorite.empty" | translate }}</h5>
+        <p class="mb-3">{{ "favorite.emptyHint" | translate }}</p>
+        <a routerLink="/offers" class="btn btn-primary">{{
+          "favorite.browse" | translate
+        }}</a>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

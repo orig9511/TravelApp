@@ -1,0 +1,473 @@
+<div class="modal-backdrop fade show" (click)="close.emit()"></div>
+
+<div
+  class="modal fade show d-block"
+  tabindex="-1"
+  role="dialog"
+  (click)="close.emit()"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-lg"
+    role="document"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <div>
+          <div class="fw-semibold">
+            {{ "flights.booking.title" | translate }}
+          </div>
+          <div class="text-muted small">
+            {{
+              isRoundTrip
+                ? ("flights.booking.roundTripBooking" | translate)
+                : ("flights.booking.oneWayBooking" | translate)
+            }}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="close.emit()"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div *ngIf="bookingSuccess" class="text-center py-4">
+          <div class="fw-semibold fs-4 mb-2">
+            {{ "flights.booking.bookingSuccess" | translate }}
+          </div>
+          <div class="text-muted mb-4">
+            {{ "flights.booking.bookingSuccessDesc" | translate }}
+          </div>
+
+          <div
+            class="border rounded p-3 text-start mx-auto"
+            style="max-width: 560px"
+          >
+            <div class="small text-muted">
+              {{ "flights.booking.outbound" | translate }}
+            </div>
+            <div class="mb-2">
+              {{ outboundFlight?.from }} → {{ outboundFlight?.to }} ·
+              {{ outboundFlight?.depart }} - {{ outboundFlight?.arrive }}
+            </div>
+
+            <div *ngIf="returnFlight">
+              <div class="small text-muted">
+                {{ "flights.booking.return" | translate }}
+              </div>
+              <div class="mb-2">
+                {{ returnFlight.from }} → {{ returnFlight.to }} ·
+                {{ returnFlight.depart }} - {{ returnFlight.arrive }}
+              </div>
+            </div>
+
+            <div class="small text-muted">
+              {{ "flights.booking.booker" | translate }}
+            </div>
+            <div class="mb-2">{{ lastName }} {{ firstName }}</div>
+
+            <div class="small text-muted">Email</div>
+            <div class="mb-2">{{ email }}</div>
+
+            <div class="small text-muted">
+              {{ "flights.booking.phone" | translate }}
+            </div>
+            <div class="mb-2">{{ phone }}</div>
+
+            <div class="small text-muted mt-3">
+              {{ "flights.booking.passengers" | translate }}
+            </div>
+            <div>{{ passengersSummary }}</div>
+            <div class="mb-2 text-muted small">
+              {{
+                "flights.booking.totalPassengersCount"
+                  | translate: { count: totalPassengers }
+              }}
+            </div>
+
+            <div class="small text-muted">
+              {{ "flights.booking.totalAmount" | translate }}
+            </div>
+            <div class="fw-semibold fs-5">
+              {{ totalPrice }} <span class="currency-eur">&euro;</span>
+            </div>
+          </div>
+
+          <button
+            class="btn btn-primary mt-4"
+            type="button"
+            (click)="close.emit()"
+          >
+            {{ "flights.booking.close" | translate }}
+          </button>
+        </div>
+
+        <div class="row g-3" *ngIf="!bookingSuccess">
+          <div class="col-12 col-lg-7">
+            <div class="border rounded p-3">
+              <div class="fw-semibold mb-3">
+                {{ "flights.booking.flightDetails" | translate }}
+              </div>
+
+              <div class="border rounded p-3 mb-3">
+                <div class="small text-muted mb-1">
+                  {{ "flights.booking.outbound" | translate }}
+                </div>
+                <div class="fw-semibold">
+                  {{ outboundFlight?.from }} → {{ outboundFlight?.to }}
+                </div>
+                <div class="text-muted small">
+                  {{ outboundFlight?.depart }} - {{ outboundFlight?.arrive }} ·
+                  {{ outboundFlight?.airline }} ·
+                  {{ outboundFlight?.stopsLabel }}
+                </div>
+                <div class="mt-2">
+                  {{ outboundPrice }} <span class="currency-eur">&euro;</span> /
+                  {{ "flights.booking.perPerson" | translate }}
+                </div>
+              </div>
+
+              <div *ngIf="returnFlight" class="border rounded p-3 mb-3">
+                <div class="small text-muted mb-1">
+                  {{ "flights.booking.return" | translate }}
+                </div>
+                <div class="fw-semibold">
+                  {{ returnFlight.from }} → {{ returnFlight.to }}
+                </div>
+                <div class="text-muted small">
+                  {{ returnFlight.depart }} - {{ returnFlight.arrive }} ·
+                  {{ returnFlight.airline }} · {{ returnFlight.stopsLabel }}
+                </div>
+                <div class="mt-2">
+                  {{ returnPrice }} <span class="currency-eur">&euro;</span> /
+                  {{ "flights.booking.perPerson" | translate }}
+                </div>
+              </div>
+
+              <div class="fw-semibold mb-2">
+                {{ "flights.booking.passengerData" | translate }}
+              </div>
+
+              <div class="row g-2">
+                <div class="col-12 col-md-6">
+                  <label class="form-label small text-muted mb-1">{{
+                    "flights.booking.lastName" | translate
+                  }}</label>
+                  <input
+                    class="form-control"
+                    [value]="lastName"
+                    (input)="lastName = $any($event.target).value"
+                    [placeholder]="
+                      'flights.booking.lastNamePlaceholder' | translate
+                    "
+                  />
+                  <div *ngIf="lastNameError" class="small text-danger mt-1">
+                    {{ lastNameError }}
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label small text-muted mb-1">{{
+                    "flights.booking.firstName" | translate
+                  }}</label>
+                  <input
+                    class="form-control"
+                    [value]="firstName"
+                    (input)="firstName = $any($event.target).value"
+                    [placeholder]="
+                      'flights.booking.firstNamePlaceholder' | translate
+                    "
+                  />
+                  <div *ngIf="firstNameError" class="small text-danger mt-1">
+                    {{ firstNameError }}
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small text-muted mb-1">{{
+                    "flights.booking.email" | translate
+                  }}</label>
+                  <input
+                    class="form-control"
+                    [value]="email"
+                    (input)="email = $any($event.target).value"
+                    [placeholder]="
+                      'flights.booking.emailPlaceholder' | translate
+                    "
+                  />
+                  <div *ngIf="emailError" class="small text-danger mt-1">
+                    {{ emailError }}
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label small text-muted mb-1">{{
+                    "flights.booking.phone" | translate
+                  }}</label>
+                  <input
+                    class="form-control"
+                    [value]="phone"
+                    (input)="phone = $any($event.target).value"
+                    [placeholder]="
+                      'flights.booking.phonePlaceholder' | translate
+                    "
+                  />
+                  <div *ngIf="phoneError" class="small text-danger mt-1">
+                    {{ phoneError }}
+                  </div>
+                </div>
+              </div>
+
+              <hr class="my-3" />
+
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <div class="fw-semibold">
+                    {{ "flights.booking.baggage" | translate }}
+                  </div>
+                  <div class="text-muted small">{{ baggageLabel }}</div>
+                </div>
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  type="button"
+                  (click)="isBaggageOpen = !isBaggageOpen"
+                >
+                  {{ "flights.booking.configure" | translate }}
+                </button>
+              </div>
+
+              <div *ngIf="isBaggageOpen" class="mt-3 border rounded p-3">
+                <div class="small text-muted mb-3">
+                  {{
+                    "flights.booking.baggagePerTypeLimit"
+                      | translate: { count: totalPassengers }
+                  }}
+                </div>
+
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <div>
+                    <div class="fw-semibold">
+                      {{ "flights.booking.cabinBaggage" | translate }}
+                    </div>
+                    <div class="small text-muted">
+                      0 <span class="currency-eur">&euro;</span> / db
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      [disabled]="baggageCounts.cabin === 0"
+                      (click)="decreaseBaggage('cabin')"
+                    >
+                      -
+                    </button>
+
+                    <span>{{ baggageCounts.cabin }}</span>
+
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      [disabled]="baggageCounts.cabin >= 1"
+                      (click)="increaseBaggage('cabin')"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <div>
+                    <div class="fw-semibold">
+                      {{ "flights.booking.checkedBaggage" | translate }}
+                    </div>
+                    <div class="small text-muted">
+                      25 <span class="currency-eur">&euro;</span> / db
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      [disabled]="baggageCounts.checked === 0"
+                      (click)="decreaseBaggage('checked')"
+                    >
+                      -
+                    </button>
+
+                    <span>{{ baggageCounts.checked }}</span>
+
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      [disabled]="baggageCounts.checked >= totalPassengers"
+                      (click)="increaseBaggage('checked')"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="fw-semibold">
+                      {{ "flights.booking.priorityBaggage" | translate }}
+                    </div>
+                    <div class="small text-muted">
+                      45 <span class="currency-eur">&euro;</span> / db
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      [disabled]="baggageCounts.priority === 0"
+                      (click)="decreaseBaggage('priority')"
+                    >
+                      -
+                    </button>
+
+                    <span>{{ baggageCounts.priority }}</span>
+
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      [disabled]="baggageCounts.priority >= totalPassengers"
+                      (click)="increaseBaggage('priority')"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-5">
+            <div class="border rounded p-3">
+              <div class="fw-semibold mb-2">
+                {{ "flights.booking.priceSummary" | translate }}
+              </div>
+
+              <div class="small text-muted mb-3">
+                {{
+                  "flights.booking.passengersSummary"
+                    | translate
+                      : {
+                          adults: passengers.adults,
+                          children: passengers.children,
+                          seniors: passengers.seniors,
+                        }
+                }}
+              </div>
+
+              <div class="d-flex justify-content-between">
+                <span class="text-muted">{{
+                  "flights.booking.outboundBasePrice" | translate
+                }}</span>
+                <span
+                  >{{ outboundPrice }}
+                  <span class="currency-eur">&euro;</span></span
+                >
+              </div>
+
+              <div
+                *ngIf="returnFlight"
+                class="d-flex justify-content-between mt-1"
+              >
+                <span class="text-muted">{{
+                  "flights.booking.returnBasePrice" | translate
+                }}</span>
+                <span
+                  >{{ returnPrice }}
+                  <span class="currency-eur">&euro;</span></span
+                >
+              </div>
+
+              <div class="d-flex justify-content-between mt-1">
+                <span class="text-muted">{{
+                  "flights.booking.ticketsTotal"
+                    | translate: { count: totalPassengers }
+                }}</span>
+                <span
+                  >{{ basePrice }}
+                  <span class="currency-eur">&euro;</span></span
+                >
+              </div>
+
+              <div class="d-flex justify-content-between mt-1">
+                <span class="text-muted">{{
+                  "flights.booking.baggageTotal" | translate
+                }}</span>
+                <span
+                  >{{ baggagePrice }}
+                  <span class="currency-eur">&euro;</span></span
+                >
+              </div>
+
+              <div class="small text-muted mt-1">
+                {{ baggageLabel }}
+              </div>
+
+              <hr class="my-3" />
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="text-muted small">
+                    {{ "flights.booking.totalPayable" | translate }}
+                  </div>
+                  <div class="fw-bold fs-4">
+                    {{ totalPrice }} <span class="currency-eur">&euro;</span>
+                  </div>
+                </div>
+                <span class="badge text-bg-success">{{
+                  "flights.booking.instantConfirmation" | translate
+                }}</span>
+              </div>
+
+              <div
+                *ngIf="bookingError"
+                class="alert alert-danger py-2 mb-3 mt-3"
+              >
+                {{ bookingError }}
+              </div>
+
+              <button
+                class="btn btn-primary btn-lg w-100 mt-3"
+                type="button"
+                [disabled]="isSubmitting"
+                (click)="onBook()"
+              >
+                {{
+                  isSubmitting
+                    ? ("flights.booking.bookingInProgress" | translate)
+                    : ("flights.booking.book" | translate)
+                }}
+              </button>
+
+              <button
+                class="btn btn-link w-100 mt-1 text-decoration-none"
+                type="button"
+                (click)="close.emit()"
+              >
+                {{ "flights.booking.cancel" | translate }}
+              </button>
+            </div>
+
+            <div class="text-muted small mt-2">
+              {{ "flights.booking.demoNote" | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<!-- TÉRKÉP -->
+<div class="map-container mb-5 d-none d-md-block">
+  <app-continent-selector (continentSelected)="onContinentChange($event)">
+  </app-continent-selector>
+</div>
+<div class="container mb-4 d-md-none">
+  <div class="d-flex flex-wrap gap-2 justify-content-center">
+    <button
+      *ngFor="let continent of continents; trackBy: trackByContinent"
+      class="btn btn-outline-primary btn-sm"
+      [ngClass]="{
+        'btn-primary text-white': continent === selectedContinent,
+      }"
+      (click)="onContinentChange(continent)"
+    >
+      {{ continent }}
+    </button>
+  </div>
+</div>
+
+<div class="mt-5 mb-5"></div>
+
+<div class="offers-list-wrapper mt-3">
+  <div class="container" *ngIf="selectedContinent !== null" #resultsSection>
+    <div class="row">
+      <div class="d-lg-none mb-3 text-start">
+        <button
+          class="btn btn-outline-primary"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#mobileFilter"
+        >
+          ☰ {{ "offers.filterButton" | translate }}
+        </button>
+      </div>
+      <div class="col-lg-4 col-xl-3 d-none d-lg-block">
+        <app-offer-filter
+          [resultCount]="filteredOffers.length"
+          (filterChanged)="onFilterChange($event)"
+        >
+        </app-offer-filter>
+      </div>
+
+      <div class="col-lg-8 col-xl-9">
+        <app-offers-list
+          [offers]="offers"
+          [continent]="selectedContinent"
+          [filter]="filterState"
+          [loading]="offersLoading"
+        ></app-offers-list>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" *ngIf="selectedContinent === null">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <app-offers-list
+          [offers]="offers"
+          [continent]="null"
+          [filter]="filterState"
+          [loading]="offersLoading"
+        ></app-offers-list>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESET GOMB -->
+<div class="text-center mt-4 mb-5">
+  <div class="container" *ngIf="selectedContinent !== null">
+    <button
+      class="reset-btn btn btn-sm btn-outline-secondary"
+      (click)="resetAll()"
+    >
+      {{ "offers.showAllOffers" | translate }}
+    </button>
+  </div>
+</div>
+
+<!-- Mobilos szűrés -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileFilter">
+  <div class="offcanvas-header">
+    <h5>{{ "offers.filterTitle" | translate }}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body">
+    <app-offer-filter
+      [resultCount]="filteredOffers.length"
+      (filterChanged)="onFilterChange($event)"
+    >
+    </app-offer-filter>
+  </div>
+</div>

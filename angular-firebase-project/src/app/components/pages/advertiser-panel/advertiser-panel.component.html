@@ -1,0 +1,162 @@
+<div class="advertiser-panel-container">
+  <div class="panel-header">
+    <h1 class="panel-title">
+      <i class="fa-solid fa-briefcase"></i>
+      {{ "advertiserPanel.title" | translate }}
+    </h1>
+    <p class="panel-subtitle">
+      {{ "advertiserPanel.subtitle" | translate }}
+    </p>
+  </div>
+
+  <div class="panel-grid">
+    <!-- Manage Orders Card -->
+    <div class="panel-card" (click)="navigateTo('/manage-orders')">
+      <div class="card-icon manage-orders">
+        <i class="fa-solid fa-clipboard-list"></i>
+      </div>
+      <h3 class="card-title">
+        {{ "advertiserPanel.manageOrders.title" | translate }}
+      </h3>
+      <p class="card-description">
+        {{ "advertiserPanel.manageOrders.description" | translate }}
+      </p>
+      <div class="card-action">
+        <span>{{ "advertiserPanel.open" | translate }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </div>
+    </div>
+
+    <!-- Create Offer Card -->
+    <div class="panel-card" (click)="navigateTo('/offers/create')">
+      <div class="card-icon create-offer">
+        <i class="fa-solid fa-plus-circle"></i>
+      </div>
+      <h3 class="card-title">
+        {{ "advertiserPanel.createOffer.title" | translate }}
+      </h3>
+      <p class="card-description">
+        {{ "advertiserPanel.createOffer.description" | translate }}
+      </p>
+      <div class="card-action">
+        <span>{{ "advertiserPanel.open" | translate }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </div>
+    </div>
+
+    <!-- Update Offers Card -->
+    <div class="panel-card" (click)="navigateTo('/offers/update')">
+      <div class="card-icon update-offers">
+        <i class="fa-solid fa-edit"></i>
+      </div>
+      <h3 class="card-title">
+        {{ "advertiserPanel.updateOffers.title" | translate }}
+      </h3>
+      <p class="card-description">
+        {{ "advertiserPanel.updateOffers.description" | translate }}
+      </p>
+      <div class="card-action">
+        <span>{{ "advertiserPanel.open" | translate }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </div>
+    </div>
+
+    <!-- Create Accommodation Card -->
+    <div class="panel-card" (click)="navigateTo('/accommodation-register')">
+      <div class="card-icon create-accommodation">
+        <i class="fa-solid fa-plus-circle"></i>
+      </div>
+      <h3 class="card-title">
+        {{ "advertiserPanel.createAccommodation.title" | translate }}
+      </h3>
+      <p class="card-description">
+        {{ "advertiserPanel.createAccommodation.description" | translate }}
+      </p>
+      <div class="card-action">
+        <span>{{ "advertiserPanel.open" | translate }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </div>
+    </div>
+    <!-- List Accommodation Card -->
+    <div class="panel-card" (click)="navigateTo('/advertiser/accommodations')">
+      <div class="card-icon list-accommodation">
+        <i class="fa-solid fa-list"></i>
+      </div>
+      <h3 class="card-title">
+        {{ "advertiserPanel.listAccommodations.title" | translate }}
+      </h3>
+      <p class="card-description">
+        {{ "advertiserPanel.listAccommodations.description" | translate }}
+      </p>
+      <div class="card-action">
+        <span>{{ "advertiserPanel.open" | translate }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </div>
+    </div>
+
+    <!-- Reporting Card -->
+    <div class="panel-card" (click)="navigateTo('/reporting')">
+      <div class="card-icon reporting">
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+      <h3 class="card-title">
+        {{ "advertiserPanel.reporting.title" | translate }}
+      </h3>
+      <p class="card-description">
+        {{ "advertiserPanel.reporting.description" | translate }}
+      </p>
+      <div class="card-action">
+        <span>{{ "advertiserPanel.open" | translate }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Section -->
+  <div class="quick-stats">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa-solid fa-clock"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">
+          {{ "advertiserPanel.stats.pending" | translate }}
+        </div>
+        <div class="stat-value" *ngIf="!loading">{{ pendingCount }}</div>
+        <div class="stat-value" *ngIf="loading">
+          <div class="spinner-border spinner-border-sm" role="status"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa-solid fa-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">
+          {{ "advertiserPanel.stats.confirmed" | translate }}
+        </div>
+        <div class="stat-value" *ngIf="!loading">{{ confirmedCount }}</div>
+        <div class="stat-value" *ngIf="loading">
+          <div class="spinner-border spinner-border-sm" role="status"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fa-solid fa-tag"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-label">
+          {{ "advertiserPanel.stats.activeOffers" | translate }}
+        </div>
+        <div class="stat-value" *ngIf="!loading">{{ activeOffersCount }}</div>
+        <div class="stat-value" *ngIf="loading">
+          <div class="spinner-border spinner-border-sm" role="status"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
